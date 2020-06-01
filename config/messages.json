@@ -1,0 +1,20 @@
+{
+  "USER_EMPTY_EMAIL": "Please enter your email",
+  "USER_INVALID_PASSWORD": "Please enter your password",
+  "AUTH_SUCCESS_LOGGEDIN": "You have successfully logged In",
+  "AUTH_INVALID_LOGIN": "The email and password you entered did not match our records. Please try again",
+  "USER_INVALID_NAME": "Please enter your name",
+  "USER_INVALID_USERNAME": "Please enter fullname",
+  "USER_INVALID_EMAIL": "Invalid email address",
+  "USER_INVALID_CONFIRM_PASSWORD": "Please enter confirmationPassword",
+  "USER_EMAIL_ALREADY_EXIST": "This email already exists",
+  "USER_SUCCESS_REGISTER": "User signup successfully",
+  "USER_ERROR_SAVE": "Error while saving user",
+  "USER_ERROR_UPDATE": "Error while updating user",
+  "AUTH_INVALID_USERNAME": "Please enter fullname",
+  "AUTH_INVALID_EMAIL": "Please enter email",
+  "AUTH_INVALID_PASS": "Please enter password",
+  "NO_RECORD_FOUND": "No record found!!",
+  "INVALID_TOKEN": "Invalid Token",
+  "VALID_TOKEN": "Valid Token"
+}
