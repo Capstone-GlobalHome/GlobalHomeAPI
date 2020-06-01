@@ -8,7 +8,7 @@
   "USER_INVALID_EMAIL": "Invalid email address",
   "USER_INVALID_CONFIRM_PASSWORD": "Please enter confirmationPassword",
   "USER_EMAIL_ALREADY_EXIST": "This email already exists",
-  "USER_SUCCESS_REGISTER": "User signup successfully",
+  "USER_SUCCESS_REGISTER": "An email has been sent with verification code",
   "USER_ERROR_SAVE": "Error while saving user",
   "USER_ERROR_UPDATE": "Error while updating user",
   "AUTH_INVALID_USERNAME": "Please enter fullname",
