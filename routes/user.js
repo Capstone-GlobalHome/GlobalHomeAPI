@@ -9,4 +9,7 @@ router.post("/signup", userController.create);
 //Login
 router.post("/signin", userController.authenticate);
 
+//Forgot & Reset Password >> EC2 server
+router.post("/forgotPassword", userController.forgotPassword);
+
 module.exports = router;

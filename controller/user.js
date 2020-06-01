@@ -137,6 +137,11 @@ class UserController {
         //Create JWT Token
         const newToken = await helper.createTokens(1, "harpreet", process.env.API_KEY, process.env.REFRESH_KEY);
 
+        var subject = "GlobalHome Verification Code";
+        var bodyOfMail = "New account verificaiton code is :\n\n" + "\n\n" + "4444\n\n";
+        console.log("GlobalHome Verification Code");
+        await sendMail(subject, bodyOfMail, req.body.email);
+
         //Response -
         return res.status(200).json({
           status: "success",
@@ -164,6 +169,64 @@ class UserController {
       next(err);
     }
   }
+
+  //Forgot Password
+  async forgotPassword(req, res, next) {
+    try {
+      if (req.body.email && req.body.email.trim() != "") {
+        var subject = "GlobalHome Password Reset";
+        var bodyOfMail =
+          "You are receiving this email because we received a password reset request for your account:\n\n" +
+          "\n\n" +
+          "If you did not request a password reset, no further action is required.\n\n" +
+          "If you don’t use this link within 1 hour, it will expire.\n\n";
+        console.log("Before Send");
+        await sendMail(subject, bodyOfMail, req.body.email);
+        console.log("After Send");
+        res.status(200).json({
+          status: "success",
+          message: "Check your email for a link to reset your password.",
+          data: null,
+        });
+      } else {
+        res.status(400).json({
+          status: "error",
+          message: [{ error: "The email is required." }],
+          data: null,
+        });
+      }
+    } catch (ex) {
+      next(ex);
+    }
+  }
+}
+
+//Send Email via Provider
+async function sendMail(subject, bodyOfMail, receiverMailId) {
+  const sendgrid = require("@sendgrid/mail");
+
+  sendgrid.setApiKey(process.env.SENDGRID_ApiKey);
+  console.log("from: ", config.senderMailId, "to: ", receiverMailId);
+  const msg = {
+    to: receiverMailId,
+    from: config.senderMailId,
+    subject: subject,
+    text: bodyOfMail,
+  };
+  console.log("First", msg);
+  await (() => {
+    console.log("second");
+    sendgrid
+      .send(msg)
+      .then(() => {
+        console.log("email sent successfully");
+      })
+      .catch((error) => {
+        console.log("error");
+        console.error(error.toString());
+      });
+  })();
+  console.log("third");
 }
 
 module.exports = new UserController();

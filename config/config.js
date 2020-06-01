@@ -3,4 +3,5 @@ module.exports = {
   resetPasswordTokenTime: 3600000, //1hour
   refreshExpiryTime: process.env.REFRESH_EXPIRY_TIME || "7d",
   port: process.env.PORT || 4000,
+  senderMailId: "harpreet.iosdev@gmail.com",
 };
