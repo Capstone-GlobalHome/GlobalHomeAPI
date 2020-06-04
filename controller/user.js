@@ -66,6 +66,7 @@ class UserController {
                 rememberToken: null,
                 notifications: 0,
                 lastLogin: null,
+                status: "Active",
                 createdAt: "2020-05-20T02:06:36.000Z",
                 updatedAt: "2020-05-20T02:06:36.000Z",
               },
@@ -135,10 +136,10 @@ class UserController {
         return res.status(400).send({ status: "error", message: errors, data: null });
       } else {
         //Create JWT Token
-        const newToken = await helper.createTokens(1, "harpreet", process.env.API_KEY, process.env.REFRESH_KEY);
+        const newToken = await helper.createTokens(1, fullname, process.env.API_KEY, process.env.REFRESH_KEY);
 
         var subject = "GlobalHome Verification Code";
-        var bodyOfMail = "New account verificaiton code is :\n\n" + "\n\n" + "4444\n\n";
+        var bodyOfMail = "New account verificaiton code is :" + "4444";
         console.log("GlobalHome Verification Code");
         await sendMail(subject, bodyOfMail, req.body.email);
 
@@ -153,12 +154,13 @@ class UserController {
           data: {
             user: {
               id: 1,
-              name: "harpreet",
-              fullname: "harpreet",
-              email: "harpreet.iosdev@gmail.com",
+              name: fullname,
+              fullname: fullname,
+              email: email,
               rememberToken: null,
               notifications: 0,
               lastLogin: null,
+              status: "Pending_verificaiton",
               createdAt: "2020-05-20T02:06:36.000Z",
               updatedAt: "2020-05-20T02:06:36.000Z",
             },
@@ -173,30 +175,64 @@ class UserController {
   //Forgot Password
   async forgotPassword(req, res, next) {
     try {
-      if (req.body.email && req.body.email.trim() != "") {
-        var subject = "GlobalHome Password Reset";
-        var bodyOfMail =
-          "You are receiving this email because we received a password reset request for your account:\n\n" +
-          "\n\n" +
-          "If you did not request a password reset, no further action is required.\n\n" +
-          "If you don’t use this link within 1 hour, it will expire.\n\n";
-        console.log("Before Send");
-        await sendMail(subject, bodyOfMail, req.body.email);
-        console.log("After Send");
+      var errors = [];
+      var { email } = req.body;
+
+      if (!email) {
+        errors.push({ email: "Please enter your email" });
+      } else if (!/^[\-0-9a-zA-Z\.\+_]+@[\-0-9a-zA-Z\.\+_]+\.[a-zA-Z]{2,}$/.test(String(email))) {
+        errors.push({ email: messages.USER_INVALID_EMAIL });
+      }
+
+      if (errors.length > 0) {
+        return res.status(400).send({ status: "error", message: errors, data: null });
+      } else {
+        if (req.body.email && req.body.email.trim() != "") {
+          var subject = "GlobalHome Password Reset";
+          var bodyOfMail =
+            "You are receiving this email because we received a password reset request for your account:\n\n" +
+            "\n\n" +
+            "If you did not request a password reset, no further action is required.\n\n" +
+            "If you don’t use this link within 1 hour, it will expire.\n\n";
+          console.log("Before Send");
+          await sendMail(subject, bodyOfMail, req.body.email);
+          console.log("After Send");
+          res.status(200).json({
+            status: "success",
+            message: "Check your email for a link to reset your password.",
+            data: null,
+          });
+        }
+      }
+    } catch (ex) {
+      next(ex);
+    }
+  }
+
+  async verifyCode(req, res, next) {
+    var errors = [];
+    var { verificationCode } = req.body;
+
+    if (!verificationCode) {
+      errors.push({ verificationCode: "Please enter verification code received in email" });
+    }
+
+    if (errors.length > 0) {
+      return res.status(400).send({ status: "error", message: errors, data: null });
+    } else {
+      if (verificationCode == "4444") {
         res.status(200).json({
           status: "success",
-          message: "Check your email for a link to reset your password.",
+          message: "user successfully verified.",
           data: null,
         });
       } else {
         res.status(400).json({
           status: "error",
-          message: [{ error: "The email is required." }],
+          message: "Invalid verification code",
           data: null,
         });
       }
-    } catch (ex) {
-      next(ex);
     }
   }
 }
