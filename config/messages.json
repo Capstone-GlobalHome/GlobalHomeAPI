@@ -16,5 +16,6 @@
   "AUTH_INVALID_PASS": "Please enter password",
   "NO_RECORD_FOUND": "No record found!!",
   "INVALID_TOKEN": "Invalid Token",
-  "VALID_TOKEN": "Valid Token"
+  "VALID_TOKEN": "Valid Token",
+  "NO_USER_FOUND": "No user found!!"
 }
