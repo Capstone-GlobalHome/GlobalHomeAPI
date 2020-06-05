@@ -9,6 +9,8 @@ const _ = require("lodash");
 const Op = Sequelize.Op;
 var jwt = require("jsonwebtoken");
 const bcrypt = require("bcrypt");
+const fs = require("fs");
+const faker = require("faker");
 
 class UserController {
   //Authenticate User
@@ -22,6 +24,7 @@ class UserController {
       //both email and password missing -
       if (!email && !password) {
         return res.status(400).send({
+          statusCode: 400,
           status: "error",
           message: [{ error: "Please enter your login information" }],
           data: null,
@@ -36,6 +39,7 @@ class UserController {
 
       if (errors.length > 0) {
         return res.status(400).json({
+          statusCode: 400,
           status: "error",
           message: errors,
           token: null,
@@ -44,13 +48,24 @@ class UserController {
       } else {
         //Fetch user details
 
-        //var hashPassword = userInfo.password;
-        if (email == "harpreet.iosdev@gmail.com" && password == "12345678") {
+        const response = await helper.isAuthenticated(email, password);
+        console.log("response", response);
+
+        if (!response.status || response.data === null) {
+          return res.status(401).json({
+            statusCode: 401,
+            status: "error",
+            message: [{ error: messages.AUTH_INVALID_LOGIN }],
+            token: null,
+            data: null,
+          });
+        } else {
           //Create JWT Token
-          const newToken = await helper.createTokens(1, "harpreet", process.env.API_KEY, process.env.REFRESH_KEY);
+          const newToken = await helper.createTokens(response.data, email, process.env.API_KEY, process.env.REFRESH_KEY);
 
           //Response -
           return res.status(200).json({
+            statusCode: 200,
             status: "success",
             message: messages.AUTH_SUCCESS_LOGGEDIN,
             token: newToken.token,
@@ -59,25 +74,17 @@ class UserController {
             refreshTokenExpireAt: newToken.refreshToken ? new Date(jwt.decode(newToken.refreshToken).exp * 1000) : "",
             data: {
               user: {
-                id: 1,
-                name: "harpreet",
-                fullname: "harpreet",
-                email: "harpreet.iosdev@gmail.com",
+                id: response.data,
+                fullname: response.name,
+                email: email,
                 rememberToken: null,
                 notifications: 0,
                 lastLogin: null,
                 status: "Active",
-                createdAt: "2020-05-20T02:06:36.000Z",
-                updatedAt: "2020-05-20T02:06:36.000Z",
+                createdAt: Date.now(),
+                updatedAt: Date.now(),
               },
             },
-          });
-        } else {
-          return res.status(401).json({
-            status: "error",
-            message: [{ error: messages.AUTH_INVALID_LOGIN }],
-            token: null,
-            data: null,
           });
         }
       }
@@ -133,39 +140,52 @@ class UserController {
       }
 
       if (errors.length > 0) {
-        return res.status(400).send({ status: "error", message: errors, data: null });
+        return res.status(400).send({ statusCode: 400, status: "error", message: errors, data: null });
       } else {
-        //Create JWT Token
-        const newToken = await helper.createTokens(1, fullname, process.env.API_KEY, process.env.REFRESH_KEY);
+        const response = await helper.postUser(fullname, email, password);
+        console.log("res", response);
 
-        var subject = "GlobalHome Verification Code";
-        var bodyOfMail = "New account verificaiton code is :" + "4444";
-        console.log("GlobalHome Verification Code");
-        await sendMail(subject, bodyOfMail, req.body.email);
+        if (!response.status) {
+          return res.status(401).json({
+            statusCode: 401,
+            status: "error",
+            message: [{ error: messages.USER_EMAIL_ALREADY_EXIST }],
+            token: null,
+            data: null,
+          });
+        } else {
+          //Create JWT Token
+          const newToken = await helper.createTokens(response.data, email, process.env.API_KEY, process.env.REFRESH_KEY);
 
-        //Response -
-        return res.status(200).json({
-          status: "success",
-          message: messages.USER_SUCCESS_REGISTER,
-          token: newToken.token,
-          tokenExpireAt: newToken.token ? new Date(jwt.decode(newToken.token).exp * 1000) : "",
-          refreshToken: newToken.refreshToken,
-          refreshTokenExpireAt: newToken.refreshToken ? new Date(jwt.decode(newToken.refreshToken).exp * 1000) : "",
-          data: {
-            user: {
-              id: 1,
-              name: fullname,
-              fullname: fullname,
-              email: email,
-              rememberToken: null,
-              notifications: 0,
-              lastLogin: null,
-              status: "Pending_verificaiton",
-              createdAt: "2020-05-20T02:06:36.000Z",
-              updatedAt: "2020-05-20T02:06:36.000Z",
+          var subject = "GlobalHome Verification Code";
+          var bodyOfMail = "New account verificaiton code is :" + "4444";
+          console.log("GlobalHome Verification Code");
+          await sendMail(subject, bodyOfMail, req.body.email);
+
+          //Response -
+          return res.status(200).json({
+            statusCode: 200,
+            status: "success",
+            message: messages.USER_SUCCESS_REGISTER,
+            token: newToken.token,
+            tokenExpireAt: newToken.token ? new Date(jwt.decode(newToken.token).exp * 1000) : "",
+            refreshToken: newToken.refreshToken,
+            refreshTokenExpireAt: newToken.refreshToken ? new Date(jwt.decode(newToken.refreshToken).exp * 1000) : "",
+            data: {
+              user: {
+                id: response.data,
+                fullname: response.name,
+                email: email,
+                rememberToken: null,
+                notifications: 0,
+                lastLogin: null,
+                status: "Pending_verificaiton",
+                createdAt: Date.now(),
+                updatedAt: Date.now(),
+              },
             },
-          },
-        });
+          });
+        }
       }
     } catch (err) {
       next(err);
@@ -185,23 +205,37 @@ class UserController {
       }
 
       if (errors.length > 0) {
-        return res.status(400).send({ status: "error", message: errors, data: null });
+        return res.status(400).send({ statusCode: 400, status: "error", message: errors, data: null });
       } else {
-        if (req.body.email && req.body.email.trim() != "") {
-          var subject = "GlobalHome Password Reset";
-          var bodyOfMail =
-            "You are receiving this email because we received a password reset request for your account:\n\n" +
-            "\n\n" +
-            "If you did not request a password reset, no further action is required.\n\n" +
-            "If you don’t use this link within 1 hour, it will expire.\n\n";
-          console.log("Before Send");
-          await sendMail(subject, bodyOfMail, req.body.email);
-          console.log("After Send");
-          res.status(200).json({
-            status: "success",
-            message: "Check your email for a link to reset your password.",
+        const response = await helper.checkUserExist(email);
+        console.log("response", response);
+
+        if (!response.status) {
+          return res.status(401).json({
+            statusCode: 401,
+            status: "error",
+            message: [{ error: messages.NO_USER_FOUND }],
+            token: null,
             data: null,
           });
+        } else {
+          if (req.body.email && req.body.email.trim() != "") {
+            var subject = "GlobalHome Password Reset";
+            var bodyOfMail =
+              "You are receiving this email because we received a password reset request for your account:\n\n" +
+              "\n\n" +
+              "If you did not request a password reset, no further action is required.\n\n" +
+              "If you don’t use this link within 1 hour, it will expire.\n\n";
+            console.log("Before Send");
+            await sendMail(subject, bodyOfMail, req.body.email);
+            console.log("After Send");
+            res.status(200).json({
+              statusCode: 200,
+              status: "success",
+              message: "Check your email for a link to reset your password.",
+              data: null,
+            });
+          }
         }
       }
     } catch (ex) {
