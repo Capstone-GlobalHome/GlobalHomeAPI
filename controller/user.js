@@ -26,7 +26,7 @@ class UserController {
         return res.status(400).send({
           statusCode: 400,
           status: "error",
-          message: [{ error: "Please enter your login information" }],
+          message: [{ error: messages.EMPTY_EMAIL_PASSWORD }],
           data: null,
         });
       }
@@ -49,7 +49,6 @@ class UserController {
         //Fetch user details
 
         const response = await helper.isAuthenticated(email, password);
-        console.log("response", response);
 
         if (!response.status || response.data === null) {
           return res.status(401).json({
@@ -61,7 +60,7 @@ class UserController {
           });
         } else {
           //Create JWT Token
-          const newToken = await helper.createTokens(response.data, email, process.env.API_KEY, process.env.REFRESH_KEY);
+          const newToken = await helper.createTokens(response.data.id, email, process.env.API_KEY, process.env.REFRESH_KEY);
 
           //Response -
           return res.status(200).json({
@@ -74,13 +73,13 @@ class UserController {
             refreshTokenExpireAt: newToken.refreshToken ? new Date(jwt.decode(newToken.refreshToken).exp * 1000) : "",
             data: {
               user: {
-                id: response.data,
-                fullname: response.name,
-                email: email,
+                id: response.data.id,
+                fullname: response.data.fullname,
+                email: response.data.email,
                 rememberToken: null,
                 notifications: 0,
                 lastLogin: null,
-                status: "Active",
+                status: response.data.status,
                 createdAt: Date.now(),
                 updatedAt: Date.now(),
               },
@@ -97,7 +96,6 @@ class UserController {
   //SignUp New User
   async create(req, res, next) {
     try {
-      console.log(req.body);
       var errors = [];
       var { fullname, email, password, confirmationPassword } = req.body;
 
@@ -157,9 +155,16 @@ class UserController {
           //Create JWT Token
           const newToken = await helper.createTokens(response.data, email, process.env.API_KEY, process.env.REFRESH_KEY);
 
+          //Send 4 digit verification code on user email
+          var fourDigitCode = Math.floor(1000 + Math.random() * 9000);
+
+          //Save Verification code for verification
+          const responsevc = await helper.addVerificationCode(response.data, email, fourDigitCode);
+          console.log("VC-", responsevc);
+
+          //Send Email
           var subject = "GlobalHome Verification Code";
-          var bodyOfMail = "New account verificaiton code is :" + "4444";
-          console.log("GlobalHome Verification Code");
+          var bodyOfMail = "Global Home new account verificaiton code is :" + fourDigitCode;
           await sendMail(subject, bodyOfMail, req.body.email);
 
           //Response -
@@ -243,30 +248,80 @@ class UserController {
     }
   }
 
+  //Verify verification code
   async verifyCode(req, res, next) {
-    var errors = [];
-    var { verificationCode } = req.body;
+    try {
+      var errors = [];
+      var { verificationCode } = req.body;
 
-    if (!verificationCode) {
-      errors.push({ verificationCode: "Please enter verification code received in email" });
+      if (!verificationCode) {
+        errors.push({ verificationCode: "Please enter your verification code received in email" });
+      }
+
+      if (errors.length > 0) {
+        return res.status(400).send({ statusCode: 400, status: "error", message: errors, data: null });
+      } else {
+        const response = await helper.verify(req, verificationCode);
+        console.log("response", response);
+
+        if (response.status) {
+          res.status(200).json({
+            statusCode: 200,
+            status: "success",
+            message: "user successfully verified.",
+            data: null,
+          });
+        } else {
+          res.status(400).json({
+            statusCode: 400,
+            status: "error",
+            message: "Invalid verification code",
+            data: null,
+          });
+        }
+      }
+    } catch (error) {
+      next(error);
     }
+  }
 
-    if (errors.length > 0) {
-      return res.status(400).send({ status: "error", message: errors, data: null });
-    } else {
-      if (verificationCode == "4444") {
+  //Resend verification code
+  async resendCode(req, res, next) {
+    try {
+      if (req.auth.check()) {
+        console.log("logged in user");
+      }
+
+      //Send 4 digit verification code on user email
+      var fourDigitCode = Math.floor(1000 + Math.random() * 9000);
+      console.log("fourDigitVerification code is", fourDigitCode);
+
+      //Resend Verification code for verification
+      const responsevc = await helper.resend(req, fourDigitCode);
+      console.log("VC-", responsevc);
+
+      //Send Email
+      var subject = "GlobalHome Verification Code";
+      var bodyOfMail = "Global Home new account verificaiton code is :" + fourDigitCode;
+      await sendMail(subject, bodyOfMail, req.email);
+
+      if (responsevc.status) {
         res.status(200).json({
+          statusCode: 200,
           status: "success",
-          message: "user successfully verified.",
+          message: "verificaiton code sent successfully.",
           data: null,
         });
       } else {
         res.status(400).json({
+          statusCode: 400,
           status: "error",
-          message: "Invalid verification code",
+          message: "Error sending verification code",
           data: null,
         });
       }
+    } catch (error) {
+      next(error);
     }
   }
 }
