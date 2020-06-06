@@ -1,0 +1,14 @@
+{
+  "codes": [
+    {
+      "id": 1,
+      "email": "test@gmail.com",
+      "code": 4444
+    },
+    {
+      "id": 77926,
+      "email": "harpreet.iosdev@gmail.com",
+      "code": 1345
+    }
+  ]
+}

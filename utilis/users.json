@@ -5,16 +5,18 @@
       "fullname": "test",
       "email": "test@gmail.com",
       "password": "12345678",
+      "status": "Active",
       "createdAt": 1591349908233,
       "updatedAt": 1591349908233
     },
     {
-      "id": 21959,
+      "id": 77926,
       "fullname": "harpreet",
       "email": "harpreet.iosdev@gmail.com",
       "password": "12345678",
-      "createdAt": 1591349908233,
-      "updatedAt": 1591349908233
+      "status": "Active",
+      "createdAt": 1591460915364,
+      "updatedAt": 1591460915364
     }
   ]
 }
