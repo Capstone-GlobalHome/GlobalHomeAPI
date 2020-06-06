@@ -272,12 +272,21 @@ class UserController {
             data: null,
           });
         } else {
-          res.status(400).json({
-            statusCode: 400,
-            status: "error",
-            message: "Invalid verification code",
-            data: null,
-          });
+          if (response.account_status) {
+            res.status(400).json({
+              statusCode: 400,
+              status: "error",
+              message: "Account Blocked",
+              data: null,
+            });
+          } else {
+            res.status(400).json({
+              statusCode: 400,
+              status: "error",
+              message: "Invalid verification code",
+              data: null,
+            });
+          }
         }
       }
     } catch (error) {
@@ -288,17 +297,11 @@ class UserController {
   //Resend verification code
   async resendCode(req, res, next) {
     try {
-      if (req.auth.check()) {
-        console.log("logged in user");
-      }
-
-      //Send 4 digit verification code on user email
+      //resend 4 digit verification code on user email
       var fourDigitCode = Math.floor(1000 + Math.random() * 9000);
-      console.log("fourDigitVerification code is", fourDigitCode);
 
       //Resend Verification code for verification
       const responsevc = await helper.resend(req, fourDigitCode);
-      console.log("VC-", responsevc);
 
       //Send Email
       var subject = "GlobalHome Verification Code";
