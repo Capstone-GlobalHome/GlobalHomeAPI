@@ -9,10 +9,13 @@ router.post("/signup", userController.create);
 //Login
 router.post("/signin", userController.authenticate);
 
-//Forgot & Reset Password >> EC2 server
+//Forgot Password
 router.post("/forgotPassword", userController.forgotPassword);
 
 //VerificationCode
-router.post("/verify", userController.verifyCode);
+router.post("/verify", helper.validateToken, userController.verifyCode);
+
+//Resend Verification Code
+router.post("/resend-code", helper.validateToken, userController.resendCode);
 
 module.exports = router;
