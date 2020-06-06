@@ -1,4 +1,5 @@
 {
+  "EMPTY_EMAIL_PASSWORD": "Please enter your login information",
   "USER_EMPTY_EMAIL": "Please enter your email",
   "USER_INVALID_PASSWORD": "Please enter your password",
   "AUTH_SUCCESS_LOGGEDIN": "You have successfully logged In",
