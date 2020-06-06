@@ -72,6 +72,8 @@ exports.addVerificationCode = async function (id, email, code) {
       id: id,
       email: email,
       code: code,
+      resend_attempts: 0,
+      verify_attempts: 0,
     };
     await verificaitontb.codes.push(newVerification);
     fs.writeFileSync(__dirname + "/verifications.json", JSON.stringify(verificaitontb, null, 2), "utf8");
@@ -84,14 +86,11 @@ exports.addVerificationCode = async function (id, email, code) {
 
 //Verify Verification code
 exports.verify = async function (req, verificationCode) {
-  console.log(req.userId);
-  console.log(req.email);
   let verified = false;
   let data;
+  let account_blocked = false;
   await verificaitontb.codes.findIndex((verification) => {
     if (verification.id === req.userId) {
-      console.log("user matched", verification.code);
-      console.log("verificationCode is", verificationCode);
       if (verification.code == verificationCode) {
         verified = true;
       }
@@ -102,7 +101,6 @@ exports.verify = async function (req, verificationCode) {
     //Update user status to Active
     await usertb.users.findIndex((user) => {
       if (user.email === req.email && user.id === req.userId) {
-        console.log("user matched now -update it");
         user.status = "Pending_verificaiton" ? "Active" : "Active";
         data = user;
         status = true;
@@ -112,7 +110,19 @@ exports.verify = async function (req, verificationCode) {
 
     return { data: data, status: true };
   } else {
-    return { status: false };
+    //Update user status to Active
+    await verificaitontb.codes.findIndex((verification) => {
+      if (verification.email === req.email && verification.id === req.userId) {
+        if (verification.verify_attempts < 3) {
+          verification.verify_attempts = verification.verify_attempts + 1;
+          account_blocked = false;
+        } else {
+          account_blocked = true;
+        }
+      }
+    });
+    fs.writeFileSync(__dirname + "/verifications.json", JSON.stringify(verificaitontb, null, 2), "utf8");
+    return { data: null, account_status: account_blocked, status: false };
   }
 };
 
@@ -151,6 +161,34 @@ exports.resend = async function (req, verificationCode) {
   } else {
     return { status: false };
   }
+};
+
+//Send Email via Provider
+exports.sendMail = async function (subject, bodyOfMail, receiverMailId) {
+  const sendgrid = require("@sendgrid/mail");
+
+  sendgrid.setApiKey(process.env.SENDGRID_ApiKey);
+  console.log("from: ", config.senderMailId, "to: ", receiverMailId);
+  const msg = {
+    to: receiverMailId,
+    from: config.senderMailId,
+    subject: subject,
+    text: bodyOfMail,
+  };
+  console.log("First", msg);
+  await (() => {
+    console.log("second");
+    sendgrid
+      .send(msg)
+      .then(() => {
+        console.log("email sent successfully");
+      })
+      .catch((error) => {
+        console.log("error");
+        console.error(error.toString());
+      });
+  })();
+  console.log("third");
 };
 
 //validateToken
