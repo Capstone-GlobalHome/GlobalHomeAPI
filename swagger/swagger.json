@@ -1,0 +1,232 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Global Home Stub Api's",
+    "description": "Node STUB API's for GlobalHome.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/user/signin": {
+      "post": {
+        "tags": ["User"],
+        "summary": "User Authentication",
+        "description": "Authenticate user with Email and Password.",
+        "requestBody": {
+          "description": "Enter Email and Password.",
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "required": ["password", "email"],
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "password": {
+                    "type": "string",
+                    "required": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "405": {
+            "description": "Invalid Inputs"
+          }
+        }
+      }
+    },
+    "/user/signup": {
+      "post": {
+        "tags": ["User"],
+        "summary": "signup new user.",
+        "description": "signup new user with fullname, email, password, confirmationPassword. All are required.",
+        "requestBody": {
+          "description": "Enter fullname, email, password, confirmationPassword for new user.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "allOf": [
+                  {
+                    "$ref": "#/components/schemas/Users"
+                  }
+                ]
+              },
+              "examples": {
+                "user's data": {
+                  "summary": "An example for signUp. Optional",
+                  "value": {
+                    "fullname": "test",
+                    "email": "test@gmail.com",
+                    "password": "12345678",
+                    "confirmationPassword": "12345678"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid status",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/user/verify": {
+      "post": {
+        "tags": ["Verification"],
+        "summary": "Verify verification code",
+        "description": "Verify verification code",
+        "requestBody": {
+          "description": "Enter verificationCode.",
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "required": ["verificationCode"],
+                "type": "object",
+                "properties": {
+                  "verificationCode": {
+                    "type": "Integer"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid status",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/user/forgotPassword": {
+      "post": {
+        "tags": ["Forgot Password"],
+        "summary": "Forgot Password",
+        "description": "Enter field as Email to reset password",
+        "requestBody": {
+          "description": "Enter field as Email of user for which password needs to reset.",
+          "content": {
+            "application/x-www-form-urlencoded": {
+              "schema": {
+                "required": ["email"],
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid status value"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/user/resend-code": {
+      "post": {
+        "tags": ["Verification"],
+        "summary": "Resend verification code.",
+        "description": "Resend verification code.",
+        "requestBody": {
+          "description": "Resend verification code"
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid status value"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Users": {
+        "required": ["email"],
+        "type": "object",
+        "properties": {
+          "fullname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "rememberToken": {
+            "type": "string"
+          },
+          "notifications": {
+            "type": "boolean"
+          },
+          "lastLogin": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "JWT": {
+        "type": "apiKey",
+        "name": "x-access-token",
+        "in": "header"
+      }
+    }
+  }
+}

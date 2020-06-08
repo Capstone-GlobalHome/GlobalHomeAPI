@@ -3,6 +3,8 @@ const express = require("express");
 const app = express();
 const helper = require("./utilis/helper");
 
+var swaggerUi = require("swagger-ui-express"),
+  swaggerDocument = require("./swagger/swagger.json");
 var cors = require("cors");
 
 app.use(bodyParser.json());
@@ -11,6 +13,8 @@ app.use(bodyParser.urlencoded({ extended: true }));
 app.get("/", function (req, res) {
   res.json({ message: "Welcome to Global Homes App" });
 });
+
+app.use("/swagger", swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
 //CORS middleware
 var allowCrossDomain = function (req, res, next) {
