@@ -5,4 +5,5 @@ module.exports = {
   port: process.env.PORT || 4000,
   senderMailId: "harpreet.iosdev@gmail.com",
   senderPassword: "",
+  verifyAttempts: process.env.VERIFY_ATTEMPT
 };

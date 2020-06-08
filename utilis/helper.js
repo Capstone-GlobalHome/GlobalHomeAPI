@@ -113,7 +113,7 @@ exports.verify = async function (req, verificationCode) {
     //Update user status to Active
     await verificaitontb.codes.findIndex((verification) => {
       if (verification.email === req.email && verification.id === req.userId) {
-        if (verification.verify_attempts < 3) {
+        if (verification.verify_attempts < config.verifyAttempts) {
           verification.verify_attempts = verification.verify_attempts + 1;
           account_blocked = false;
         } else {
