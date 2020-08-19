@@ -11,7 +11,7 @@
         "tags": [
           "User"
         ],
-        "summary": "signup new user.",
+        "summary": "Signup new user",
         "description": "signup new user with name, email, password. All are required.",
         "requestBody": {
           "description": "Enter name, email and password for new user.",
@@ -63,7 +63,7 @@
         "tags": [
           "User"
         ],
-        "summary": "User Authentication",
+        "summary": "User signin",
         "description": "Authenticate user with Email and Password.",
         "requestBody": {
           "description": "Enter Email and Password.",
@@ -103,7 +103,7 @@
       }
     },
     "/verify/code": {
-      "post": {
+      "put": {
         "tags": [
           "Verification"
         ],
@@ -144,12 +144,7 @@
             "description": "Not Found",
             "content": {}
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       }
     },
     "/resend/code": {
@@ -192,12 +187,7 @@
           "404": {
             "description": "Not Found"
           }
-        },
-        "security": [
-          {
-            "JWT": []
-          }
-        ]
+        }
       }
     },
     "/forgot/password": {
@@ -237,17 +227,69 @@
           }
         }
       }
+    },
+    "/set/password": {
+      "put": {
+        "tags": [
+          "Forgot Password"
+        ],
+        "summary": "Set Password",
+        "description": "Enter field as userId, password, confirm_password and verification_code to set password",
+        "requestBody": {
+          "description": "Enter field as userId, password, confirm_password and verification_code of user for which set password.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "userId",
+                  "password",
+                  "confirm_password",
+                  "verification_code"
+                ],
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "integer"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "confirm_password": {
+                    "type": "string"
+                  },
+                  "verification_code": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid status value"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
     }
   },
   "components": {
     "schemas": {
       "Users": {
         "required": [
-          "email"
+          "name",
+          "email",
+          "password"
         ],
         "type": "object",
         "properties": {
-          "fullname": {
+          "name": {
             "type": "string"
           },
           "email": {
@@ -256,14 +298,23 @@
           "password": {
             "type": "string"
           },
-          "rememberToken": {
-            "type": "string"
+          "verification_code": {
+            "type": "integer"
           },
-          "notifications": {
-            "type": "boolean"
+          "resend_code_time": {
+            "type": "integer"
           },
-          "lastLogin": {
-            "type": "string"
+          "password_reset_date": {
+            "type": "date"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "createdAt": {
+            "type": "date"
+          },
+          "updatedAt": {
+            "type": "date"
           }
         }
       }
@@ -271,7 +322,7 @@
     "securitySchemes": {
       "JWT": {
         "type": "apiKey",
-        "name": "x-access-token",
+        "name": "Authorization",
         "in": "header"
       }
     }

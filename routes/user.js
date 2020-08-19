@@ -1,21 +1,22 @@
-const express = require("express");
-const router = express.Router();
-var helper = require("../utilis/helper");
-const userController = require("../controller/user");
+import express from "express"
+// import helper from "../utilis/helper"
+import userController from "../controller/user.controller"
 
-//Register
-router.post("/signup", userController.create);
+const route = express.Router();
 
-//Login
-router.post("/signin", userController.authenticate);
+// Unauthenticate roues
+route.post("/signup", userController.create); // Register route
+route.post("/signin", userController.authenticate); // Login route
+route.put("/verify/code", userController.verifyCode); // VerificationCode route
+route.post("/resend/code", userController.resendCode); // Resend verification code route
 
-//Forgot Password
-router.post("/forgotPassword", userController.forgotPassword);
+//route.post("/resend/code", helper.validateToken, userController.resendCode); // Resend verification code route
 
-//VerificationCode
-router.post("/verify", helper.validateToken, userController.verifyCode);
 
-//Resend Verification Code
-router.post("/resend-code", helper.validateToken, userController.resendCode);
+route.post("/forgot/password", userController.forgotPassword); // Forgot password route with send email
+route.put("/set/password", userController.setPasswordWithVerifyCode); // Set password route
 
-module.exports = router;
+// Authenticate roues
+
+
+export default route;
