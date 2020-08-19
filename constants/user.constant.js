@@ -1,6 +1,7 @@
 export const USER_ROLE = {
    ADMIN: 'ADMIN',
-   USER: 'USER'
+   USER: 'USER',
+   MANAGER: 'MANAGER'
 }
 
 export const STATUS = {
@@ -15,4 +16,13 @@ export const RESEND_CODE_TIME = {
    ACCOUNT_WARNING_TWO: 2,
    ACCOUNT_WARNING_TREE: 3,
    ACCOUNT_BLOCK: 4
+}
+
+export const MESSAGES = {
+   VALIDATION_ERROR: "All fields are required.",
+   ACCOUNT_BLOCK: "Account has been blocked.",
+   EMAIL_SERVER_ERROR: "Email server error.",
+   SENT_VERIFICATION_CODE: "Verification code has been sent your email address.",
+   VERIFICATION_CODE_EXPIRED: "Verification code has been expired.",
+   VERIFICATION_CODE_WRONG: "Wrong verification code."
 }

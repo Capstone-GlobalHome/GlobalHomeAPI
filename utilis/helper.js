@@ -1,13 +1,15 @@
-import sendgrid from "@sendgrid/mail";
+import sendgrid from "@sendgrid/mail"
+// import { Validator } from 'node-input-validator'
 import { RESEND_CODE_TIME } from "../constants/user.constant"
+import { environment } from '../config/environment'
 
 class Helper {
   //Send email via provider
   static async sendMail(subject, bodyOfMail, receiverMailId) {
-    sendgrid.setApiKey(process.env.SENDGRID_ApiKey);
+    sendgrid.setApiKey(environment.SENDGRID_APIKEY);
     const msg = {
       to: receiverMailId,
-      from: process.env.SENDER_EMAILID,
+      from: environment.SENDER_EMAIL,
       subject: subject,
       html: bodyOfMail,
     };
@@ -36,6 +38,16 @@ class Helper {
     }
     return time
   }
+
+  // static async validateInput(body) {
+  //   const v = new Validator(body, {
+  //     name: 'required',
+  //     email: 'required|email',
+  //     password: 'required|minLength:7'
+  //   })
+  //   const matched = await v.check()
+  //   return { matched, v }
+  // }
 
 }
 

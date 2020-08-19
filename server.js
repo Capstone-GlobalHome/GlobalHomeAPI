@@ -1,15 +1,14 @@
-import dotenv from "dotenv";
-dotenv.config();
-import { config } from "./config/config";
 import app from "./app";
+import { environment } from "./config/environment";
 
-// Database
-import db from './config/db';
-// Test DB
-db.authenticate()
-  .then(() => console.log('Connect to Postgres Database...'))
-  .catch(err => console.log('Error: ' + err))
+// db config
+import db from './models';
 
-app.listen(config.port, () => {
-  console.log(`GlobalHome server listen on port ${config.port}...`);
+app.listen(environment.PORT, () => {
+  db.sequelize.sync().then((data) => {
+    console.log('Postgres server started and tables created successfully...')
+  }).catch((error) => {
+    console.log('Error... Postgres connection error, not connect with db')
+  })
+  console.log(`GlobalHome server listen on port ${environment.PORT}...`);
 });

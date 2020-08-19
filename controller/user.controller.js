@@ -6,13 +6,13 @@ import Sequelize from "sequelize"
 import _ from "lodash"
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
-// import sendgrid from "@sendgrid/mail"
 import Helper from "../utilis/Helper"
-import { config } from "../config/config"
-import { STATUS, RESEND_CODE_TIME } from "../constants/user.constant"
+import { environment } from "../config/environment"
+import { STATUS, RESEND_CODE_TIME, MESSAGES } from "../constants/user.constant"
 // Models
-import User from '../models/User'
+import db from '../models'
 const Op = Sequelize.Op;
+const User = db.User
 
 class UserController {
   //SignUp New User
@@ -25,15 +25,12 @@ class UserController {
       })
       const matched = await v.check()
       if (!matched) {
-        res.status(422).json({ error: true, message: "All fileds are required.", validation_error: v.errors })
+        res.status(422).json({ error: true, message: MESSAGES.VALIDATION_ERROR, validation_error: v.errors })
         return;
       } else {
         User.findOne({ where: { email: req.body.email } }).then(result => {
           if (result) {
-            res.status(409).json({
-              error: true,
-              message: 'User with the email \'' + req.body.email + '\' already exists.'
-            }); return;
+            res.status(409).json({ error: true, message: `${req.body.email} : already exists.` }); return;
           } else {
             bcrypt.genSalt(10, async (err, salt) => {
               bcrypt.hash(req.body.password, salt, async (err, hash) => {
@@ -54,12 +51,12 @@ class UserController {
                     }).then(user => {
                       res.status(200).json({
                         error: false,
-                        message: "Verification code sent successfully your email address.",
+                        message: MESSAGES.SENT_VERIFICATION_CODE,
                         userId: user.id
                       });
                     });
                   } else {
-                    res.status(400).json({ error: true, message: "Email server error." })
+                    res.status(400).json({ error: true, message: MESSAGES.EMAIL_SERVER_ERROR })
                   }
                 }
               });
@@ -81,7 +78,7 @@ class UserController {
   //     })
   //     const matched = await v.check()
   //     if (!matched) {
-  //       res.status(422).json({ error: true, message: "All fileds are required.", validation_error: v.errors })
+  //       res.status(422).json({ error: true, message: MESSAGES.VALIDATION_ERROR, validation_error: v.errors })
   //       return;
   //     } else {
 
@@ -198,7 +195,7 @@ class UserController {
       })
       const matched = await v.check()
       if (!matched) {
-        res.status(422).json({ error: true, message: "All fileds are required.", validation_error: v.errors })
+        res.status(422).json({ error: true, message: MESSAGES.VALIDATION_ERROR, validation_error: v.errors })
         return;
       } else {
         const checkOTPRightOrWrong = await User.findOne({
@@ -225,7 +222,7 @@ class UserController {
               createdAt: user.createdAt,
               updatedAt: user.updatedAt
             }
-            let token = jwt.sign(user.dataValues, process.env.JWT_KEY, { expiresIn: process.env.JWT_EXPIRY_TIME })
+            let token = jwt.sign(user.dataValues, environment.JWT_SECRET_KEY, { expiresIn: environment.JWT_EXPIRY_TIME })
             res.status(200).json({
               error: false,
               message: "User verified successfully.",
@@ -234,10 +231,10 @@ class UserController {
             })
           } else {
             await User.update({ verification_code: null, resend_code_time: RESEND_CODE_TIME.SIGNUP_CODE }, { where: { id: checkOTPRightOrWrong.id } })
-            res.status(500).json({ error: true, message: "Verification code has been expired." })
+            res.status(500).json({ error: true, message: MESSAGES.VERIFICATION_CODE_EXPIRED })
           }
         } else {
-          res.status(500).json({ error: true, message: "Wrong verification code." })
+          res.status(500).json({ error: true, message: MESSAGES.VERIFICATION_CODE_WRONG })
         }
       }
     } catch (error) {
@@ -299,37 +296,38 @@ class UserController {
       })
       const matched = await v.check()
       if (!matched) {
-        res.status(422).json({ error: true, message: "All fileds are required.", validation_error: v.errors })
+        res.status(422).json({ error: true, message: MESSAGES.VALIDATION_ERROR, validation_error: v.errors })
         return;
       } else {
         const user = await User.findOne({ where: { id: req.body.userId, email: req.body.email } })
         if (typeof user !== 'undefined' && user !== null) {
           if (user.status === STATUS.BLOCK) {
-            res.status(423).json({
-              error: true,
-              message: "Account has been blocked."
-            })
+            res.status(423).json({ error: true, message: MESSAGES.ACCOUNT_BLOCK })
           } else {
             let time = Helper.checkResendCodeTime(user.resend_code_time)
             if (time === RESEND_CODE_TIME.ACCOUNT_BLOCK) {
               await user.update({ verification_code: null, resend_code_time: time, status: STATUS.BLOCK })
-              res.status(423).json({
-                error: true,
-                message: "Account has been blocked."
-              })
+              res.status(423).json({ error: true, message: MESSAGES.ACCOUNT_BLOCK })
             } else {
+              // const checkUserResendCodeHowManyTimeInOneDay = await User.findOne({
+              //   where: {
+              //     id: user.id, updatedAt: { [Op.gte]: moment().subtract(30, 'minute').toDate() }
+              //   },
+              //   attributes: ['id', 'resend_code_date']
+              // })
+              // console.log(checkUserResendCodeHowManyTimeInOneDay.resend_code_date)
               let code = Math.floor(1000 + Math.random() * 9000);
               let subject = "GlobalHome Verification Code";
-              let bodyOfMail = '<p>Hi ' + user.name + ', </p><p>Global Home new account verificaiton code is <b>' + code + '</b>.</p><p>Thank You</p><p> GlobalHome</p>'
+              let bodyOfMail = '<p>Hi ' + user.name + ', </p>' +
+                '<p>Global Home new account verificaiton code is <b>' + code + '</b></p>.' +
+                '<p>Thank You</p>' +
+                '<p>GlobalHome</p>';
               const mail = Helper.sendMail(subject, bodyOfMail, user.email);
               if (mail) {
-                await user.update({ verification_code: code, resend_code_time: time })
-                res.status(200).json({
-                  error: false,
-                  message: "Verification code sent successfully your email address."
-                });
+                await user.update({ verification_code: code, resend_code_time: time, resend_code_date: Date.now() })
+                res.status(200).json({ error: false, message: MESSAGES.SENT_VERIFICATION_CODE });
               } else {
-                res.status(400).json({ error: true, message: "Email server error." })
+                res.status(400).json({ error: true, message: MESSAGES.EMAIL_SERVER_ERROR })
               }
             }
           }
@@ -385,7 +383,7 @@ class UserController {
       })
       const matched = await v.check()
       if (!matched) {
-        res.status(422).json({ error: true, message: "All fileds are required.", validation_error: v.errors })
+        res.status(422).json({ error: true, message: MESSAGES.VALIDATION_ERROR, validation_error: v.errors })
         return;
       } else {
         User.findOne({ where: { email: req.body.email } }).then(user => {
@@ -396,7 +394,7 @@ class UserController {
             }); return;
           } else {
             if (user.status === STATUS.BLOCK) {
-              res.status(423).json({ error: true, message: "Account has been blocked." })
+              res.status(423).json({ error: true, message: MESSAGES.ACCOUNT_BLOCK })
             } else if (user.status === STATUS.PENDING) {
               res.status(403).json({ error: true, message: "Account verification is pending." })
             } else {
@@ -409,7 +407,7 @@ class UserController {
                   createdAt: user.createdAt,
                   updatedAt: user.updatedAt
                 }
-                let token = jwt.sign(user.dataValues, 'secretKey', { expiresIn: config.jwtExpiryTime })
+                let token = jwt.sign(user.dataValues, environment.JWT_SECRET_KEY, { expiresIn: environment.JWT_EXPIRY_TIME })
                 res.status(200).json({
                   error: false,
                   message: "Login successfully.",
@@ -427,7 +425,6 @@ class UserController {
           });
       }
     } catch (err) {
-      console.log("Catch Error", err);
       next(err);
     }
   }
@@ -520,7 +517,7 @@ class UserController {
       })
       const matched = await v.check()
       if (!matched) {
-        res.status(422).json({ error: true, message: "Email fileds is required." })
+        res.status(422).json({ error: true, message: "Email field is required." })
         return;
       } else {
         const user = await User.findOne({
@@ -529,23 +526,14 @@ class UserController {
         })
         if (typeof user !== 'undefined' && user !== null) {
           if (user.status === STATUS.BLOCK) {
-            res.status(423).json({
-              error: true,
-              message: "Account has been blocked."
-            })
+            res.status(423).json({ error: true, message: MESSAGES.ACCOUNT_BLOCK })
           } else if (user.status === STATUS.PENDING) {
-            res.status(403).json({
-              error: true,
-              message: "Account verification is pending."
-            })
+            res.status(403).json({ error: true, message: "Account verification is pending." })
           } else {
             let time = Helper.checkResendCodeTime(user.resend_code_time)
             if (time === RESEND_CODE_TIME.ACCOUNT_BLOCK) {
               await user.update({ verification_code: null, resend_code_time: time, status: STATUS.BLOCK })
-              res.status(423).json({
-                error: true,
-                message: "Account has been blocked."
-              })
+              res.status(423).json({ error: true, message: MESSAGES.ACCOUNT_BLOCK })
             } else {
               let code = Math.floor(1000 + Math.random() * 9000);
               let subject = "GlobalHome Password Reset";
@@ -555,17 +543,19 @@ class UserController {
                 `<p>Veridication code: <b>${code}</b>.</p>` +
                 '<p>If you don’t use this verification code within 1 hour, it will expire.</p>' +
                 '<p>Thank You</p>' +
-                '<p>GlobalHome</p>'
+                '<p>GlobalHome</p>';
               const mail = Helper.sendMail(subject, bodyOfMail, user.email);
               if (mail) {
-                await user.update({ verification_code: code, resend_code_time: time, password_reset_date: Date.now() })
+                await user.update({
+                  verification_code: code, resend_code_time: time, resend_code_date: Date.now(), forgot_password_date: Date.now()
+                })
                 res.status(200).json({
                   error: false,
-                  message: "Verification code send your registered email.",
+                  message: MESSAGES.SENT_VERIFICATION_CODE,
                   userId: user.id
                 });
               } else {
-                res.status(400).json({ error: true, message: "Email server error." });
+                res.status(400).json({ error: true, message: MESSAGES.EMAIL_SERVER_ERROR });
               }
             }
           }
@@ -589,7 +579,7 @@ class UserController {
       })
       const matched = await v.check()
       if (!matched) {
-        res.status(422).json({ error: true, message: "All fileds are required.", validation_error: v.errors })
+        res.status(422).json({ error: true, message: MESSAGES.VALIDATION_ERROR, validation_error: v.errors })
         return;
       } else {
         const checkOTPRightOrWrong = await User.findOne({
@@ -602,7 +592,7 @@ class UserController {
           const user = await User.findOne({
             where: {
               id: checkOTPRightOrWrong.id, verification_code: checkOTPRightOrWrong.verification_code,
-              password_reset_date: { [Op.gte]: moment().subtract(60, 'minute').toDate() }
+              forgot_password_date: { [Op.gte]: moment().subtract(60, 'minute').toDate() }
             },
             attributes: ['id', 'verification_code']
           })
@@ -623,10 +613,10 @@ class UserController {
             }
           } else {
             await checkOTPRightOrWrong.update({ verification_code: null, resend_code_time: RESEND_CODE_TIME.ACCOUNT_WARNING_ONE })
-            res.status(500).json({ error: true, message: "Verification code has been expired." })
+            res.status(500).json({ error: true, message: MESSAGES.VERIFICATION_CODE_EXPIRED })
           }
         } else {
-          res.status(500).json({ error: true, message: "Wrong verification code." })
+          res.status(500).json({ error: true, message: MESSAGES.VERIFICATION_CODE_WRONG })
         }
       }
     } catch (error) {
