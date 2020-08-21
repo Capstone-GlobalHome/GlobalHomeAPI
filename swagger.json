@@ -241,15 +241,15 @@
             "application/json": {
               "schema": {
                 "required": [
-                  "userId",
+                  "email",
                   "password",
                   "confirm_password",
                   "verification_code"
                 ],
                 "type": "object",
                 "properties": {
-                  "userId": {
-                    "type": "integer"
+                  "email": {
+                    "type": "string"
                   },
                   "password": {
                     "type": "string"

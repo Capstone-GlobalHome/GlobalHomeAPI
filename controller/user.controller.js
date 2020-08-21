@@ -309,13 +309,6 @@ class UserController {
               await user.update({ verification_code: null, resend_code_time: time, status: STATUS.BLOCK })
               res.status(423).json({ error: true, message: MESSAGES.ACCOUNT_BLOCK })
             } else {
-              // const checkUserResendCodeHowManyTimeInOneDay = await User.findOne({
-              //   where: {
-              //     id: user.id, updatedAt: { [Op.gte]: moment().subtract(30, 'minute').toDate() }
-              //   },
-              //   attributes: ['id', 'resend_code_date']
-              // })
-              // console.log(checkUserResendCodeHowManyTimeInOneDay.resend_code_date)
               let code = Math.floor(1000 + Math.random() * 9000);
               let subject = "GlobalHome Verification Code";
               let bodyOfMail = '<p>Hi ' + user.name + ', </p>' +
@@ -530,37 +523,31 @@ class UserController {
           } else if (user.status === STATUS.PENDING) {
             res.status(403).json({ error: true, message: "Account verification is pending." })
           } else {
-            let time = Helper.checkResendCodeTime(user.resend_code_time)
-            if (time === RESEND_CODE_TIME.ACCOUNT_BLOCK) {
-              await user.update({ verification_code: null, resend_code_time: time, status: STATUS.BLOCK })
-              res.status(423).json({ error: true, message: MESSAGES.ACCOUNT_BLOCK })
+            let code = Math.floor(1000 + Math.random() * 9000);
+            let subject = "GlobalHome Password Reset";
+            let bodyOfMail = '<p>Hi ' + user.name + ',' +
+              '</p><p>You are receiving this email because we received a password reset request for your account.</p>' +
+              '<p>If you did not request a password reset, no further action is required.</p>' +
+              `<p>Veridication code: <b>${code}</b>.</p>` +
+              '<p>If you don’t use this verification code within 1 hour, it will expire.</p>' +
+              '<p>Thank You</p>' +
+              '<p>GlobalHome</p>';
+            const mail = Helper.sendMail(subject, bodyOfMail, user.email);
+            if (mail) {
+              await user.update({
+                verification_code: code, forgot_password_date: Date.now()
+              })
+              res.status(200).json({
+                error: false,
+                message: MESSAGES.SENT_VERIFICATION_CODE,
+                userId: user.email
+              });
             } else {
-              let code = Math.floor(1000 + Math.random() * 9000);
-              let subject = "GlobalHome Password Reset";
-              let bodyOfMail = '<p>Hi ' + user.name + ',' +
-                '</p><p>You are receiving this email because we received a password reset request for your account.</p>' +
-                '<p>If you did not request a password reset, no further action is required.</p>' +
-                `<p>Veridication code: <b>${code}</b>.</p>` +
-                '<p>If you don’t use this verification code within 1 hour, it will expire.</p>' +
-                '<p>Thank You</p>' +
-                '<p>GlobalHome</p>';
-              const mail = Helper.sendMail(subject, bodyOfMail, user.email);
-              if (mail) {
-                await user.update({
-                  verification_code: code, resend_code_time: time, resend_code_date: Date.now(), forgot_password_date: Date.now()
-                })
-                res.status(200).json({
-                  error: false,
-                  message: MESSAGES.SENT_VERIFICATION_CODE,
-                  userId: user.id
-                });
-              } else {
-                res.status(400).json({ error: true, message: MESSAGES.EMAIL_SERVER_ERROR });
-              }
+              res.status(400).json({ error: true, message: MESSAGES.EMAIL_SERVER_ERROR });
             }
           }
         } else {
-          res.status(401).json({ error: true, message: "Email not found." });
+          res.status(401).json({ error: true, message: "Email does not exist." });
         }
       }
     } catch (ex) {
@@ -572,7 +559,7 @@ class UserController {
   static async setPasswordWithVerifyCode(req, res, next) {
     try {
       const v = new Validator(req.body, {
-        userId: 'required|integer',
+        email: 'required|email',
         password: 'required|minLength:7',
         confirm_password: 'required|minLength:7',
         verification_code: 'required|minLength:4'
@@ -584,14 +571,14 @@ class UserController {
       } else {
         const checkOTPRightOrWrong = await User.findOne({
           where: {
-            id: req.body.userId, verification_code: req.body.verification_code, status: STATUS.ACTIVE
+            email: req.body.email, verification_code: req.body.verification_code, status: STATUS.ACTIVE
           },
-          attributes: ['id', 'verification_code']
+          attributes: ['id', 'email', 'verification_code']
         })
         if (typeof checkOTPRightOrWrong !== 'undefined' && checkOTPRightOrWrong !== null) {
           const user = await User.findOne({
             where: {
-              id: checkOTPRightOrWrong.id, verification_code: checkOTPRightOrWrong.verification_code,
+              email: checkOTPRightOrWrong.email, verification_code: checkOTPRightOrWrong.verification_code,
               forgot_password_date: { [Op.gte]: moment().subtract(60, 'minute').toDate() }
             },
             attributes: ['id', 'verification_code']
@@ -603,7 +590,7 @@ class UserController {
                   if (err) {
                     res.status(500).json({ error: true, message: err })
                   } else {
-                    await user.update({ password: hash, verification_code: null, resend_code_time: RESEND_CODE_TIME.ACCOUNT_WARNING_ONE })
+                    await user.update({ password: hash, verification_code: null })
                     res.status(200).json({ error: false, message: "Password changed successfully." })
                   }
                 })
@@ -612,7 +599,7 @@ class UserController {
               res.status(401).json({ error: true, message: "New password and confirm password did not matched." })
             }
           } else {
-            await checkOTPRightOrWrong.update({ verification_code: null, resend_code_time: RESEND_CODE_TIME.ACCOUNT_WARNING_ONE })
+            await checkOTPRightOrWrong.update({ verification_code: null })
             res.status(500).json({ error: true, message: MESSAGES.VERIFICATION_CODE_EXPIRED })
           }
         } else {
