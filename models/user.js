@@ -11,7 +11,9 @@ export default (sequelize, DataTypes) => {
     status: { type: DataTypes.INTEGER, defaultValue: 0 }
   }, {});
   User.associate = function (models) {
-    // associations can be defined here
+    User.belongsTo(models.unit,{
+      foreignKey: 'fk_unit_id'
+    })
   };
   return User;
 };
