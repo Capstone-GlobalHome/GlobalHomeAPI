@@ -24,5 +24,6 @@ export const MESSAGES = {
    EMAIL_SERVER_ERROR: "Email server error.",
    SENT_VERIFICATION_CODE: "Verification code has been sent your email address.",
    VERIFICATION_CODE_EXPIRED: "Verification code has been expired.",
-   VERIFICATION_CODE_WRONG: "Wrong verification code."
+   VERIFICATION_CODE_WRONG: "Wrong verification code.",
+   DATA_NOT_FOUND: "Data not found."
 }

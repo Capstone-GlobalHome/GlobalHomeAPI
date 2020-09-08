@@ -12,7 +12,8 @@ module.exports = (sequelize, DataTypes) => {
     static associate(models) {
       // define association here
       room.belongsTo(models.unit,{
-        foreignKey: 'fk_unit_id'
+        foreignKey: 'fk_unit_id',
+        as:'unit'
       })
       room.hasMany(models.thing,{
         foreignKey: 'fk_room_id',
@@ -21,6 +22,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   room.init({
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV1,
+      primaryKey: true
+    },
     nick_name: DataTypes.STRING,
     type: DataTypes.STRING,
     physical_location: DataTypes.STRING

@@ -13,15 +13,22 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       unit.hasMany(models.room, {
         foreignKey: 'fk_unit_id',
+        as: 'rooms',
         onDelete: 'cascade'
       })
-      unit.hasMany(models.User,{
+      unit.hasMany(models.User, {
         foreignKey: 'fk_unit_id',
+        as: 'users',
         onDelete: 'cascade'
       })
     }
   };
   unit.init({
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV1,
+      primaryKey: true
+    },
     name: DataTypes.STRING,
     unit_type: DataTypes.STRING,
     property_id: DataTypes.STRING,

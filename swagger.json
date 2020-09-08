@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Global Home Stub Api's",
-    "description": "Node STUB API's for GlobalHome.",
+    "description": "Node Real API's for GlobalHome.",
     "version": "1.0.0"
   },
   "paths": {
@@ -277,6 +277,69 @@
           }
         }
       }
+    },
+    "/properties/unit/create":{
+      "post": {
+        "tags": [
+          "Units"
+        ],
+        "summary": "Real api for creating unit from backend/support team",
+        "description": "user can create or configure unit for the user with name, unit-type, property_id,building_id,physical_location. All are required.",
+        "requestBody": {
+          "description": "Enter name, unit-type, property_id,building_id,physical_location.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "name",
+                  "unit_type",
+                  "property_id",
+                  "building_id",
+                  "physical_location"
+                ],
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "unit_type": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "property_id": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "building_id": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "physical_location": {
+                    "type": "string",
+                    "required": true
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid status",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          }
+        }
+      }
+
     }
   },
   "components": {

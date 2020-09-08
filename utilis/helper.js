@@ -49,6 +49,19 @@ class Helper {
   //   return { matched, v }
   // }
 
+  // createOrUpdate
+  static upsert(Model, values, condition) {
+    return Model.findOne({ where: condition })
+      .then((obj) => {
+        // update
+        if (obj) {
+          return obj.update(values)
+        }
+        // create
+        return Model.create(values)
+      })
+  }
+
 }
 
 export default Helper

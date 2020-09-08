@@ -1,6 +1,6 @@
 import express from "express"
 // import helper from "../utilis/helper"
-import userController from "../controller/user.controller"
+import userController from "../controller/user_controller"
 
 const route = express.Router();
 
@@ -17,6 +17,5 @@ route.post("/forgot/password", userController.forgotPassword); // Forgot passwor
 route.put("/set/password", userController.setPasswordWithVerifyCode); // Set password route
 
 // Authenticate roues
-
 
 export default route;
