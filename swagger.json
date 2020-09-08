@@ -2,7 +2,7 @@
   "openapi": "3.0.1",
   "info": {
     "title": "Global Home Stub Api's",
-    "description": "Node Real API's for GlobalHome.",
+    "description": "Backend API's for GlobalHome.",
     "version": "1.0.0"
   },
   "paths": {
@@ -278,68 +278,692 @@
         }
       }
     },
-    "/properties/unit/create":{
+    "/properties/{propertyId}/buildings/{buildingId}/units": {
+      "get": {
+        "tags": [
+          "units"
+        ],
+        "summary": "List the living or working units associated with this Property.",
+        "description": "List all units registered within a Property.",
+        "operationId": "listUnits",
+        "parameters": [
+          {
+            "name": "propertyId",
+            "in": "path",
+            "description": "The ID of the location/development.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "buildingId",
+            "in": "path",
+            "description": "The ID of the building within the development.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccessList"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "List of data  successfully.",
+                  "data": [
+                    {
+                      "id": "234324242423",
+                      "name": "test name",
+                      "unit_type": "building",
+                      "property_id": "2133214",
+                      "building_id": "243243",
+                      "physical_location": "Delhi",
+                      "updatedAt": "2020-09-08T06:33:32.458Z",
+                      "createdAt": "2020-09-08T06:33:32.458Z"
+                    },
+                    {
+                      "id": "234324242423",
+                      "name": "test name",
+                      "unit_type": "building",
+                      "property_id": "2133214",
+                      "building_id": "243243",
+                      "physical_location": "Delhi",
+                      "updatedAt": "2020-09-08T06:33:32.458Z",
+                      "createdAt": "2020-09-08T06:33:32.458Z"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No information found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          }
+        }
+      },
       "post": {
         "tags": [
-          "Units"
+          "units"
         ],
-        "summary": "Real api for creating unit from backend/support team",
-        "description": "user can create or configure unit for the user with name, unit-type, property_id,building_id,physical_location. All are required.",
+        "summary": "Create a Unit.",
+        "description": "Create a Unit within a Property.\n",
+        "operationId": "createUnit",
+        "parameters": [
+          {
+            "name": "propertyId",
+            "in": "path",
+            "description": "The ID of the location/development.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "buildingId",
+            "in": "path",
+            "description": "The ID of the building within the development.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
         "requestBody": {
-          "description": "Enter name, unit-type, property_id,building_id,physical_location.",
+          "description": "Create unit request body",
           "content": {
             "application/json": {
               "schema": {
-                "required": [
-                  "name",
-                  "unit_type",
-                  "property_id",
-                  "building_id",
-                  "physical_location"
-                ],
-                "type": "object",
-                "properties": {
-                  "name": {
-                    "type": "string",
-                    "required": true
-                  },
-                  "unit_type": {
-                    "type": "string",
-                    "required": true
-                  },
-                  "property_id": {
-                    "type": "string",
-                    "required": true
-                  },
-                  "building_id": {
-                    "type": "string",
-                    "required": true
-                  },
-                  "physical_location": {
-                    "type": "string",
-                    "required": true
+                "$ref": "#/components/schemas/CreateUnitRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Unit created successfully.",
+                  "data": {
+                    "id": "234324242423",
+                    "name": "test name",
+                    "unit_type": "building",
+                    "property_id": "2133214",
+                    "building_id": "243243",
+                    "physical_location": "Delhi",
+                    "updatedAt": "2020-09-08T06:33:32.458Z",
+                    "createdAt": "2020-09-08T06:33:32.458Z"
                   }
                 }
               }
             }
           },
-          "required": true
-        },
-        "responses": {
-          "200": {
-            "description": "successful operation"
-          },
-          "400": {
-            "description": "Invalid status",
+          "401": {
+            "description": "Unauthorized",
             "content": {}
           },
-          "404": {
-            "description": "Not Found",
+          "403": {
+            "description": "Access not authorized or forbidden",
             "content": {}
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
           }
         }
       }
-
+    },
+    "/properties/units/{unitId}": {
+      "get": {
+        "tags": [
+          "units"
+        ],
+        "summary": "Get individual units detail associated with this Property.",
+        "description": "Get individual units detail associated with this Property",
+        "operationId": "getUnitByid",
+        "parameters": [
+          {
+            "name": "unitId",
+            "in": "path",
+            "description": "The ID of the unit.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Unit info  successfully.",
+                  "data": {
+                    "id": "234324242423",
+                    "name": "test name",
+                    "unit_type": "building",
+                    "property_id": "2133214",
+                    "building_id": "243243",
+                    "physical_location": "Delhi",
+                    "updatedAt": "2020-09-08T06:33:32.458Z",
+                    "createdAt": "2020-09-08T06:33:32.458Z"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No information found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "units"
+        ],
+        "summary": "Update individual units detail associated with this Property.",
+        "description": "Update individual units detail associated with this Property",
+        "operationId": "updateUnit",
+        "parameters": [
+          {
+            "name": "unitId",
+            "in": "path",
+            "description": "The ID of the unit.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated unit request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUnitRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Unit updated successfully.",
+                  "data": {
+                    "id": "234324242423",
+                    "name": "test name",
+                    "unit_type": "building",
+                    "property_id": "2133214",
+                    "building_id": "243243",
+                    "physical_location": "Delhi",
+                    "updatedAt": "2020-09-08T06:33:32.458Z",
+                    "createdAt": "2020-09-08T06:33:32.458Z"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "units"
+        ],
+        "summary": "Delete unit detail",
+        "description": "Delete unit detail",
+        "operationId": "deleteUnit",
+        "parameters": [
+          {
+            "name": "unitId",
+            "in": "path",
+            "description": "The ID of the unit.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Unit detail deleted successfully.",
+                  "data": null
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "500": {
+            "description": "Error on delete operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rooms/create": {
+      "post": {
+        "tags": [
+          "rooms"
+        ],
+        "summary": "Create a room.",
+        "description": "Create a room within a unit.\n",
+        "operationId": "createRoom",
+        "requestBody": {
+          "description": "Create room request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRoomRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Room created successfully.",
+                  "data": {
+                    "id": "234324242423",
+                    "nick_name": "Test room name name",
+                    "type": "building",
+                    "fk_unit_id": "857fc2f0-f128-11ea-843d-c56569c85c6c",
+                    "physical_location": "Delhi"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rooms/{roomId}": {
+      "get": {
+        "tags": [
+          "rooms"
+        ],
+        "summary": "Get individual room details .",
+        "description": "Room detail information",
+        "operationId": "getRoomById",
+        "parameters": [
+          {
+            "name": "roomId",
+            "in": "path",
+            "description": "The ID of the room.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success room detail found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Room info  detail.",
+                  "data": {
+                    "id": "234324242423",
+                    "nick_name": "rooms2",
+                    "type": "roominddor",
+                    "physical_location": "Delhi",
+                    "fk_unit_id": "857fc2f0-f128-11ea-843d-c56569c85c6c"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No information found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "rooms"
+        ],
+        "summary": "Update rooms information",
+        "description": "Room informaton update api",
+        "operationId": "updateRoom",
+        "parameters": [
+          {
+            "name": "roomId",
+            "in": "path",
+            "description": "The ID of the room.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated room request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRoomRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Room info updated successfully.",
+                  "data": {
+                    "id": "234324242423",
+                    "nick_name": "test name",
+                    "type": "building",
+                    "physical_location": "Apartment 532A Apartment 532A "
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "rooms"
+        ],
+        "summary": "Delete room detail",
+        "description": "Delete room detail",
+        "operationId": "deleteRoom",
+        "parameters": [
+          {
+            "name": "roomId",
+            "in": "path",
+            "description": "The ID of the room.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Unit detail deleted successfully.",
+                  "data": null
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "500": {
+            "description": "Error on delete operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rooms/unit/:unitId": {
+      "get": {
+        "tags": [
+          "rooms"
+        ],
+        "summary": "List the rooms associated with this Unit id.",
+        "description": "List all rooms registered within a Unit.",
+        "operationId": "listRooms",
+        "parameters": [
+          {
+            "name": "unitId",
+            "in": "path",
+            "description": "The ID of the Unit.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Rooms detail found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccessList"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "List of data  successfully.",
+                  "data": [
+                    {
+                      "id": "234324242423",
+                      "nick_name": "rooms2",
+                      "type": "roominddor",
+                      "physical_location": "Delhi",
+                      "fk_unit_id": "857fc2f0-f128-11ea-843d-c56569c85c6c"
+                    },
+                    {
+                      "id": "234324242423",
+                      "nick_name": "rooms2",
+                      "type": "roominddor",
+                      "physical_location": "Delhi",
+                      "fk_unit_id": "857fc2f0-f128-11ea-843d-c56569c85c6c"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No information found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -380,14 +1004,262 @@
             "type": "date"
           }
         }
+      },
+      "ValidationError": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "Status code 422"
+          },
+          "status": {
+            "type": "string",
+            "description": "Error or success"
+          },
+          "message": {
+            "type": "array",
+            "description": "array of falied validation message"
+          },
+          "data": {
+            "type": "object",
+            "description": "Data object comes null in case of error"
+          }
+        },
+        "example": {
+          "statusCode": 422,
+          "status": "error",
+          "message": [
+            "The name field is mandatory."
+          ],
+          "data": null
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "Status code 422"
+          },
+          "status": {
+            "type": "string",
+            "description": "Error or success"
+          },
+          "message": {
+            "type": "array",
+            "description": "array of falied validation message"
+          },
+          "data": {
+            "type": "object",
+            "description": "Data object comes null in case of error"
+          }
+        },
+        "example": {
+          "statusCode": 500,
+          "status": "error",
+          "message": "Something went wrong",
+          "data": null
+        }
+      },
+      "NotFoundError": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "Status code 404"
+          },
+          "status": {
+            "type": "string",
+            "description": "Error or success"
+          },
+          "message": {
+            "type": "string",
+            "description": "No information found"
+          },
+          "data": {
+            "type": "object",
+            "description": "Data object comes null in case of error"
+          }
+        },
+        "example": {
+          "statusCode": 404,
+          "status": "error",
+          "message": "Data not found ",
+          "data": null
+        }
+      },
+      "ResponseSuccess": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "Status code 200"
+          },
+          "status": {
+            "type": "string",
+            "description": "success"
+          },
+          "message": {
+            "type": "string",
+            "description": "Success message"
+          },
+          "data": {
+            "type": "object",
+            "description": "Data object comes null in case of error"
+          }
+        }
+      },
+      "ResponseSuccessList": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "Status code 200"
+          },
+          "status": {
+            "type": "string",
+            "description": "success"
+          },
+          "message": {
+            "type": "string",
+            "description": "Success message"
+          },
+          "data": {
+            "type": "array",
+            "description": "List of Data object comes"
+          }
+        }
+      },
+      "CreateRoomRequest": {
+        "required": [
+          "nick_name",
+          "type",
+          "physical_location",
+          "unit_id"
+        ],
+        "type": "object",
+        "properties": {
+          "nick_name": {
+            "type": "string",
+            "required": true
+          },
+          "type": {
+            "type": "string",
+            "required": true
+          },
+          "physical_location": {
+            "type": "string"
+          },
+          "unit_id": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "nick_name": "rooms2",
+          "type": "roominddor",
+          "physical_location": "Delhi",
+          "unit_id": "857fc2f0-f128-11ea-843d-c56569c85c6c"
+        }
+      },
+      "UpdateRoomRequest": {
+        "required": [
+          "id",
+          "nick_name",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "nick_name": {
+            "type": "string",
+            "required": true
+          },
+          "type": {
+            "type": "string",
+            "required": true
+          },
+          "physical_location": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "id": "ASDADS-SDDSA-ADSADS-ASDDSA",
+          "nick_name": "rooms2",
+          "type": "roominddor",
+          "physical_location": "Delhi"
+        }
+      },
+      "CreateUnitRequest": {
+        "required": [
+          "name",
+          "unit_type",
+          "physical_location"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "unit_type": {
+            "type": "string",
+            "required": true
+          },
+          "physical_location": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "name": "Apartment 532A",
+          "unit_type": "Residential",
+          "physical_location": "Apartment 532A Apartment 532A "
+        }
+      },
+      "UpdateUnitRequest": {
+        "required": [
+          "id",
+          "name",
+          "unit_type",
+          "physical_location"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "unit_type": {
+            "type": "string",
+            "required": true
+          },
+          "physical_location": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "id": "ASDADS-SDDSA-ADSADS-ASDDSA",
+          "name": "Apartment 532A",
+          "unit_type": "Residential",
+          "physical_location": "Apartment 532A Apartment 532A "
+        }
       }
-    },
-    "securitySchemes": {
-      "JWT": {
-        "type": "apiKey",
-        "name": "Authorization",
-        "in": "header"
-      }
+    }
+  },
+  "securitySchemes": {
+    "JWT": {
+      "type": "apiKey",
+      "name": "Authorization",
+      "in": "header"
     }
   }
 }
