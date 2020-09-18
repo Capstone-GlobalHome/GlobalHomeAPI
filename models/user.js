@@ -1,6 +1,11 @@
 'use strict';
 export default (sequelize, DataTypes) => {
   const User = sequelize.define('User', {
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV1,
+      primaryKey: true
+    },
     name: { type: DataTypes.STRING },
     email: { type: DataTypes.STRING },
     verification_code: { type: DataTypes.INTEGER },
@@ -11,7 +16,7 @@ export default (sequelize, DataTypes) => {
     status: { type: DataTypes.INTEGER, defaultValue: 0 }
   }, {});
   User.associate = function (models) {
-    User.belongsTo(models.unit,{
+    User.belongsTo(models.unit, {
       foreignKey: 'fk_unit_id'
     })
   };

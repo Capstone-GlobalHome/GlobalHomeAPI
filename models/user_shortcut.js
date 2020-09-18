@@ -11,10 +11,26 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      user_shortcut.belongsTo(models.global_feature_config, {
+        foreignKey: 'fk_feature_id',
+        as: 'user_feature'
+      })
+     
     }
   };
   user_shortcut.init({
-    access_count: DataTypes.INTEGER
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV1,
+      primaryKey: true
+    },
+    userId: {
+      type: DataTypes.STRING
+    },
+    access_count: {
+      type: DataTypes.INTEGER,
+      defaultValue: 0,
+    }
   }, {
     sequelize,
     modelName: 'user_shortcut',

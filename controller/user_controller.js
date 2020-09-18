@@ -16,7 +16,7 @@ const User = db.User
 
 class UserController {
   //SignUp New User
-  static async create(req, res, next) {
+  async create(req, res, next) {
     try {
       const v = new Validator(req.body, {
         name: 'required',
@@ -187,10 +187,10 @@ class UserController {
 
 
   //Verify verification code
-  static async verifyCode(req, res, next) {
+  async verifyCode(req, res, next) {
     try {
       const v = new Validator(req.body, {
-        userId: 'required|integer',
+        userId: 'required',
         verification_code: 'required|minLength:4'
       })
       const matched = await v.check()
@@ -288,7 +288,7 @@ class UserController {
   // }
 
   //Resend verification code
-  static async resendCode(req, res, next) {
+  async resendCode(req, res, next) {
     try {
       const v = new Validator(req.body, {
         userId: 'required|integer',
@@ -368,7 +368,7 @@ class UserController {
   // }
 
   //Authenticate User
-  static async authenticate(req, res, next) {
+  async authenticate(req, res, next) {
     try {
       const v = new Validator(req.body, {
         email: 'required|email',
@@ -503,7 +503,7 @@ class UserController {
   // }
 
   // Forgot Password
-  static async forgotPassword(req, res, next) {
+  async forgotPassword(req, res, next) {
     try {
       const v = new Validator(req.body, {
         email: 'required|email'
@@ -556,7 +556,7 @@ class UserController {
   }
 
   // Change password with verification code
-  static async setPasswordWithVerifyCode(req, res, next) {
+  async setPasswordWithVerifyCode(req, res, next) {
     try {
       const v = new Validator(req.body, {
         email: 'required|email',
@@ -611,7 +611,49 @@ class UserController {
     }
   }
 
+  async setUserUnitID(req, res, next) {
+    try {
+      const v = new Validator(req.body, {
+        userId: 'required',
+        unitId: 'required'
+      })
+      const matched = await v.check()
+      if (!matched) {
+        const errors = _.map(v.errors, value => value.message);
+        res.status(422).json({
+          statusCode: 422,
+          status: "error",
+          message: errors,
+          data: null
+        })
+      } else {
+        let { userId, unitId } = req.body;
+        User.findByPk(userId).then(result => {
+          if (!result) {
+            res.status(404).json({
+              status: "error",
+              message: "No User found with userId:" + userId,
+              statusCode: 404
+            });
+          } else {
+            result.update({ 'fk_unit_id': unitId }).then(user => {
+              res.status(200).json({
+                statusCode: 200,
+                status: "success",
+                message: "User info updated",
+                data: user
+              })
+            });
+          }
+        });
+      }
+    } catch (error) {
+      next(error);
+    }
+
+  }
+
 
 }
 
-export default UserController
+module.exports = new UserController();

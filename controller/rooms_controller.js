@@ -8,11 +8,12 @@ import db from '../models'
 const Room = db.room
 
 class RoomsController {
-  
+
   async getRoomById(req, res, next) {
     try {
       const roomId = req.params.roomId;
-      Room.findByPk(roomId).then(result => {
+      // { include: ["unit"] }
+      Room.findByPk(roomId, { include: ["unit"] }).then(result => {
         if (!result) {
           res.status(404).json({
             status: "error",
@@ -32,7 +33,6 @@ class RoomsController {
       next(error);
     }
   }
-
 
   //Get list of rooms inside unit
   async getRoomByUnitID(req, res, next) {

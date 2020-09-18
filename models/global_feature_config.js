@@ -14,8 +14,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   global_feature_config.init({
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV1,
+      primaryKey: true
+    },
     title: DataTypes.STRING,
     identifier: DataTypes.STRING,
+    image: DataTypes.STRING,
     position: DataTypes.INTEGER,
     status: DataTypes.INTEGER
   }, {

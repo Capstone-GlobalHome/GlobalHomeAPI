@@ -6,12 +6,15 @@ module.exports = {
         allowNull: false,
         autoIncrement: true,
         primaryKey: true,
-        type: Sequelize.INTEGER
+        type: Sequelize.UUID
       },
       title: {
         type: Sequelize.STRING
       },
       identifier: {
+        type: Sequelize.STRING
+      },
+      image: {
         type: Sequelize.STRING
       },
       position: {

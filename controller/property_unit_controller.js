@@ -104,7 +104,6 @@ class PropertiesUnitController {
     }
   }
 
-
   //update unit for the given propertyid and building id
    async updateUnit(req, res, next) {
     try {
@@ -152,6 +151,7 @@ class PropertiesUnitController {
       next(error);
     }
   }
+ 
   //Delete unit for the given propertyid and building id
    async deleteUnit(req, res, next) {
     try {
