@@ -6,78 +6,21 @@ import _ from "lodash"
 import db from '../models'
 import { image } from 'faker';
 const GlobalFeatureConfig = db.global_feature_config
+const ThingDbOps = db.thing
 const UserShortCut = db.user_shortcut
 
-class HomeController {
-
-    // Get list of home features
-    async getFeatures(req, res, next) {
-        try {
-            GlobalFeatureConfig.findAll({
-                where: {
-                    status: 1
-                },
-                order: [
-                    ['position', 'ASC'],
-                ],
-                attributes: ['id', 'title', 'identifier', 'image', 'position', 'status']
-            }).then(result => {
-                if (!result) {
-                    res.status(404).json({
-                        status: "error",
-                        message: "No Units information is found with given property and building id",
-                        statusCode: 404
-                    });
-                } else {
-                    res.status(200).json({
-                        statusCode: 200,
-                        status: "success",
-                        message: "Global Feature list successfully.",
-                        data: result
-                    });
-
-                }
-            });
-        } catch (error) {
-            next(error);
-        }
-    }
-
-    // Get list of home features
-    async getFeaturesById(req, res, next) {
-        try {
-            const featureId = req.params.featureId;
-            GlobalFeatureConfig.findByPk(featureId).then(result => {
-                if (!result) {
-                    res.status(404).json({
-                        status: "error",
-                        message: "No information is found with given id:" + featureId,
-                        statusCode: 404
-                    });
-                } else {
-                    res.status(200).json({
-                        statusCode: 200,
-                        status: "success",
-                        message: "Feature information found successfully.",
-                        data: result
-                    });
-
-                }
-            })
-        } catch (error) {
-            next(error);
-        }
-    }
+class ThingsController {
 
     //Create Feature entry
     async create(req, res, next) {
         try {
             const v = new Validator(req.body, {
-                title: 'required',
+                name: 'required',
                 identifier: 'required',
                 image: 'required',
-                position: 'required',
-                status: 'required'
+                type: 'required',
+                status: 'required',
+                roomId: 'required'
             })
             const matched = await v.check()
             if (!matched) {
@@ -89,20 +32,23 @@ class HomeController {
                     data: null
                 })
             } else {
-                GlobalFeatureConfig.create({
-                    title: req.body.title,
+                ThingDbOps.create({
+                    name: req.body.name,
                     identifier: req.body.identifier,
                     image: req.body.image,
-                    position: req.body.position,
-                    status: req.body.status
+                    type: req.body.type,
+                    status: req.body.status,
+                    fk_room_id: req.body.roomId,
+                    parent_id: req.body.parentId
                 }).then((config) => {
                     res.status(200).json({
                         statusCode: 200,
                         status: "success",
-                        message: "Feature config created successfully.",
+                        message: "Thing config created successfully.",
                         data: config
                     });
                 })
+
             }
         } catch (error) {
             next(error);
@@ -114,11 +60,9 @@ class HomeController {
         try {
             const v = new Validator(req.body, {
                 id: 'required',
-                title: 'required',
+                name: 'required',
                 identifier: 'required',
                 image: 'required',
-                position: 'required',
-                status: 'required'
             })
             const matched = await v.check()
             if (!matched) {
@@ -130,7 +74,7 @@ class HomeController {
                     data: null
                 })
             } else {
-                GlobalFeatureConfig.findOne({
+                ThingDbOps.findOne({
                     where: {
                         id: req.body.id
                     }
@@ -138,7 +82,7 @@ class HomeController {
                     if (!result) {
                         res.status(404).json({
                             status: "error",
-                            message: "Feature Config information not found with id:" + req.body.id,
+                            message: "Things Config information not found with id:" + req.body.id,
                             statusCode: 404
                         });
                     } else {
@@ -146,7 +90,7 @@ class HomeController {
                             res.status(200).json({
                                 statusCode: 200,
                                 status: "success",
-                                message: "Feature config updated successfully.",
+                                message: "Things config updated successfully.",
                                 data: unit
                             });
                         })
@@ -158,12 +102,74 @@ class HomeController {
         }
     }
 
+    // Get list of units associated with given propertyid and building id
+    async getThingsInRooms(req, res, next) {
+        try {
+            const roomId = req.body.roomId;
+            ThingDbOps.findAll({
+                where: {
+                    fk_room_id: roomId
+                }
+            }).then(result => {
+                if (!result) {
+                    res.status(404).json({
+                        status: "error",
+                        message: "No things config information is found ",
+                        statusCode: 404
+                    });
+                } else {
+                    res.status(200).json({
+                        statusCode: 200,
+                        status: "success",
+                        message: "List of units successfully.",
+                        data: result
+                    });
+
+                }
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+    // Get list of units associated with given propertyid and building id
+    async getChildThings(req, res, next) {
+        try {
+            const thingId = req.params.parentId;
+            ThingDbOps.findAll({
+                where: {
+                    parent_id: thingId,
+                    status: 1
+                }
+            }).then(result => {
+                if (!result) {
+                    res.status(404).json({
+                        status: "error",
+                        message: "No things config information is found ",
+                        statusCode: 404
+                    });
+                } else {
+                    res.status(200).json({
+                        statusCode: 200,
+                        status: "success",
+                        message: "List of things successfully.",
+                        data: result
+                    });
+
+                }
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+
     //Delete unit for the given propertyid and building id
     async delete(req, res, next) {
         try {
-            GlobalFeatureConfig.destroy({
+            const thingId = req.params.id;
+            ThingDbOps.destroy({
                 where: {
-                    id: req.body.id
+                    id: thingId
                 }
             }).then(num => {
                 if (num >= 1) {
@@ -187,93 +193,25 @@ class HomeController {
         }
     }
 
-    // add user shortcut
-    async addShortCuts(req, res, next) {
+    //Get things individual information
+    async getThing(req, res, next) {
         try {
-            const v = new Validator(req.body, {
-                userId: 'required',
-                featureId: 'required'
-            })
-            const matched = await v.check()
-            if (!matched) {
-                const errors = _.map(v.errors, value => value.message);
-                res.status(422).json({
-                    statusCode: 422,
-                    status: "error",
-                    message: errors,
-                    data: null
-                })
-            } else {
-                UserShortCut.findOne({
-                    where: {
-                        userId: req.body.userId,
-                        fk_feature_id: req.body.featureId
-                    }
-                }).then(result => {
-                    if (!result) {
-                        UserShortCut.create({
-                            userId: req.body.userId,
-                            fk_feature_id: req.body.featureId,
-                            access_count: 0
-                        }).then((config) => {
-                            res.status(200).json({
-                                statusCode: 200,
-                                status: "success",
-                                message: "User shortcut created successfully.",
-                                data: config
-                            });
-                        })
-                    } else {
-                        let { access_count } = result;
-                        result.update({ access_count: access_count + 1 }).then((unit) => {
-                            res.status(200).json({
-                                statusCode: 200,
-                                status: "success",
-                                message: "User shortcut updated successfully.",
-                                data: unit
-                            });
-                        })
-                    }
-                });
-
-
-            }
-        } catch (error) {
-            next(error);
-        }
-    }
-    // Get list of home features
-    // Get list of user shortcuts
-    async getUserShortCuts(req, res, next) {
-        try {
-            UserShortCut.findAll({
-                where: {
-                    userId: req.body.userId
-                },
-                include: [{
-                    model: GlobalFeatureConfig,
-                    as: "user_feature",
-                    attributes: ['id', 'title', 'identifier', 'image', 'position', 'status']
-                }],
-                order: [
-                    ['access_count', 'DESC'],
-                ],
-                attributes: ['id', 'access_count']
-            }).then(result => {
+            const thingId = req.params.id;
+            // { include: ["unit"] }
+            ThingDbOps.findByPk(thingId).then(result => {
                 if (!result) {
                     res.status(404).json({
                         status: "error",
-                        message: "No shortcuts information found information.",
+                        message: "No Room information is found with given roomId:" + thingId,
                         statusCode: 404
                     });
                 } else {
                     res.status(200).json({
                         statusCode: 200,
                         status: "success",
-                        message: "Global Feature list successfully.",
+                        message: "Room information successfully.",
                         data: result
                     });
-
                 }
             });
         } catch (error) {
@@ -281,7 +219,6 @@ class HomeController {
         }
     }
 
-
 }
 
-module.exports = new HomeController();
+module.exports = new ThingsController();

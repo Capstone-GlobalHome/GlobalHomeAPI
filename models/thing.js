@@ -11,15 +11,25 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
-      thing.belongsTo(models.room,{
+      thing.belongsTo(models.room, {
         foreignKey: 'fk_room_id'
+      })
+      thing.hasMany(models.thing, {
+        foreignKey: {
+          name: 'parent_id',
+          allowNull: true
+        },
+        onDelete: 'cascade',
+        as: 'things-groups'
       })
     }
   };
   thing.init({
     name: DataTypes.STRING,
-    type: DataTypes.STRING,
-    is_group_of_thing: DataTypes.BOOLEAN
+    identifier: DataTypes.STRING,
+    image: DataTypes.STRING,
+    type: DataTypes.INTEGER,
+    status: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'thing',

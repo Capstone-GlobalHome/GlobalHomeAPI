@@ -1,16 +1,15 @@
 import express from "express"
 // import helper from "../utilis/helper"
-import homeController from "../controller/home_controller"
+import thingsController from "../controller/things_controller"
 
-const roomsRoute = express.Router();
+const thingsRoute = express.Router();
 
-roomsRoute.post("/create", homeController.create); // create or update room's
-roomsRoute.get("/features", homeController.getFeatures); //  update room's
-roomsRoute.get("/features/:featureId", homeController.getFeaturesById); //  update room's
-roomsRoute.put("/features", homeController.update); //  update room's
-roomsRoute.delete("/features", homeController.delete); //  update room's
-roomsRoute.post("/addShortcuts", homeController.addShortCuts); // create or update room's
-roomsRoute.get("/userShortcuts", homeController.getUserShortCuts); // create or update room's
+thingsRoute.post("/create", thingsController.create); // create or update room's
+thingsRoute.put("/create", thingsController.update); //  update room's
+thingsRoute.post("/list", thingsController.getThingsInRooms); //  get things in rooms room's
+thingsRoute.get("/list/:parentId", thingsController.getChildThings); //  get things detail room's
+thingsRoute.get("/:id", thingsController.getThing); //  get detail of particular thing 
+thingsRoute.delete("/delete/:id", thingsController.delete); //  update room's
 
 
-module.exports = roomsRoute;
+module.exports = thingsRoute;
