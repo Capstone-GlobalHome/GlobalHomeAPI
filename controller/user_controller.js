@@ -6,7 +6,7 @@ import Sequelize from "sequelize"
 import _ from "lodash"
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
-import Helper from "../utilis/Helper"
+import Helper from "../utilis/helper"
 import { environment } from "../config/environment"
 import { STATUS, RESEND_CODE_TIME, MESSAGES } from "../constants/user.constant"
 // Models
