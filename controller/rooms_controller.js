@@ -1,7 +1,6 @@
 "use strict";
 import { Validator } from 'node-input-validator'
 import _ from "lodash"
-import Helper from "../utilis/Helper"
 import { MESSAGES } from "../constants/user.constant"
 // Models
 import db from '../models'
