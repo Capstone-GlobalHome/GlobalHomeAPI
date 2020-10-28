@@ -3,7 +3,7 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class thing_type extends Model {
+  class thing_temp_val extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,7 +13,7 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  thing_type.init({
+  thing_temp_val.init({
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV1,
@@ -21,12 +21,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     thing_id: DataTypes.STRING,
     target: DataTypes.STRING,
-    index: DataTypes.STRING,
-    command: DataTypes.STRING,
-    command_protocal: DataTypes.STRING
+    value: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'thing_type',
+    modelName: 'thing_temp_val',
   });
-  return thing_type;
+  return thing_temp_val;
 };

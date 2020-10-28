@@ -4,7 +4,6 @@ import { Validator } from 'node-input-validator'
 import _ from "lodash"
 // Models
 import db from '../models'
-import { image } from 'faker';
 const GlobalFeatureConfig = db.global_feature_config
 const UserShortCut = db.user_shortcut
 

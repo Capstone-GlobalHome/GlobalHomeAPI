@@ -3,7 +3,8 @@ const {
   Model
 } = require('sequelize');
 module.exports = (sequelize, DataTypes) => {
-  class thing_type extends Model {
+  class thing_mapping_config
+    extends Model {
     /**
      * Helper method for defining associations.
      * This method is not a part of Sequelize lifecycle.
@@ -13,20 +14,19 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
     }
   };
-  thing_type.init({
+  thing_mapping_config.init({
     id: {
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV1,
       primaryKey: true
     },
-    thing_id: DataTypes.STRING,
-    target: DataTypes.STRING,
-    index: DataTypes.STRING,
-    command: DataTypes.STRING,
-    command_protocal: DataTypes.STRING
+    target_function: DataTypes.STRING,
+    device_identifier: DataTypes.STRING,
+    name_space: DataTypes.STRING,
+    executing_command: DataTypes.STRING
   }, {
     sequelize,
-    modelName: 'thing_type',
+    modelName: 'thing_mapping_config',
   });
-  return thing_type;
+  return thing_mapping_config;
 };
