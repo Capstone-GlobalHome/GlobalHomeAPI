@@ -6,7 +6,7 @@
     "version": "1.0.0"
   },
   "paths": {
-    "/signup": {
+    "/user/signup": {
       "post": {
         "tags": [
           "User"
@@ -58,7 +58,7 @@
         }
       }
     },
-    "/signin": {
+    "/user/signin": {
       "post": {
         "tags": [
           "User"
@@ -102,7 +102,7 @@
         }
       }
     },
-    "/verify/code": {
+    "/user/verify/code": {
       "put": {
         "tags": [
           "Verification"
@@ -147,7 +147,7 @@
         }
       }
     },
-    "/resend/code": {
+    "/user/resend/code": {
       "post": {
         "tags": [
           "Verification"
@@ -190,7 +190,7 @@
         }
       }
     },
-    "/forgot/password": {
+    "/user/forgot/password": {
       "post": {
         "tags": [
           "Forgot Password"
@@ -228,7 +228,7 @@
         }
       }
     },
-    "/set/password": {
+    "/user/set/password": {
       "put": {
         "tags": [
           "Forgot Password"
@@ -276,6 +276,62 @@
             "description": "Not Found"
           }
         }
+      }
+    },
+    "/user/userDetail": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get user Info detail.",
+        "description": "User information",
+        "operationId": "getUser",
+        "responses": {
+          "200": {
+            "description": "Successfully user Detail show",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "User detail information info  successfully.",
+                  "data": {
+                    "id": "234324242423",
+                    "name": "test name",
+                    "Email": "email@email.com",
+                    "status": "0/1/2"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No information found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/properties/{propertyId}/buildings/{buildingId}/units": {
@@ -2307,13 +2363,13 @@
           "roomId": "3adad6e0-f9a2-11ea-b93d-df07a6f5c7a7"
         }
       }
-    }
-  },
-  "securitySchemes": {
-    "JWT": {
-      "type": "apiKey",
-      "name": "Authorization",
-      "in": "header"
+    },
+    "securitySchemes": {
+      "JWT": {
+        "type": "apiKey",
+        "name": "x-access-token",
+        "in": "header"
+      }
     }
   }
 }

@@ -25,17 +25,38 @@ class UserController {
       })
       const matched = await v.check()
       if (!matched) {
-        res.status(422).json({ error: true, message: MESSAGES.VALIDATION_ERROR, validation_error: v.errors })
-        return;
+        const errors = _.map(v.errors, value => value.message);
+        res.status(422).json({
+          statusCode: 422,
+          status: "error",
+          message: errors,
+          data: null
+        })
+        // statusCode: 200,
+        // status: "success",
+        // message: "Thing config created successfully.",
+        // data: config
+
       } else {
         User.findOne({ where: { email: req.body.email } }).then(result => {
           if (result) {
-            res.status(409).json({ error: true, message: `${req.body.email} : already exists.` }); return;
+            res.status(409).json(
+              {
+                statusCode: 409,
+                status: "error",
+                message: `${req.body.email} : already exists.`,
+                data: null
+              });
           } else {
             bcrypt.genSalt(10, async (err, salt) => {
               bcrypt.hash(req.body.password, salt, async (err, hash) => {
                 if (err) {
-                  res.status(500).json({ error: true, message: err });
+                  res.status(500).json({
+                    statusCode: 500,
+                    status: "error",
+                    message: err,
+                    data: null
+                  });
                 } else {
                   let code = Math.floor(1000 + Math.random() * 9000);
                   let subject = "GlobalHome Verification Code";
@@ -50,13 +71,26 @@ class UserController {
                       resend_code_time: RESEND_CODE_TIME.SIGNUP_CODE
                     }).then(user => {
                       res.status(200).json({
-                        error: false,
+                        statusCode: 200,
+                        status: "success",
                         message: MESSAGES.SENT_VERIFICATION_CODE,
-                        userId: user.id
+                        data: {
+                          "id": user.id,
+                          "name": user.name,
+                          "email": user.email,
+                          "status": user.status,
+                          "avatar": ''
+                        }
                       });
                     });
                   } else {
-                    res.status(400).json({ error: true, message: MESSAGES.EMAIL_SERVER_ERROR })
+                    res.status(400).json(
+                      {
+                        statusCode: 400,
+                        status: "error",
+                        message: MESSAGES.EMAIL_SERVER_ERROR,
+                        data: null
+                      })
                   }
                 }
               });
@@ -78,8 +112,13 @@ class UserController {
       })
       const matched = await v.check()
       if (!matched) {
-        res.status(422).json({ error: true, message: MESSAGES.VALIDATION_ERROR, validation_error: v.errors })
-        return;
+        const errors = _.map(v.errors, value => value.message);
+        res.status(422).json({
+          statusCode: 422,
+          status: "error",
+          message: errors,
+          data: null
+        });
       } else {
         const checkOTPRightOrWrong = await User.findOne({
           where: {
@@ -105,19 +144,37 @@ class UserController {
               createdAt: user.createdAt,
               updatedAt: user.updatedAt
             }
-            let token = jwt.sign(user.dataValues, environment.JWT_SECRET_KEY, { expiresIn: environment.JWT_EXPIRY_TIME })
+            let token = jwt.sign(user.dataValues, environment.JWT_SECRET_KEY, { expiresIn: environment.JWT_EXPIRY_TIME });
+
+            let refreshToken = jwt.sign(user.dataValues, environment.REFRESH_KEY, { expiresIn: environment.JWT_REFERESH_TIME });
+
             res.status(200).json({
-              error: false,
+              statusCode: 200,
+              status: "success",
               message: "User verified successfully.",
               user: data,
-              token: token
+              token: token,
+              tokenExpireAt: token ? new Date(jwt.decode(token).exp * 1000) : "",
+              refreshToken: refreshToken,
+              refreshTokenExpireAt: refreshToken ? new Date(jwt.decode(refreshToken).exp * 1000) : "",
             })
           } else {
             await User.update({ verification_code: null, resend_code_time: RESEND_CODE_TIME.SIGNUP_CODE }, { where: { id: checkOTPRightOrWrong.id } })
-            res.status(500).json({ error: true, message: MESSAGES.VERIFICATION_CODE_EXPIRED })
+            res.status(500).json({
+              statusCode: 500,
+              status: "error",
+              data: null,
+              message: MESSAGES.VERIFICATION_CODE_EXPIRED
+            })
           }
         } else {
-          res.status(500).json({ error: true, message: MESSAGES.VERIFICATION_CODE_WRONG })
+          res.status(500).json(
+            {
+              statusCode: 500,
+              status: "error",
+              data: null,
+              message: MESSAGES.VERIFICATION_CODE_WRONG
+            })
         }
       }
     } catch (error) {
@@ -129,23 +186,38 @@ class UserController {
   async resendCode(req, res, next) {
     try {
       const v = new Validator(req.body, {
-        userId: 'required|integer',
+        userId: 'required',
         email: 'required|email'
       })
       const matched = await v.check()
       if (!matched) {
-        res.status(422).json({ error: true, message: MESSAGES.VALIDATION_ERROR, validation_error: v.errors })
-        return;
+        const errors = _.map(v.errors, value => value.message);
+        res.status(422).json({
+          statusCode: 422,
+          status: "error",
+          message: errors,
+          data: null
+        });
       } else {
         const user = await User.findOne({ where: { id: req.body.userId, email: req.body.email } })
         if (typeof user !== 'undefined' && user !== null) {
           if (user.status === STATUS.BLOCK) {
-            res.status(423).json({ error: true, message: MESSAGES.ACCOUNT_BLOCK })
+            res.status(423).json({
+              statusCode: 423,
+              status: "error",
+              data: null,
+              message: MESSAGES.ACCOUNT_BLOCK
+            })
           } else {
             let time = Helper.checkResendCodeTime(user.resend_code_time)
             if (time === RESEND_CODE_TIME.ACCOUNT_BLOCK) {
               await user.update({ verification_code: null, resend_code_time: time, status: STATUS.BLOCK })
-              res.status(423).json({ error: true, message: MESSAGES.ACCOUNT_BLOCK })
+              res.status(423).json({
+                statusCode: 423,
+                status: "error",
+                data: null,
+                message: MESSAGES.ACCOUNT_BLOCK
+              })
             } else {
               let code = Math.floor(1000 + Math.random() * 9000);
               let subject = "GlobalHome Verification Code";
@@ -156,14 +228,30 @@ class UserController {
               const mail = Helper.sendMail(subject, bodyOfMail, user.email);
               if (mail) {
                 await user.update({ verification_code: code, resend_code_time: time, resend_code_date: Date.now() })
-                res.status(200).json({ error: false, message: MESSAGES.SENT_VERIFICATION_CODE });
+                res.status(200).json({
+                  statusCode: 200,
+                  status: "success",
+                  message: MESSAGES.SENT_VERIFICATION_CODE,
+                  data: null
+                });
               } else {
-                res.status(400).json({ error: true, message: MESSAGES.EMAIL_SERVER_ERROR })
+                res.status(400).json({
+                  statusCode: 422,
+                  status: "error",
+                  data: null,
+                  message: MESSAGES.EMAIL_SERVER_ERROR
+
+                })
               }
             }
           }
         } else {
-          res.status(404).json({ error: true, message: "User not found." });
+          res.status(404).json({
+            statusCode: 422,
+            status: "error",
+            data: null,
+            message: "User not found."
+          });
         }
       }
     } catch (error) {
@@ -180,20 +268,37 @@ class UserController {
       })
       const matched = await v.check()
       if (!matched) {
-        res.status(422).json({ error: true, message: MESSAGES.VALIDATION_ERROR, validation_error: v.errors })
-        return;
+        const errors = _.map(v.errors, value => value.message);
+        res.status(422).json({
+          statusCode: 422,
+          status: "error",
+          message: errors,
+          data: null
+        })
+
       } else {
         User.findOne({ where: { email: req.body.email } }).then(user => {
           if (!user) {
             res.status(404).json({
-              error: true,
+              statusCode: 404,
+              status: "error",
+              data: null,
               message: 'You have entered an invalid email or password.'
             }); return;
           } else {
             if (user.status === STATUS.BLOCK) {
-              res.status(423).json({ error: true, message: MESSAGES.ACCOUNT_BLOCK })
+              res.status(423).json({
+                statusCode: 423,
+                status: "error",
+                data: null, message: MESSAGES.ACCOUNT_BLOCK
+              })
             } else if (user.status === STATUS.PENDING) {
-              res.status(403).json({ error: true, message: "Account verification is pending." })
+              res.status(403).json({
+                statusCode: 403,
+                status: "error",
+                data: null,
+                message: "Account verification is pending."
+              })
             } else {
               if (bcrypt.compareSync(req.body.password, user.password)) {
                 let data = {
@@ -205,20 +310,37 @@ class UserController {
                   updatedAt: user.updatedAt
                 }
                 let token = jwt.sign(user.dataValues, environment.JWT_SECRET_KEY, { expiresIn: environment.JWT_EXPIRY_TIME })
+
+                let refreshToken = jwt.sign(user.dataValues, environment.REFRESH_KEY, { expiresIn: environment.JWT_REFERESH_TIME });
+
                 res.status(200).json({
-                  error: false,
+                  statusCode: 200,
+                  status: "success",
                   message: "Login successfully.",
                   user: data,
-                  token: token
+                  token: token,
+                  tokenExpireAt: token ? new Date(jwt.decode(token).exp * 1000) : "",
+                  refreshToken: refreshToken,
+                  refreshTokenExpireAt: refreshToken ? new Date(jwt.decode(refreshToken).exp * 1000) : "",
+
                 })
               } else {
-                res.status(404).json({ error: true, message: "You have entered an invalid email or password." });
+                res.status(404).json({
+                  statusCode: 404,
+                  status: "error",
+                  data: null,
+                  message: "You have entered an invalid email or password."
+                });
               }
             }
           }
         })
           .catch(err => {
-            res.status(500).send({ error: true, message: err.message })
+            res.status(500).send({
+              statusCode: 500,
+              status: "error",
+              data: null, message: err.message
+            })
           });
       }
     } catch (err) {
@@ -234,8 +356,13 @@ class UserController {
       })
       const matched = await v.check()
       if (!matched) {
-        res.status(422).json({ error: true, message: "Email field is required." })
-        return;
+        const errors = _.map(v.errors, value => value.message);
+        res.status(422).json({
+          statusCode: 422,
+          status: "error",
+          message: errors,
+          data: null
+        })
       } else {
         const user = await User.findOne({
           where: { email: req.body.email },
@@ -243,9 +370,17 @@ class UserController {
         })
         if (typeof user !== 'undefined' && user !== null) {
           if (user.status === STATUS.BLOCK) {
-            res.status(423).json({ error: true, message: MESSAGES.ACCOUNT_BLOCK })
+            res.status(423).json({
+              statusCode: 423,
+              status: "error",
+              data: null, message: MESSAGES.ACCOUNT_BLOCK
+            })
           } else if (user.status === STATUS.PENDING) {
-            res.status(403).json({ error: true, message: "Account verification is pending." })
+            res.status(403).json({
+              statusCode: 403,
+              status: "error",
+              data: null, message: "Account verification is pending."
+            })
           } else {
             let code = Math.floor(1000 + Math.random() * 9000);
             let subject = "GlobalHome Password Reset";
@@ -261,17 +396,27 @@ class UserController {
               await user.update({
                 verification_code: code, forgot_password_date: Date.now()
               })
+
               res.status(200).json({
-                error: false,
+                statusCode: 200,
+                status: "success",
                 message: MESSAGES.SENT_VERIFICATION_CODE,
                 userId: user.email
               });
             } else {
-              res.status(400).json({ error: true, message: MESSAGES.EMAIL_SERVER_ERROR });
+              res.status(400).json({
+                statusCode: 400,
+                status: "error",
+                data: null, message: MESSAGES.EMAIL_SERVER_ERROR
+              });
             }
           }
         } else {
-          res.status(401).json({ error: true, message: "Email does not exist." });
+          res.status(401).json({
+            statusCode: 401,
+            status: "error",
+            data: null, message: "Email does not exist."
+          });
         }
       }
     } catch (ex) {
@@ -290,8 +435,13 @@ class UserController {
       })
       const matched = await v.check()
       if (!matched) {
-        res.status(422).json({ error: true, message: MESSAGES.VALIDATION_ERROR, validation_error: v.errors })
-        return;
+        const errors = _.map(v.errors, value => value.message);
+        res.status(422).json({
+          statusCode: 422,
+          status: "error",
+          message: errors,
+          data: null
+        })
       } else {
         const checkOTPRightOrWrong = await User.findOne({
           where: {
@@ -312,22 +462,42 @@ class UserController {
               bcrypt.genSalt(10, (err, salt) => {
                 bcrypt.hash(req.body.password, salt, async (err, hash) => {
                   if (err) {
-                    res.status(500).json({ error: true, message: err })
+                    res.status(500).json({
+                      statusCode: 404,
+                      status: "error",
+                      data: null, message: err
+                    })
                   } else {
                     await user.update({ password: hash, verification_code: null })
-                    res.status(200).json({ error: false, message: "Password changed successfully." })
+                    res.status(200).json({
+                      statusCode: 200,
+                      status: "success",
+                      data: null, message: "Password changed successfully."
+                    })
                   }
                 })
               })
             } else {
-              res.status(401).json({ error: true, message: "New password and confirm password did not matched." })
+              res.status(401).json({
+                statusCode: 401,
+                status: "error",
+                data: null, message: "New password and confirm password did not matched."
+              })
             }
           } else {
             await checkOTPRightOrWrong.update({ verification_code: null })
-            res.status(500).json({ error: true, message: MESSAGES.VERIFICATION_CODE_EXPIRED })
+            res.status(500).json({
+              statusCode: 500,
+              status: "error",
+              data: null, message: MESSAGES.VERIFICATION_CODE_EXPIRED
+            })
           }
         } else {
-          res.status(500).json({ error: true, message: MESSAGES.VERIFICATION_CODE_WRONG })
+          res.status(500).json({
+            statusCode: 500,
+            status: "error",
+            data: null, message: MESSAGES.VERIFICATION_CODE_WRONG
+          })
         }
       }
     } catch (error) {
@@ -374,6 +544,26 @@ class UserController {
     } catch (error) {
       next(error);
     }
+
+  }
+
+
+  async getUserDetail(req, res, next) {
+    console.log(req);
+    if (req.headers && req.headers.authorization) {
+      let authorization = req.headers.authorization.split(' ')[1],
+        decoded;
+      try {
+        decoded = jwt.verify(authorization, secret.secretToken);
+      } catch (e) {
+        return res.status(401).send('unauthorized');
+      }
+      let userId = decoded.id;
+      console.log(userId)
+      // Fetch the user by id 
+
+    }
+    return res.send(500);
 
   }
 

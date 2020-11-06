@@ -6,7 +6,7 @@ import home from "./home_routes"
 import things from "./things_route"
 const router = express.Router()
 
-router.use("/", user);
+router.use("/user", user);
 router.use("/properties", property_unit_routes);
 router.use("/rooms", rooms);
 router.use("/home", home);

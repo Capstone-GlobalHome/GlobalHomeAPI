@@ -62,6 +62,21 @@ class Helper {
       })
   }
 
+  static validateToken(req, res, next) {
+    console.log("auth")
+    if (req.auth.check()) {
+      next();
+    } else {
+      console.log("error",req.auth);
+      res.status(401).json({
+        status: "error",
+        message: [{ error: req.jwtError && req.jwtError.message == "jwt expired" ? req.jwtError.message : "Could not validate the token" }],
+        data: null,
+      });
+    }
+  };
+
+
 }
 
 export default Helper
