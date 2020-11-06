@@ -21,7 +21,7 @@ class UserController {
       const v = new Validator(req.body, {
         name: 'required',
         email: 'required|email',
-        password: 'required|minLength:7'
+        password: 'required|minLength:8'
       })
       const matched = await v.check()
       if (!matched) {
@@ -264,7 +264,7 @@ class UserController {
     try {
       const v = new Validator(req.body, {
         email: 'required|email',
-        password: 'required|minLength:7'
+        password: 'required|minLength:8'
       })
       const matched = await v.check()
       if (!matched) {
@@ -429,8 +429,8 @@ class UserController {
     try {
       const v = new Validator(req.body, {
         email: 'required|email',
-        password: 'required|minLength:7',
-        confirm_password: 'required|minLength:7',
+        password: 'required|minLength:8',
+        confirm_password: 'required|minLength:8',
         verification_code: 'required|minLength:4'
       })
       const matched = await v.check()
@@ -549,21 +549,35 @@ class UserController {
 
 
   async getUserDetail(req, res, next) {
-    console.log(req);
-    if (req.headers && req.headers.authorization) {
-      let authorization = req.headers.authorization.split(' ')[1],
-        decoded;
-      try {
-        decoded = jwt.verify(authorization, secret.secretToken);
-      } catch (e) {
-        return res.status(401).send('unauthorized');
-      }
-      let userId = decoded.id;
-      console.log(userId)
-      // Fetch the user by id 
+    try {
+      const userId = req.user.id;
+      User.findByPk(userId).then(user => {
+        if (!user) {
+          res.status(404).json({
+            status: "error",
+            message: "No user information found:" + userId,
+            statusCode: 404
+          });
+        } else {
+          res.status(200).json({
+            statusCode: 200,
+            status: "success",
+            message: "User information detail.",
+            data: {
+              id: user.id,
+              name: user.name,
+              email: user.email,
+              status: user.status,
+              createdAt: user.createdAt,
+              updatedAt: user.updatedAt
+            }
+          });
+        }
+      });
 
+    } catch (error) {
+      next(error);
     }
-    return res.send(500);
 
   }
 

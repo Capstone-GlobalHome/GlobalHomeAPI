@@ -3,6 +3,9 @@ import sendgrid from "@sendgrid/mail"
 import { RESEND_CODE_TIME } from "../constants/user.constant"
 import { environment } from '../config/environment'
 
+
+import jwt from "jsonwebtoken"
+
 class Helper {
   //Send email via provider
   static async sendMail(subject, bodyOfMail, receiverMailId) {
@@ -63,17 +66,25 @@ class Helper {
   }
 
   static validateToken(req, res, next) {
-    console.log("auth")
-    if (req.auth.check()) {
-      next();
-    } else {
-      console.log("error",req.auth);
-      res.status(401).json({
+
+    const authHeader = req.headers['authorization']
+    const token = authHeader && authHeader.split(' ')[1]
+    if (token == null) return res.sendStatus(401).json({
+      statusCode: 401,
+      status: "error",
+      message: "Authentication Token required",
+      data: null
+    })
+
+    jwt.verify(token, environment.JWT_SECRET_KEY, (err, user) => {
+      if (err) return res.sendStatus(403).json({
+        statusCode: 403,
         status: "error",
-        message: [{ error: req.jwtError && req.jwtError.message == "jwt expired" ? req.jwtError.message : "Could not validate the token" }],
-        data: null,
-      });
-    }
+        message: "Authentication Token expired or invalid",
+      })
+      req.user = user
+      next() // pass the execution off to whatever request the client intended
+    })
   };
 
 

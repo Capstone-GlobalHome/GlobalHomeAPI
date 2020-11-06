@@ -2367,7 +2367,7 @@
     "securitySchemes": {
       "JWT": {
         "type": "apiKey",
-        "name": "x-access-token",
+        "name": "Authorization",
         "in": "header"
       }
     }
