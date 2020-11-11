@@ -1,36 +1,94 @@
 
 import ThingsMappingRepo from '../repo/things_mapping_repo'
 
+import { returnType } from "../opcua/returnType";
+
 import OpcuaSessionHelper from '../opcua/opcua_session'
 const opcuaSessionHelper = new OpcuaSessionHelper();
+import {
+    AttributeIds,
+    StatusCodes,
+} from "node-opcua";
 
-const opcua = require("node-opcua");
-const endPointUrl = "opc.tcp://25.21.162.217:48050";
 
 class OpcuaProvider {
 
-    async execute(getThingType, value) {
 
-        const project = await ThingsMappingRepo.findThingMappingConfig(getThingType);
-        if (project === null) {
-            console.log('Not found!');
+
+    async execute(getThingType, res) {
+
+        const thingsIotmappingConfig = await ThingsMappingRepo.findThingMappingConfig(getThingType);
+        if (typeof thingsIotmappingConfig !== 'undefined' && thingsIotmappingConfig !== null) {
+            let serverUrl = getThingType.serverUrl;
+            let index = getThingType.index;
+            const executeCommand = this.buildOpcuaCommand(thingsIotmappingConfig, index);
+            console.log("cmd", executeCommand);
+            thingsIotmappingConfig.argValue = getThingType.argValue;
+            await this.buildOpcuaExecutionCommand(thingsIotmappingConfig, executeCommand, serverUrl)
         } else {
-            console.log("Full command", project.executing_command); // 'My Title'
+            res.status(404).json({
+                status: "error",
+                message: "Things mapping configuration not found.",
+                statusCode: 404
+            });
         }
-        // const opcuaclient = await this.buildOpcuaExecutionCommand(project)
-        const read = await opcuaSessionHelper.readNode(endPointUrl);
-        const write = await opcuaSessionHelper.writeToNode(endPointUrl);
+        // const read = await opcuaSessionHelper.readNode(endPointUrl);
+        // const write = await opcuaSessionHelper.writeToNode(endPointUrl);
+    }
+
+    async read(getThingType, res) {
+        const thingsIotmappingConfig = await ThingsMappingRepo.findThingMappingConfig(getThingType);
+        if (typeof thingsIotmappingConfig !== 'undefined' && thingsIotmappingConfig !== null) {
+            let serverUrl = getThingType.serverUrl;
+            let index = getThingType.index;
+            const executeCommand = this.buildOpcuaCommand(thingsIotmappingConfig, index);
+            console.log("cmd", executeCommand);
+            return await this.buildOpcuaReadCommand(executeCommand, serverUrl)
+        } else {
+            return undefined;
+        }
+
+        // const read = await opcuaSessionHelper.readNode(endPointUrl);
+        // const write = await opcuaSessionHelper.writeToNode(endPointUrl);
     }
 
 
-    async buildOpcuaExecutionCommand(project) {
+    buildOpcuaCommand(config, index) {
+        let ns = config.name_space;
+        let exe_cmd = config.executing_command;
+        let cmd = ns + ';' + exe_cmd.replace('index', index);
+        return cmd;
+    }
+
+    async buildOpcuaExecutionCommand(config, cmd, serverUrl) {
         const client = await opcuaSessionHelper.getOpcuaClient()
-        console.log("client[" + client + "]");
-        const session = await opcuaSessionHelper.getOPcuaSession(client);
-        // console.log("session[" + session+"]");
-        const cmd = "ns=13;s=GVL.astSMIBlind[1].lrSetPosition";
-        var status_code = await session.writeSingleNode(cmd, { dataType: opcua.DataType.Double, value: 10 });
+        const session = await opcuaSessionHelper.getOPcuaSession(client, serverUrl);
+        var status_code = await session.writeSingleNode(cmd, this.buildWriteValueObject(config.argument_type,
+            config.argValue));
+        await session.close();
+        await client.disconnect();
         console.log('writeOPCUACommands status_code =', status_code);
+    }
+    async buildOpcuaReadCommand(cmd, serverUrl) {
+        const client = await opcuaSessionHelper.getOpcuaClient()
+        const session = await opcuaSessionHelper.getOPcuaSession(client, serverUrl);
+        const exeCmd = cmd.toString();
+        const nodeId = "ns=13;s=GVL.astDALIFixture[0].bSetLevel"
+        const dataValue = await session.read({ nodeId, attributeId: AttributeIds.Value });
+        await session.close();
+        await client.disconnect();
+        console.log("dataValue", dataValue);
+        if (dataValue.value.value !== null) {
+            return dataValue.value;
+        } else {
+            return undefined;
+        }
+    }
+
+    buildWriteValueObject(type, value) {
+        let writeValue = { "dataType": returnType[type], "value": value }
+        console.log("writevalue", writeValue);
+        return writeValue;
     }
 
     async getstate() {

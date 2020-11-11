@@ -25,6 +25,11 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   thing.init({
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV1,
+      primaryKey: true
+    },
     name: DataTypes.STRING,
     identifier: DataTypes.STRING,
     image: DataTypes.STRING,

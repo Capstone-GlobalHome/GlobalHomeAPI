@@ -1841,7 +1841,7 @@
     "/things/delete/{id}": {
       "delete": {
         "tags": [
-          "home"
+          "things"
         ],
         "summary": "Delete Gh feature config",
         "description": "Delete feature Config",
@@ -1888,6 +1888,275 @@
               "application/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/things/config/create": {
+      "post": {
+        "tags": [
+          "things"
+        ],
+        "summary": "Create a things configuration for IOT operation.",
+        "description": "Create a things configuration for IOT operation",
+        "operationId": "createThingConfig",
+        "requestBody": {
+          "description": "Create things request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateThingConfigRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Thing config created successfully.",
+                  "data": {
+                    "id": "e750e550-23ea-11eb-9c75-5374cff90c7b",
+                    "index": "0",
+                    "thing_id": "c0725590-23ea-11eb-9c75-5374cff90c7b",
+                    "identifier": "DIMMABLE_LIGHT",
+                    "serverUrl": "opc.tcp://25.21.162.217:48050",
+                    "command_protocal": "opcua",
+                    "updatedAt": "2020-11-11T06:55:37.509Z",
+                    "createdAt": "2020-11-11T06:55:37.509Z"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/things/mapping/create": {
+      "post": {
+        "tags": [
+          "things"
+        ],
+        "summary": "Create a things IOT mapping information ",
+        "description": "Create a things IOT mapping information about detail of required field for execution of command ",
+        "operationId": "createThingIOTMapping",
+        "requestBody": {
+          "description": "Create things request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateThingIOTMappingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Thing config created successfully.",
+                  "data": {
+                    "id": "633ec9e0-23ee-11eb-b835-0fa11b33bb2d",
+                    "identifier": "DIMMABLE_LIGHT",
+                    "target_function": "switch",
+                    "name_space": "ns=13",
+                    "executing_command": "ns=13;s=GVL.astDALIFixture[index].bSetLevel",
+                    "command": "setOn",
+                    "argument_type": "boolean",
+                    "return_type": "",
+                    "read_or_write": "W",
+                    "updatedAt": "2020-11-11T07:20:33.918Z",
+                    "createdAt": "2020-11-11T07:20:33.918Z"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/things/execute": {
+      "post": {
+        "tags": [
+          "things"
+        ],
+        "summary": "Execute a write operation to IOT server",
+        "description": "Execute a write operation command , which is configure at the backend ",
+        "operationId": "execute",
+        "requestBody": {
+          "description": "Create things request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExecuteCmdRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Things command executed successfully.",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No record found with given data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/things/read": {
+      "post": {
+        "tags": [
+          "things"
+        ],
+        "summary": "Read IOT device status",
+        "description": "Api to execute a command to the IOT server which send us back the current status of device",
+        "operationId": "readDeviceState",
+        "requestBody": {
+          "description": "Create things request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReadDataRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Things command executed successfully.",
+                  "data": {
+                    "dataType": "Boolean",
+                    "arrayType": "Scalar",
+                    "value": true
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No record found with given data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
                 }
               }
             }
@@ -2361,6 +2630,174 @@
           "status": 1,
           "type": 0,
           "roomId": "3adad6e0-f9a2-11ea-b93d-df07a6f5c7a7"
+        }
+      },
+      "CreateThingConfigRequest": {
+        "required": [
+          "thing_id",
+          "identifier",
+          "index",
+          "serverUrl",
+          "command_protocal"
+        ],
+        "type": "object",
+        "properties": {
+          "thing_id": {
+            "type": "string",
+            "required": true
+          },
+          "identifier": {
+            "type": "string",
+            "required": true
+          },
+          "index": {
+            "type": "string",
+            "required": true
+          },
+          "serverUrl": {
+            "type": "string",
+            "required": true
+          },
+          "command_protocal": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "thing_id": "c0725590-23ea-11eb-9c75-5374cff90c7b",
+          "index": "0",
+          "identifier": "DIMMABLE_LIGHT",
+          "serverUrl": "opc.tcp://25.21.162.217:48050",
+          "command_protocal": "opcua"
+        }
+      },
+      "CreateThingIOTMappingRequest": {
+        "required": [
+          "identifier",
+          "target_function",
+          "command",
+          "argument_type",
+          "return_type",
+          "read_or_write",
+          "name_space",
+          "executing_command"
+        ],
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "required": true
+          },
+          "target_function": {
+            "type": "string",
+            "required": true
+          },
+          "command": {
+            "type": "string",
+            "required": true
+          },
+          "argument_type": {
+            "type": "string",
+            "required": true
+          },
+          "return_type": {
+            "type": "string",
+            "required": true
+          },
+          "read_or_write": {
+            "type": "string",
+            "required": true
+          },
+          "name_space": {
+            "type": "string",
+            "required": true
+          },
+          "executing_command": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "identifier": "DIMMABLE_LIGHT",
+          "target_function": "switch",
+          "command": "setOn",
+          "argument_type": "boolean",
+          "return_type": "",
+          "read_or_write": "W",
+          "name_space": "ns=13",
+          "executing_command": "ns=13;s=GVL.astDALIFixture[index].bSetLevel"
+        }
+      },
+      "ExecuteCmdRequest": {
+        "required": [
+          "thing_id",
+          "identifier",
+          "target_function",
+          "command",
+          "argValue"
+        ],
+        "type": "object",
+        "properties": {
+          "thing_id": {
+            "type": "string",
+            "required": true
+          },
+          "identifier": {
+            "type": "string",
+            "required": true
+          },
+          "target_function": {
+            "type": "string",
+            "required": true
+          },
+          "command": {
+            "type": "string",
+            "required": true
+          },
+          "argValue": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "thing_id": "c0725590-23ea-11eb-9c75-5374cff90c7b",
+          "identifier": "DIMMABLE_LIGHT",
+          "target_function": "switch",
+          "command": "setOn",
+          "argValue": false
+        }
+      },
+      "ReadDataRequest": {
+        "required": [
+          "thing_id",
+          "identifier",
+          "target_function",
+          "command"
+        ],
+        "type": "object",
+        "properties": {
+          "thing_id": {
+            "type": "string",
+            "required": true
+          },
+          "identifier": {
+            "type": "string",
+            "required": true
+          },
+          "target_function": {
+            "type": "string",
+            "required": true
+          },
+          "command": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "thing_id": "c0725590-23ea-11eb-9c75-5374cff90c7b",
+          "identifier": "DIMMABLE_LIGHT",
+          "target_function": "switch",
+          "command": "getOn"
         }
       }
     },

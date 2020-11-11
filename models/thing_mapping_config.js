@@ -20,8 +20,12 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV1,
       primaryKey: true
     },
+    identifier: DataTypes.STRING,
     target_function: DataTypes.STRING,
-    device_identifier: DataTypes.STRING,
+    command: DataTypes.STRING,
+    argument_type:DataTypes.STRING,
+    return_type:DataTypes.STRING,
+    read_or_write:DataTypes.STRING,
     name_space: DataTypes.STRING,
     executing_command: DataTypes.STRING
   }, {

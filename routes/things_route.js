@@ -12,9 +12,10 @@ thingsRoute.get("/list/:parentId", thingsController.getChildThings); //  get thi
 thingsRoute.get("/:id", thingsController.getThing); //  get detail of particular thing 
 thingsRoute.delete("/delete/:id", thingsController.delete); //  update room's
 //Things operation perform api
-thingsRoute.post("/execute", thingsOpsController.execute); //  update room's
-thingsRoute.post("/type/create", thingsOpsController.createType); // create or update room's
-thingsRoute.post("/mapping/create", thingsOpsController.createIotConfig); // create or update room's
+thingsRoute.post("/config/create", thingsOpsController.createThingsConfig); // create or update room's
+thingsRoute.post("/mapping/create", thingsOpsController.createThingIotMappingConfig); // create or update room's
 
+thingsRoute.post("/execute", thingsOpsController.execute); //  update room's
+thingsRoute.post("/read", thingsOpsController.read); //  update room's
 
 module.exports = thingsRoute;
