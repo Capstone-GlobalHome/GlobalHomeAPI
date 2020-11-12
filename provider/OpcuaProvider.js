@@ -16,7 +16,6 @@ class OpcuaProvider {
 
 
     async execute(getThingType, res) {
-
         const thingsIotmappingConfig = await ThingsMappingRepo.findThingMappingConfig(getThingType);
         if (typeof thingsIotmappingConfig !== 'undefined' && thingsIotmappingConfig !== null) {
             let serverUrl = getThingType.serverUrl;
@@ -32,8 +31,6 @@ class OpcuaProvider {
                 statusCode: 404
             });
         }
-        // const read = await opcuaSessionHelper.readNode(endPointUrl);
-        // const write = await opcuaSessionHelper.writeToNode(endPointUrl);
     }
 
     async read(getThingType, res) {
@@ -48,8 +45,6 @@ class OpcuaProvider {
             return undefined;
         }
 
-        // const read = await opcuaSessionHelper.readNode(endPointUrl);
-        // const write = await opcuaSessionHelper.writeToNode(endPointUrl);
     }
 
 
@@ -63,25 +58,29 @@ class OpcuaProvider {
     async buildOpcuaExecutionCommand(config, cmd, serverUrl) {
         const client = await opcuaSessionHelper.getOpcuaClient()
         const session = await opcuaSessionHelper.getOPcuaSession(client, serverUrl);
-        var status_code = await session.writeSingleNode(cmd, this.buildWriteValueObject(config.argument_type,
+        const status_code = await session.writeSingleNode(cmd, this.buildWriteValueObject(config.argument_type,
             config.argValue));
         await session.close();
         await client.disconnect();
         console.log('writeOPCUACommands status_code =', status_code);
+        let obj = { "value": status_code.value, "description": status_code.description, "name:": status_code.name }
+        return obj;
     }
     async buildOpcuaReadCommand(cmd, serverUrl) {
         const client = await opcuaSessionHelper.getOpcuaClient()
         const session = await opcuaSessionHelper.getOPcuaSession(client, serverUrl);
-        const exeCmd = cmd.toString();
-        const nodeId = "ns=13;s=GVL.astDALIFixture[0].bSetLevel"
-        const dataValue = await session.read({ nodeId, attributeId: AttributeIds.Value });
+        console.log("cmd", cmd);
+        const exeCmd =cmd.trim();
+        // const nodeId = "ns=13;s=GVL.astDALIFixture[0].bSetLevel"
+        let nodeId = "ns=13;s=GVL.astDALIFixture[0].lrLevel"
+        const dataValue = await session.read({ exeCmd, attributeId: AttributeIds.Value });
         await session.close();
         await client.disconnect();
         console.log("dataValue", dataValue);
         if (dataValue.value.value !== null) {
             return dataValue.value;
         } else {
-            return undefined;
+            return dataValue;
         }
     }
 
@@ -91,16 +90,39 @@ class OpcuaProvider {
         return writeValue;
     }
 
-    async getstate() {
-        // getting mapping from things-mapping-config
-        // call to things_temp_value table for stub api call.
-        const client = opcuaSessionHelper.getOpcuaClient()
-        const session = opcuaSessionHelper.getOPcuaSession(client);
-        const dataValue = await session.read({ nodeId, attributeId: AttributeIds.Value });
-        if (dataValue.statusCode !== StatusCodes.Good) {
-            console.log("Could not read ", nodeId);
-        }
-        console.log(` temperature = ${dataValue.value.toString()}`);
+    async buildtestExecutionCommand(config, cmd, serverUrl) {
+        const client = await opcuaSessionHelper.getOpcuaClient()
+        const session = await opcuaSessionHelper.getOPcuaSession(client, serverUrl);
+        var status_code = await session.writeSingleNode(cmd, this.buildWriteValueObject(config.argument_type,
+            config.argValue));
+        await session.close();
+        await client.disconnect();
+        console.log('writeOPCUACommands status_code =', status_code);
     }
+
+    async tstCmd(getThingType) {
+        let serverUrl = getThingType.serverUrl;
+        let executeCommand = getThingType.command;
+        const readWrite = getThingType.operation
+
+        console.log("Operation", readWrite);
+        if (readWrite == "R") {
+            console.log("OperationR", readWrite);
+            const data = await this.buildOpcuaReadCommand(executeCommand, serverUrl)
+            return data;
+        } else {
+            console.log("OperationW", readWrite);
+            let dataType = getThingType.dataType
+            let argValue = getThingType.argValue;
+            let config = {
+                "argument_type": dataType,
+                "argValue": argValue
+            }
+            const data = await this.buildOpcuaExecutionCommand(config, executeCommand, serverUrl)
+            return data;
+        }
+
+    }
+
 }
 export default OpcuaProvider

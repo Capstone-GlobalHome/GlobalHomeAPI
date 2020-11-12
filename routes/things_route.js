@@ -17,5 +17,6 @@ thingsRoute.post("/mapping/create", thingsOpsController.createThingIotMappingCon
 
 thingsRoute.post("/execute", thingsOpsController.execute); //  update room's
 thingsRoute.post("/read", thingsOpsController.read); //  update room's
+thingsRoute.post("/tst/cmd", thingsOpsController.tstCmd); //  update room's
 
 module.exports = thingsRoute;

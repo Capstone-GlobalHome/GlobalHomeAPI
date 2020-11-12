@@ -124,6 +124,24 @@ class ThingsOperationController {
         }
     }
 
+
+    //Execute thing command
+    async tstCmd(req, res, next) {
+        try {
+            const protocol = new ProviderFactory();
+            protocol.getProvider(req.body.protocol);
+            const data = await protocol.provider.tstCmd(req.body)
+            console.log("Data", data)
+            res.status(200).json({
+                statusCode: 200,
+                status: "success",
+                message: "Things command executed successfully.",
+                data: data
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
 }
 
 module.exports = new ThingsOperationController();
