@@ -67,15 +67,18 @@ class OpcuaProvider {
         return obj;
     }
     async buildOpcuaReadCommand(cmd, serverUrl) {
-        const client = await opcuaSessionHelper.getOpcuaClient()
-        const session = await opcuaSessionHelper.getOPcuaSession(client, serverUrl);
+        // const client = await opcuaSessionHelper.getOpcuaClient()
+        // const session = await opcuaSessionHelper.getOPcuaSession(client, serverUrl);
         console.log("cmd", cmd);
         const exeCmd =cmd.trim();
         // const nodeId = "ns=13;s=GVL.astDALIFixture[0].bSetLevel"
         let nodeId = "ns=13;s=GVL.astDALIFixture[0].lrLevel"
-        const dataValue = await session.read({ exeCmd, attributeId: AttributeIds.Value });
-        await session.close();
-        await client.disconnect();
+        console.log("TypeOf",typeof exeCmd)
+        console.log("TypeOf nodeId",typeof nodeId)
+        const dataValue = await opcuaSessionHelper.readNode(serverUrl,exeCmd);
+        // session.read({ ${exeCmd}, attributeId: AttributeIds.Value });
+        // await session.close();
+        // await client.disconnect();
         console.log("dataValue", dataValue);
         if (dataValue.value.value !== null) {
             return dataValue.value;

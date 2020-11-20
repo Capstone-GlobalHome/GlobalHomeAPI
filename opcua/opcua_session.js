@@ -82,7 +82,7 @@ class OpcuaSessionHelper {
             console.log("Error !!!", err);
         }
     }
-    async readNode(endpointUrl) {
+    async readNode(endpointUrl, nodeId) {
 
         try {
             const client = OPCUAClient.create({
@@ -102,7 +102,7 @@ class OpcuaSessionHelper {
             const session = await client.createSession();
 
             // const nodeId = "ns=13;s=GVL.astSMIBlind[1].lrSetPosition";
-            const nodeId = "ns=13;s=GVL.astDALIFixture[1].bSetLevel";
+            // const nodeId = "ns=13;s=GVL.astDALIFixture[1].bSetLevel";
             const dataValue = await session.read({ nodeId, attributeId: AttributeIds.Value });
             if (dataValue.statusCode !== StatusCodes.Good) {
                 console.log("Could not read ", nodeId);
@@ -110,6 +110,7 @@ class OpcuaSessionHelper {
             console.log(` temperature = ${dataValue.value.toString()}`);
             await session.close();
             await client.disconnect();
+            return dataValue;
         }
         catch (err) {
             console.log("Error !!!", err);
