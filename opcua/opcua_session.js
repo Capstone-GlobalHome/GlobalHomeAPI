@@ -51,13 +51,13 @@ class OpcuaSessionHelper {
 
     }
 
-    async writeToNode(endpointUrl) {
+    async writeToNode(endpointUrl, cmd, valueToNode) {
 
         try {
             const client = OPCUAClient.create({
                 endpoint_must_exist: false,
                 connectionStrategy: {
-                    maxRetry: 2,
+                    maxRetry: 3,
                     initialDelay: 2000,
                     maxDelay: 10 * 1000
                 }
@@ -71,12 +71,12 @@ class OpcuaSessionHelper {
             const session = await client.createSession();
 
             // const cmd = "ns=13;s=GVL.astSMIBlind[1].lrSetPosition";
-            const cmd = "ns=13;s=GVL.astDALIFixture[1].bSetLevel";
-            var status_code = await session.writeSingleNode(cmd, { dataType: DataType.Boolean, value: true });
+            var status_code = await session.writeSingleNode(cmd, valueToNode);
             console.log('writeOPCUACommands status_code =', status_code);
 
             await session.close();
             await client.disconnect();
+            return status_code;
         }
         catch (err) {
             console.log("Error !!!", err);
@@ -107,7 +107,7 @@ class OpcuaSessionHelper {
             if (dataValue.statusCode !== StatusCodes.Good) {
                 console.log("Could not read ", nodeId);
             }
-            console.log(` temperature = ${dataValue.value.toString()}`);
+            console.log(` data = ${dataValue.value.toString()}`);
             await session.close();
             await client.disconnect();
             return dataValue;
