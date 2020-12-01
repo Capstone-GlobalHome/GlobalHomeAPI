@@ -6,13 +6,23 @@ import Sequelize from "sequelize"
 import _ from "lodash"
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
+import AWS from 'aws-sdk'
+import uuid from 'uuid/v4'
 import Helper from "../utilis/helper"
 import { environment } from "../config/environment"
 import { STATUS, RESEND_CODE_TIME, MESSAGES } from "../constants/user.constant"
+import s3 from '../config/s3-config'
 // Models
 import db from '../models'
 const Op = Sequelize.Op;
 const User = db.User
+const ShortcutImage = db.ShortcutImage
+
+// const s3 = new AWS.S3({
+//   accessKeyId: environment.AWS_SES_ACCESS_KEY,
+//   secretAccessKey: environment.AWS_SES_SECRET_ACCESS_KEY,
+//   region: environment.AWS_SES_REGION
+// })
 
 class UserController {
   //SignUp New User
@@ -61,37 +71,71 @@ class UserController {
                   let code = Math.floor(1000 + Math.random() * 9000);
                   let subject = "GlobalHome Verification Code";
                   let bodyOfMail = '<p>Hi ' + req.body.name + ', </p><p>Global Home new account verificaiton code is <b>' + code + '</b>.</p><p>Thank You</p><p> GlobalHome</p>'
-                  const mail = Helper.sendMail(subject, bodyOfMail, req.body.email);
-                  if (mail) {
-                    User.create({
-                      name: req.body.name,
-                      email: req.body.email,
-                      password: hash,
-                      verification_code: code,
-                      resend_code_time: RESEND_CODE_TIME.SIGNUP_CODE
-                    }).then(user => {
-                      res.status(200).json({
-                        statusCode: 200,
-                        status: "success",
-                        message: MESSAGES.SENT_VERIFICATION_CODE,
-                        data: {
-                          "id": user.id,
-                          "name": user.name,
-                          "email": user.email,
-                          "status": user.status,
-                          "avatar": ''
-                        }
-                      });
-                    });
-                  } else {
-                    res.status(400).json(
-                      {
-                        statusCode: 400,
-                        status: "error",
-                        message: MESSAGES.EMAIL_SERVER_ERROR,
-                        data: null
+                  // const mail = Helper.sendMail(subject, bodyOfMail, req.body.email);
+                  Helper.sendMail(subject, bodyOfMail, req.body.email, async (err, result) => {
+                    if (!err) {
+                      result.then(async data => {
+                        User.create({
+                          name: req.body.name,
+                          email: req.body.email,
+                          password: hash,
+                          verification_code: code,
+                          resend_code_time: RESEND_CODE_TIME.SIGNUP_CODE
+                        }).then(user => {
+                          res.status(200).json({
+                            statusCode: 200,
+                            status: "success",
+                            message: MESSAGES.SENT_VERIFICATION_CODE,
+                            data: {
+                              "id": user.id,
+                              "name": user.name,
+                              "email": user.email,
+                              "status": user.status,
+                              "avatar": ''
+                            }
+                          });
+                        });
                       })
-                  }
+                    } else {
+                      res.status(400).json(
+                        {
+                          statusCode: 400,
+                          status: "error",
+                          message: MESSAGES.EMAIL_SERVER_ERROR,
+                          data: null
+                        })
+                    }
+                  })
+                  // if (mail) {
+                  //   User.create({
+                  //     name: req.body.name,
+                  //     email: req.body.email,
+                  //     password: hash,
+                  //     verification_code: code,
+                  //     resend_code_time: RESEND_CODE_TIME.SIGNUP_CODE
+                  //   }).then(user => {
+                  //     res.status(200).json({
+                  //       statusCode: 200,
+                  //       status: "success",
+                  //       message: MESSAGES.SENT_VERIFICATION_CODE,
+                  //       data: {
+                  //         "id": user.id,
+                  //         "name": user.name,
+                  //         "email": user.email,
+                  //         "status": user.status,
+                  //         "avatar": ''
+                  //       }
+                  //     });
+                  //   });
+                  // } else {
+                  //   res.status(400).json(
+                  //     {
+                  //       statusCode: 400,
+                  //       status: "error",
+                  //       message: MESSAGES.EMAIL_SERVER_ERROR,
+                  //       data: null
+                  //     })
+                  // }
                 }
               });
             });
@@ -225,24 +269,43 @@ class UserController {
                 '<p>Global Home new account verificaiton code is <b>' + code + '</b></p>.' +
                 '<p>Thank You</p>' +
                 '<p>GlobalHome</p>';
-              const mail = Helper.sendMail(subject, bodyOfMail, user.email);
-              if (mail) {
-                await user.update({ verification_code: code, resend_code_time: time, resend_code_date: Date.now() })
-                res.status(200).json({
-                  statusCode: 200,
-                  status: "success",
-                  message: MESSAGES.SENT_VERIFICATION_CODE,
-                  data: null
-                });
-              } else {
-                res.status(400).json({
-                  statusCode: 422,
-                  status: "error",
-                  data: null,
-                  message: MESSAGES.EMAIL_SERVER_ERROR
-
-                })
-              }
+              // const mail = Helper.sendMail(subject, bodyOfMail, user.email);
+              Helper.sendMail(subject, bodyOfMail, user.email, async (err, result) => {
+                if (!err) {
+                  result.then(async data => {
+                    await user.update({ verification_code: code, resend_code_time: time, resend_code_date: Date.now() })
+                    res.status(200).json({
+                      statusCode: 200,
+                      status: "success",
+                      message: MESSAGES.SENT_VERIFICATION_CODE,
+                      data: null
+                    });
+                  })
+                } else {
+                  res.status(400).json({
+                    statusCode: 422,
+                    status: "error",
+                    data: null,
+                    message: MESSAGES.EMAIL_SERVER_ERROR
+                  })
+                }
+              })
+              // if (mail) {
+              //   await user.update({ verification_code: code, resend_code_time: time, resend_code_date: Date.now() })
+              //   res.status(200).json({
+              //     statusCode: 200,
+              //     status: "success",
+              //     message: MESSAGES.SENT_VERIFICATION_CODE,
+              //     data: null
+              //   });
+              // } else {
+              //   res.status(400).json({
+              //     statusCode: 422,
+              //     status: "error",
+              //     data: null,
+              //     message: MESSAGES.EMAIL_SERVER_ERROR
+              //   })
+              // }
             }
           }
         } else {
@@ -391,25 +454,45 @@ class UserController {
               '<p>If you don’t use this verification code within 1 hour, it will expire.</p>' +
               '<p>Thank You</p>' +
               '<p>GlobalHome</p>';
-            const mail = Helper.sendMail(subject, bodyOfMail, user.email);
-            if (mail) {
-              await user.update({
-                verification_code: code, forgot_password_date: Date.now()
-              })
-
-              res.status(200).json({
-                statusCode: 200,
-                status: "success",
-                message: MESSAGES.SENT_VERIFICATION_CODE,
-                userId: user.email
-              });
-            } else {
-              res.status(400).json({
-                statusCode: 400,
-                status: "error",
-                data: null, message: MESSAGES.EMAIL_SERVER_ERROR
-              });
-            }
+            // const mail = Helper.sendMail(subject, bodyOfMail, user.email);
+            Helper.sendMail(subject, bodyOfMail, user.email, async (err, result) => {
+              if (!err) {
+                result.then(async data => {
+                  await user.update({
+                    verification_code: code, forgot_password_date: Date.now()
+                  })
+                  res.status(200).json({
+                    statusCode: 200,
+                    status: "success",
+                    message: MESSAGES.SENT_VERIFICATION_CODE,
+                    userId: user.email
+                  });
+                })
+              } else {
+                res.status(400).json({
+                  statusCode: 400,
+                  status: "error",
+                  data: null, message: MESSAGES.EMAIL_SERVER_ERROR
+                });
+              }
+            })
+            // if (mail) {
+            //   await user.update({
+            //     verification_code: code, forgot_password_date: Date.now()
+            //   })
+            //   res.status(200).json({
+            //     statusCode: 200,
+            //     status: "success",
+            //     message: MESSAGES.SENT_VERIFICATION_CODE,
+            //     userId: user.email
+            //   });
+            // } else {
+            //   res.status(400).json({
+            //     statusCode: 400,
+            //     status: "error",
+            //     data: null, message: MESSAGES.EMAIL_SERVER_ERROR
+            //   });
+            // }
           }
         } else {
           res.status(401).json({
@@ -581,7 +664,57 @@ class UserController {
 
   }
 
+  // upload shortcut image using s3 buckets
+  async uploadShortCutImages(req, res, next) {
+    try {
+      if (req.file) {
+        const fileName = req.file.originalname.split(".")
+        const fileType = fileName[fileName.length - 1]
+        const fileExt = ['jpg', 'JPG', 'jpeg', 'JPEG', 'png', 'PNG', 'gif', 'GIF']
+        if (fileExt.includes(fileType)) {
+          const params = {
+            Bucket: environment.AWS_BUCKET_NAME,
+            Key: `${uuid()}.${fileType}`,
+            Body: req.file.buffer
+          }
+          s3.upload(params, async (err, data) => {
+            if (!err) {
+              await ShortcutImage.create({ key: data.key })
+                .then((user) => {
+                  res.status(200).json({ error: false, message: "File uploaded successfully." })
+                })
+            } else {
+              res.status(500).json({ error: true, message: err })
+            }
+          })
+        } else {
+          res.status(422).json({ error: true, message: "Only image files are allowed." })
+        }
+      } else {
+        res.status(500).json({ error: true, message: "Image file is required." })
+      }
+
+    } catch (error) {
+      next(error);
+    }
+  }
+  // get shortcut image from s3 bucket
+  async getShortCutImages(req, res, next) {
+    try {
+      const data = await ShortcutImage.findAll({ where: { status: 1 }, attributes: ['id', 'key'] })
+      const arr = []
+      for (let i = 0; i < data.length; i++) {
+        arr.push({
+          id: data[i].id,
+          location: `https://${environment.AWS_BUCKET_NAME}.s3.${environment.AWS_SES_REGION}.amazonaws.com/${data[i].key}`
+        })
+      }
+      res.status(200).json({ error: false, message: "Get all shortcut images.", data: arr })
+    } catch (error) {
+      next(error);
+    }
+  }
 
 }
 
-module.exports = new UserController();
+export default new UserController();

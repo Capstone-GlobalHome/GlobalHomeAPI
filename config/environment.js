@@ -14,6 +14,11 @@ export const environment = {
   DB_HOST: process.env.POSTGRES_DB_HOST,
   DB_CONNECTION: process.env.POSTGRES_DB_CONNECTION,
 
+  AWS_SES_ACCESS_KEY: process.env.AWS_SES_ACCESS_KEY,
+  AWS_SES_SECRET_ACCESS_KEY: process.env.AWS_SES_SECRET_ACCESS_KEY,
+  AWS_SES_REGION: process.env.AWS_SES_REGION,
+  AWS_BUCKET_NAME: process.env.AWS_BUCKET_NAME,
+
   resetPasswordTokenTime: 3600000, // 1hour
   refreshExpiryTime: process.env.REFRESH_EXPIRY_TIME || "7d",
   verifyAttempts: process.env.VERIFY_ATTEMPT,

@@ -1,6 +1,7 @@
 import express from "express"
 import helper from "../utilis/helper"
 import userController from "../controller/user_controller"
+import upload from '../utilis/file.handler'
 
 const route = express.Router();
 
@@ -15,6 +16,9 @@ route.post("/resend/code", userController.resendCode); // Resend verification co
 
 route.post("/forgot/password", userController.forgotPassword); // Forgot password route with send email
 route.put("/set/password", userController.setPasswordWithVerifyCode); // Set password route
+
+route.post("/shortcut/image/upload", upload.single('image'), userController.uploadShortCutImages); // upload shortcut images
+route.get("/shortcut/image/get", userController.getShortCutImages) // get shortcut images
 
 // Authenticate routess
 route.put("/unit", helper.validateToken, userController.setUserUnitID); // Set password route
