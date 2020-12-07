@@ -6,23 +6,20 @@ import Sequelize from "sequelize"
 import _ from "lodash"
 import jwt from "jsonwebtoken"
 import bcrypt from "bcrypt"
-import AWS from 'aws-sdk'
 import uuid from 'uuid/v4'
+import { getLogger } from 'log4js'
 import Helper from "../utilis/helper"
 import { environment } from "../config/environment"
 import { STATUS, RESEND_CODE_TIME, MESSAGES } from "../constants/user.constant"
 import s3 from '../config/s3-config'
+
+let logger = getLogger("UserController")
 // Models
 import db from '../models'
 const Op = Sequelize.Op;
 const User = db.User
 const ShortcutImage = db.ShortcutImage
 
-// const s3 = new AWS.S3({
-//   accessKeyId: environment.AWS_SES_ACCESS_KEY,
-//   secretAccessKey: environment.AWS_SES_SECRET_ACCESS_KEY,
-//   region: environment.AWS_SES_REGION
-// })
 
 class UserController {
   //SignUp New User
@@ -42,13 +39,14 @@ class UserController {
           message: errors,
           data: null
         })
+        logger.info('Validations Error: ', errors)
         // statusCode: 200,
         // status: "success",
         // message: "Thing config created successfully.",
         // data: config
 
       } else {
-        User.findOne({ where: { email: req.body.email } }).then(result => {
+        Users.findOne({ where: { email: req.body.email } }).then(result => {
           if (result) {
             res.status(409).json(
               {
@@ -57,6 +55,7 @@ class UserController {
                 message: `${req.body.email} : already exists.`,
                 data: null
               });
+            logger.info(`${req.body.email} : already exists.`)
           } else {
             bcrypt.genSalt(10, async (err, salt) => {
               bcrypt.hash(req.body.password, salt, async (err, hash) => {
@@ -67,6 +66,7 @@ class UserController {
                     message: err,
                     data: null
                   });
+                  logger.error('Password Hash Error: ', JSON.stringify(err))
                 } else {
                   let code = Math.floor(1000 + Math.random() * 9000);
                   let subject = "GlobalHome Verification Code";
@@ -94,9 +94,11 @@ class UserController {
                               "avatar": ''
                             }
                           });
+                          logger.info('Signup: ', MESSAGES.SENT_VERIFICATION_CODE)
                         });
                       })
                     } else {
+                      logger.error('Email Server Error: ', JSON.stringify(err))
                       res.status(400).json(
                         {
                           statusCode: 400,
@@ -143,6 +145,7 @@ class UserController {
         });
       }
     } catch (err) {
+      logger.error('Error: ', err.message)
       next(err);
     }
   }
@@ -222,6 +225,7 @@ class UserController {
         }
       }
     } catch (error) {
+      logger.error('Error: ', error.message)
       next(error);
     }
   }
@@ -318,6 +322,7 @@ class UserController {
         }
       }
     } catch (error) {
+      logger.error('Error: ', error.message)
       next(error);
     }
   }
@@ -407,6 +412,7 @@ class UserController {
           });
       }
     } catch (err) {
+      logger.error('Error: ', err.message)
       next(err);
     }
   }
@@ -503,6 +509,7 @@ class UserController {
         }
       }
     } catch (ex) {
+      logger.error('Error: ', ex.message)
       next(ex);
     }
   }
@@ -584,6 +591,7 @@ class UserController {
         }
       }
     } catch (error) {
+      logger.error('Error: ', error.message)
       next(error);
     }
   }
@@ -625,6 +633,7 @@ class UserController {
         });
       }
     } catch (error) {
+      logger.error('Error: ', error.message)
       next(error);
     }
 
@@ -659,6 +668,7 @@ class UserController {
       });
 
     } catch (error) {
+      logger.error('Error: ', error.message)
       next(error);
     }
 
@@ -693,8 +703,8 @@ class UserController {
       } else {
         res.status(500).json({ error: true, message: "Image file is required." })
       }
-
     } catch (error) {
+      logger.error('Error: ', error.message)
       next(error);
     }
   }
@@ -711,6 +721,7 @@ class UserController {
       }
       res.status(200).json({ error: false, message: "Get all shortcut images.", data: arr })
     } catch (error) {
+      logger.error('Error: ', error.message)
       next(error);
     }
   }

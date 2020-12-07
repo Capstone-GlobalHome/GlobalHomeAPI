@@ -1,10 +1,12 @@
 import express from "express";
 import bodyParser from "body-parser";
-const app = express();
 import cors from "cors";
-
 import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./swagger.json";
+import routes from "./routes/";
+
+// let logger = getLogger("app")
+const app = express();
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
@@ -29,8 +31,7 @@ app.use(cors());
 // app.use(helper.tokenVerify);
 // app.use(helper.auth);
 
-//Get Routes
-import routes from "./routes/";
+// Get Routes
 app.use("/", routes);
 
 // express doesn't consider not found 404 as an error so we need to handle 404 explicitly
