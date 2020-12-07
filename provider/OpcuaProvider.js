@@ -69,7 +69,6 @@ class OpcuaProvider {
 
     async buildOpcuaReadCommand(cmd, serverUrl) {
         console.log("cmd", cmd);
-        let nodeId = "ns=13;s=GVL.astDALIFixture[0].lrLevel"
         const dataValue = await opcuaSessionHelper.readNode(serverUrl, cmd);
         console.log("dataValue", dataValue);
         if (dataValue.value.value !== null) {

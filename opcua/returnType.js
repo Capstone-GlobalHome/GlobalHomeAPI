@@ -5,4 +5,5 @@ export const returnType = {
     "double": opcua.DataType.Double,
     "float": opcua.DataType.Float,
     "string": opcua.DataType.String,
+    "uint32": opcua.DataType.UInt32,
 };
