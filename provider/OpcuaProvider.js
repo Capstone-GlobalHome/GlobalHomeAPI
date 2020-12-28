@@ -45,7 +45,6 @@ class OpcuaProvider {
 
     }
 
-
     buildOpcuaCommand(config, index) {
         let ns = config.name_space;
         let exe_cmd = config.executing_command;
@@ -60,9 +59,6 @@ class OpcuaProvider {
         //     config.argValue));
         const status_code = await opcuaSessionHelper.writeToNode(serverUrl, cmd, this.buildWriteValueObject(config.argument_type,
             config.argValue));
-        // await session.close();
-        // await client.disconnect();
-        console.log('writeOPCUACommands status_code =', status_code);
         let obj = { "value": status_code.value, "description": status_code.description, "name:": status_code.name }
         return obj;
     }
@@ -121,6 +117,45 @@ class OpcuaProvider {
         }
 
     }
+
+    async executeBlindsCommand(getThingType, res) {
+        const thingsIotmappingConfig = await ThingsMappingRepo.findThingMappingConfig(getThingType);
+        if (typeof thingsIotmappingConfig !== 'undefined' && thingsIotmappingConfig !== null) {
+            let serverUrl = getThingType.serverUrl;
+            let index = getThingType.index;
+
+            // Lets execute motor off before making write function to blinds
+            const executeCmdForMotorOff = this.buildOpcuaCommand({ name_space: "ns=13",
+             executing_command: "s=GVL.astSMIDevice[index].bSetPosition" }, index);
+            console.log("execute motor Off", executeCmdForMotorOff);
+            await this.buildOpcuaExecutionCommand({
+                argument_type: "boolean",
+                argValue: false
+            }, executeCmdForMotorOff, serverUrl)
+
+            // Lets write value to blinds
+            const executeCommand = this.buildOpcuaCommand(thingsIotmappingConfig, index);
+            console.log("cmd", executeCommand);
+            thingsIotmappingConfig.argValue = getThingType.argValue;
+            await this.buildOpcuaExecutionCommand(thingsIotmappingConfig, executeCommand, serverUrl)
+
+            // Lets execute motor off before making write function to blinds
+            const executeCmdForMotorOn = this.buildOpcuaCommand({ name_space: "ns=13",
+             executing_command: "s=GVL.astSMIDevice[index].bSetPosition" }, index);
+            console.log("execute  motor On", executeCmdForMotorOn);
+            await this.buildOpcuaExecutionCommand({
+                argument_type: "boolean",
+                argValue: true
+            }, executeCmdForMotorOn, serverUrl)
+        } else {
+            res.status(404).json({
+                status: "error",
+                message: "Things mapping configuration not found.",
+                statusCode: 404
+            });
+        }
+    }
+
 
 }
 export default OpcuaProvider

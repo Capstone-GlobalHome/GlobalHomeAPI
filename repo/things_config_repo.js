@@ -2,6 +2,8 @@
 import db from '../models'
 const ThingsConfigDb = db.things_config
 
+const { Op } = require("sequelize");
+
 class ThingsConfigRepo {
 
     static create(req) {
@@ -17,6 +19,14 @@ class ThingsConfigRepo {
     static find(conditions) {
         return ThingsConfigDb.findOne({
             where: conditions
+        });
+    }
+    static findBlindConfig(thingsId, identifier) {
+        return ThingsConfigDb.findAll({
+            where: {
+                thing_id: { [Op.in]: thingsId },
+                identifier: identifier
+            }
         });
     }
 }

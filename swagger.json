@@ -2163,6 +2163,152 @@
           }
         }
       }
+    },
+    "/things/blind/execute": {
+      "post": {
+        "tags": [
+          "things"
+        ],
+        "summary": "Writing blind functions IOT device status",
+        "description": "Api to execute a command to the IOT server which perform blind operations status of device",
+        "operationId": "writeBlindDeviceState",
+        "requestBody": {
+          "description": "Create things request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WriteBlindDataRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Things command executed successfully.",
+                  "data": {
+                    "dataType": "Boolean",
+                    "arrayType": "Scalar",
+                    "value": true
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No record found with given data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/things/blind/read": {
+      "post": {
+        "tags": [
+          "things"
+        ],
+        "summary": "Reading blinds IOT device status",
+        "description": "Api to execute a command to the IOT server which perform blind  operation  read state of device",
+        "operationId": "readBlindDeviceState",
+        "requestBody": {
+          "description": "Create things request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReadBlindDataRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Things command executed successfully.",
+                  "data": [
+                    {
+                        "t_blind_1": 10
+                    },
+                    {
+                        "t_blind_2": 0
+                    },
+                    {
+                        "t_blind_3": 0
+                    }
+                ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No record found with given data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
     }
   },
   "components": {
@@ -2798,6 +2944,82 @@
           "identifier": "DIMMABLE_LIGHT",
           "target_function": "switch",
           "command": "getOn"
+        }
+      },
+      "WriteBlindDataRequest": {
+        "required": [
+          "thing_ids",
+          "identifier",
+          "target_function",
+          "command",
+          "argValue"
+        ],
+        "type": "object",
+        "properties": {
+          "thing_ids": {
+            "type": "array",
+            "required": true
+          },
+          "identifier": {
+            "type": "string",
+            "required": true
+          },
+          "target_function": {
+            "type": "string",
+            "required": true
+          },
+          "command": {
+            "type": "string",
+            "required": true
+          },
+          "argValue": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "thing_ids":["t_blind_1"],
+          "identifier":"BLIND",
+          "target_function":"parent",
+          "command":"setPosition",
+          "argValue":10
+        }
+      },
+      "ReadBlindDataRequest": {
+        "required": [
+          "thing_ids",
+          "identifier",
+          "target_function",
+          "command"
+        ],
+        "type": "object",
+        "properties": {
+          "thing_ids": {
+            "type": "array",
+            "required": true
+          },
+          "identifier": {
+            "type": "string",
+            "required": true
+          },
+          "target_function": {
+            "type": "string",
+            "required": true
+          },
+          "command": {
+            "type": "string",
+            "required": true
+          },
+          "argValue": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "thing_ids":["t_blind_1"],
+          "identifier":"BLIND",
+          "target_function":"parent",
+          "command":"getPosition"
         }
       }
     },
