@@ -20,5 +20,8 @@ thingsRoute.post("/read", thingsOpsController.read); //  update room's
 thingsRoute.post("/tst/cmd", thingsOpsController.tstCmd); //  update room's
 thingsRoute.post("/blind/execute",thingsOpsController.writeToblinds)
 thingsRoute.post("/blind/read",thingsOpsController.readBlindState)
+thingsRoute.post("/dmx/execute",thingsOpsController.writeToDMX)
+thingsRoute.post("/dmx/read",thingsOpsController.readDMX)
+
 
 module.exports = thingsRoute;

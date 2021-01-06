@@ -18,6 +18,23 @@ class ThingsMappingRepo {
 
     }
 
+    static async findThingMappingConfingOrdered(obj) {
+        // console.log("<---------obj------->", obj);
+        const project = await ThingMappingConfigDb.findAll({
+            where: {
+                target_function: obj.target_function,
+                identifier: obj.identifier,
+                command: obj.command
+            },
+            order: [
+                ['order', 'ASC']
+            ]
+        });
+        // console.log("<---------project------->", project);
+        return project;
+
+    }
+
     static create(req) {
         return ThingMappingConfigDb.create({
             identifier: req.body.identifier,
@@ -27,7 +44,8 @@ class ThingsMappingRepo {
             command: req.body.command,
             argument_type: req.body.argument_type,
             return_type: req.body.return_type,
-            read_or_write: req.body.read_or_write
+            read_or_write: req.body.read_or_write,
+            order: req.body.order
         });
     }
 }

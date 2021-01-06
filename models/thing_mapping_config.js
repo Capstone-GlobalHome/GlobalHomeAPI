@@ -27,7 +27,8 @@ module.exports = (sequelize, DataTypes) => {
     return_type:DataTypes.STRING,
     read_or_write:DataTypes.STRING,
     name_space: DataTypes.STRING,
-    executing_command: DataTypes.STRING
+    executing_command: DataTypes.STRING,
+    order:DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'thing_mapping_config',

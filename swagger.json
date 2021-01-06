@@ -2234,6 +2234,76 @@
         }
       }
     },
+    "/things/dmx/execute": {
+      "post": {
+        "tags": [
+          "things"
+        ],
+        "summary": "Writing Dmx functions IOT device status",
+        "description": "Api to execute a command to the DMX device which perform DMX operations status of device",
+        "operationId": "writeDmxDeviceState",
+        "requestBody": {
+          "description": "Create things request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WriteDMXDataRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Things command executed successfully.",
+                  "data": {
+                    "dataType": "Boolean",
+                    "arrayType": "Scalar",
+                    "value": true
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No record found with given data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/things/blind/read": {
       "post": {
         "tags": [
@@ -2266,15 +2336,83 @@
                   "message": "Things command executed successfully.",
                   "data": [
                     {
-                        "t_blind_1": 10
+                      "t_blind_1": 10
                     },
                     {
-                        "t_blind_2": 0
+                      "t_blind_2": 0
                     },
                     {
-                        "t_blind_3": 0
+                      "t_blind_3": 0
                     }
-                ]
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No record found with given data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/things/dmx/read": {
+      "post": {
+        "tags": [
+          "things"
+        ],
+        "summary": "Reading Dmx IOT device status",
+        "description": "Api to execute a command to the IOT server which perform DMX  operation  read state of device",
+        "operationId": "readDmxDeviceState",
+        "requestBody": {
+          "description": "Create things request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReadDMXDataRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Things command executed successfully.",
+                  "data": {
+                    "t_dmx_5_1": 80
+                  }
                 }
               }
             }
@@ -2978,11 +3116,52 @@
           }
         },
         "example": {
-          "thing_ids":["t_blind_1"],
-          "identifier":"BLIND",
-          "target_function":"parent",
-          "command":"setPosition",
-          "argValue":10
+          "thing_ids": [
+            "t_blind_1"
+          ],
+          "identifier": "BLIND",
+          "target_function": "parent",
+          "command": "setPosition",
+          "argValue": 10
+        }
+      },
+      "WriteDMXDataRequest": {
+        "required": [
+          "thing_id",
+          "identifier",
+          "target_function",
+          "command",
+          "argValue"
+        ],
+        "type": "object",
+        "properties": {
+          "thing_ids": {
+            "type": "string",
+            "required": true
+          },
+          "identifier": {
+            "type": "string",
+            "required": true
+          },
+          "target_function": {
+            "type": "string",
+            "required": true
+          },
+          "command": {
+            "type": "string",
+            "required": true
+          },
+          "argValue": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "thing_id": "t_dmx_5_1",
+          "identifier": "DMX",
+          "target_function": "intensity",
+          "command": "setDMXValue",
+          "argValue": 80
         }
       },
       "ReadBlindDataRequest": {
@@ -3016,10 +3195,45 @@
           }
         },
         "example": {
-          "thing_ids":["t_blind_1"],
-          "identifier":"BLIND",
-          "target_function":"parent",
-          "command":"getPosition"
+          "thing_ids": [
+            "t_blind_1"
+          ],
+          "identifier": "BLIND",
+          "target_function": "parent",
+          "command": "getPosition"
+        }
+      },
+      "ReadDMXDataRequest": {
+        "required": [
+          "thing_id",
+          "identifier",
+          "target_function",
+          "command"
+        ],
+        "type": "object",
+        "properties": {
+          "thing_id": {
+            "type": "string",
+            "required": true
+          },
+          "identifier": {
+            "type": "string",
+            "required": true
+          },
+          "target_function": {
+            "type": "string",
+            "required": true
+          },
+          "command": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "thing_id": "t_dmx_5_1",
+          "identifier": "DMX",
+          "target_function": "intensity",
+          "command": "getDMXValue"
         }
       }
     },
