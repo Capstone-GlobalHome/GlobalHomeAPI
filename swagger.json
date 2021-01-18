@@ -2411,7 +2411,12 @@
                   "status": "success",
                   "message": "Things command executed successfully.",
                   "data": {
-                    "t_dmx_5_1": 80
+                    "t_dmx_5_4": [
+                      168,
+                      60,
+                      50,
+                      80
+                  ]
                   }
                 }
               }
@@ -3152,16 +3157,16 @@
             "required": true
           },
           "argValue": {
-            "type": "string",
+            "type": "array",
             "required": true
           }
         },
         "example": {
-          "thing_id": "t_dmx_5_1",
+          "thing_id": "t_dmx_5_4",
           "identifier": "DMX",
           "target_function": "intensity",
           "command": "setDMXValue",
-          "argValue": 80
+          "argValue": [168, 60, 50,80]
         }
       },
       "ReadBlindDataRequest": {
@@ -3230,7 +3235,7 @@
           }
         },
         "example": {
-          "thing_id": "t_dmx_5_1",
+          "thing_id": "t_dmx_5_4",
           "identifier": "DMX",
           "target_function": "intensity",
           "command": "getDMXValue"

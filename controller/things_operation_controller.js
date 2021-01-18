@@ -296,14 +296,13 @@ class ThingsOperationController {
                 protocol.getProvider(commandProtocol);
                 getThingType.target_function = target_function;
                 getThingType.command = command;
-                console.log("value", getThingType);
-                const value = await protocol.provider.read(getThingType, res)
+                const value = await protocol.provider.executeDMXReadCommand(getThingType, res)
                 if (typeof value !== 'undefined' && value !== null) {
                     res.status(200).json({
                         statusCode: 200,
                         status: "success",
                         message: "Things command executed successfully.",
-                        data: { [getThingType.thing_id]: value.value[position] }
+                        data: value
                     });
                 } else {
                     res.status(404).json({

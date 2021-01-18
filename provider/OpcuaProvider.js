@@ -87,18 +87,6 @@ class OpcuaProvider {
         return writeValue;
     }
 
-    // async buildtestExecutionCommand(config, cmd, serverUrl) {
-    //     // const client = await opcuaSessionHelper.getOpcuaClient()
-    //     // const session = await opcuaSessionHelper.getOPcuaSession(client, serverUrl);
-    //     // var status_code = await opcuaSessionHelper.writeSingleNode(cmd, this.buildWriteValueObject(config.argument_type,
-    //     //     config.argValue));
-    //     const status_code = await opcuaSessionHelper.writeToNode(serverUrl, cmd, this.buildWriteValueObject(config.argument_type,
-    //         config.argValue));
-
-    //     // await session.close();
-    //     // await client.disconnect();
-    //     // console.log('writeOPCUACommands status_code =', status_code);
-    // }
 
     async tstCmd(getThingType) {
         let serverUrl = getThingType.serverUrl;
@@ -171,9 +159,12 @@ class OpcuaProvider {
 
         const thingsIotmappingConfig = await ThingsMappingRepo.findThingMappingConfingOrdered(getThingType);
         const keys = getThingType.thing_id.split('_');
+        const noOfElements = keys[3]
         const elements = new Float64Array(16);
-        elements[0] = getThingType.argValue;
-        console.log("THings", keys);
+        for (let i = 0; i < noOfElements; i++) {
+            elements[i] = getThingType.argValue[i];
+        }
+        console.log("THings", elements);
 
         if (typeof thingsIotmappingConfig !== 'undefined' && thingsIotmappingConfig !== null) {
             let serverUrl = getThingType.serverUrl;
@@ -187,7 +178,7 @@ class OpcuaProvider {
             // Second setup to address
             thingsIotmappingConfig[1].argValue = keys[2];
             await this.buildOpcuaExecutionCommand(thingsIotmappingConfig[1], cmd2, serverUrl, false)
-            // Third setup to address 
+            // Third setup to numberofelements 
             thingsIotmappingConfig[2].argValue = keys[3];
             await this.buildOpcuaExecutionCommand(thingsIotmappingConfig[2], cmd3, serverUrl, false)
 
@@ -199,5 +190,32 @@ class OpcuaProvider {
             });
         }
     }
+    async executeDMXReadCommand(getThingType, res) {
+        const thingsIotmappingConfig = await ThingsMappingRepo.findThingMappingConfig(getThingType);
+        if (typeof thingsIotmappingConfig !== 'undefined' && thingsIotmappingConfig !== null) {
+            let serverUrl = getThingType.serverUrl;
+            const executeCommand = this.buildOpcuaCommandWithoutIndex(thingsIotmappingConfig);
+            const output = await this.buildOpcuaReadCommand(executeCommand, serverUrl);
+            const keys = getThingType.thing_id.split('_');
+            const statAddress = parseInt(keys[2]);
+            const noOfElements = parseInt(keys[3]);
+            // console.log("statAddress", statAddress);
+            // console.log("noOfElements", statAddress + noOfElements - 1);
+            let values = new Array();
+            for (let index = statAddress - 1; index < (statAddress + noOfElements - 1); index++) {
+                console.log("data", (output.value[index]));
+                values.push(output.value[index])
+            }
+            console.log("Values", values);
+            return { [getThingType.thing_id]: values }
+        } else {
+            res.status(404).json({
+                status: "error",
+                message: "Things mapping configuration not found.",
+                statusCode: 404
+            });
+        }
+    }
+
 }
 export default OpcuaProvider
