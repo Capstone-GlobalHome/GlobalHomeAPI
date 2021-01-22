@@ -22,6 +22,8 @@ thingsRoute.post("/blind/execute",thingsOpsController.writeToblinds)
 thingsRoute.post("/blind/read",thingsOpsController.readBlindState)
 thingsRoute.post("/dmx/execute",thingsOpsController.writeToDMX)
 thingsRoute.post("/dmx/read",thingsOpsController.readDMX)
+thingsRoute.post("/sensors/read",thingsOpsController.readSensors)
+
 
 
 module.exports = thingsRoute;

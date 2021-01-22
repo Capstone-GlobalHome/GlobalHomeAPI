@@ -234,6 +234,7 @@ class ThingsOperationController {
         }
     }
 
+
     // Excute thing command to blinds
     async writeToDMX(req, res, next) {
         try {
@@ -353,6 +354,49 @@ class ThingsOperationController {
         }
 
     }
+    // Read Sensors data state
+    async readSensors(req, res, next) {
+
+        try {
+            const identifiers = req.body.identifiers;
+            const sensorsConfig = await ThingsConfigRepo.findSensorsConfig(identifiers);
+            if (sensorsConfig) {
+                let arrayValue = new Array();
+                for (let item of sensorsConfig) {
+                    const commandProtocol = item.command_protocal;
+                    const protocol = new ProviderFactory();
+                    protocol.getProvider(commandProtocol);
+                    item.target_function = "sensor";
+                    item.command = "get";
+                    const value = await protocol.provider.readSenorsData(item, res);
+                   
+                    arrayValue.push({
+                        [item.identifier]: value.value,
+                        "label":value.label
+                    });
+                }
+                res.status(200).json({
+                    statusCode: 200,
+                    status: "success",
+                    message: "Things command executed successfully.",
+                    data: arrayValue
+                });
+
+            } else {
+                res.status(404).json({
+                    status: "error",
+                    message: "Things mapping configuration missing in database not found.",
+                    statusCode: 404
+                });
+            }
+
+        } catch (error) {
+            next(error);
+        }
+    }
+
+  
+
 }
 
 module.exports = new ThingsOperationController();

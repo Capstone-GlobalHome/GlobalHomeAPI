@@ -42,6 +42,7 @@ class OpcuaProvider {
 
     }
 
+
     buildOpcuaCommand(config, index) {
         let ns = config.name_space;
         let exe_cmd = config.executing_command;
@@ -215,6 +216,38 @@ class OpcuaProvider {
                 statusCode: 404
             });
         }
+    }
+
+    async readSenorsData(getThingType, res) {
+        const thingsIotmappingConfig = await ThingsMappingRepo.findThingMappingConfig(getThingType);
+        if (typeof thingsIotmappingConfig !== 'undefined' && thingsIotmappingConfig !== null) {
+            let serverUrl = getThingType.serverUrl;
+            let index = getThingType.index;
+            const executeCommand = this.buildOpcuaCommand(thingsIotmappingConfig, index);
+            const output = await this.buildOpcuaReadCommand(executeCommand, serverUrl)
+            console.log("output", output.value);
+            console.log("output-2", this.getMeLabel(getThingType.identifier, output.value));
+            output.label = this.getMeLabel(getThingType.identifier, output.value);
+            return output;
+        } else {
+            return undefined;
+        }
+
+    }
+     getMeLabel(identifier, value) {
+        console.log("Identifier", identifier);
+        let status;
+        if (identifier==='SENSOR_CO2') {
+            status="GOOD"
+        }else if(identifier==='SENSOR_VOC'){
+            status="LOW"
+        }else if(identifier==='SENSOR_HUMIDITY'){
+            status="IDEAL"
+        }else{
+            status=""
+        }
+        console.log("value", value);
+        return status;
     }
 
 }

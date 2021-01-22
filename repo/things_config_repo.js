@@ -29,6 +29,13 @@ class ThingsConfigRepo {
             }
         });
     }
+    static findSensorsConfig(identifiers) {
+        return ThingsConfigDb.findAll({
+            where: {
+                identifier: { [Op.in]: identifiers }
+            }
+        });
+    }
 }
 
 export default ThingsConfigRepo
