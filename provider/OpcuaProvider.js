@@ -4,7 +4,7 @@ import ThingsMappingRepo from '../repo/things_mapping_repo'
 import { returnType } from "../opcua/returnType";
 
 import OpcuaSessionHelper from '../opcua/opcua_session';
-import SENSOR_RANGES from '../constants/sensor.ranges';
+import {SENSOR_RANGES} from '../constants/sensor.ranges';
 import { Common } from "../utilis/common";
 
 const opcuaSessionHelper = new OpcuaSessionHelper();
@@ -228,8 +228,6 @@ class OpcuaProvider {
             let index = getThingType.index;
             const executeCommand = this.buildOpcuaCommand(thingsIotmappingConfig, index);
             const output = await this.buildOpcuaReadCommand(executeCommand, serverUrl)
-            console.log("output", output.value);
-            console.log("output-2", this.getMeLabel(getThingType.identifier, output.value));
             output.label = this.getMeLabel(getThingType.identifier, output.value);
             return output;
         } else {

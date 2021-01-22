@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run build && node dist/server.js",
     "build": "rimraf dist/ && babel ./ --out-dir dist/   --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
-    "dev": "nodemon --exec babel-node server"
+    "dev": "pm2 start --env "
   },
   "dependencies": {
     "@babel/cli": "^7.10.5",
@@ -14,6 +14,7 @@
     "@babel/preset-env": "^7.11.0",
     "@babel/runtime": "^7.11.2",
     "@sendgrid/mail": "^6.4.0",
+    "async": "~3.2.0",
     "babel-jest": "^26.3.0",
     "bcrypt": "^3.0.4",
     "body-parser": "^1.19.0",
@@ -26,18 +27,18 @@
     "lodash": "^4.17.15",
     "mysql2": "^2.0.2",
     "node-input-validator": "^4.2.1",
+    "node-opcua": "^2.14.0",
     "nodemailer": "^6.4.2",
     "nodemailer-sendgrid-transport": "^0.2.0",
     "passport": "^0.3.2",
     "pg": "^8.3.0",
     "pg-hstore": "^2.3.3",
+    "pm2": "^4.5.1",
     "request": "^2.88.2",
+    "rimraf": "^2.6.1",
     "sequelize": "^5.21.3",
     "swagger-ui-express": "^4.1.4",
-    "uuid": "^3.4.0",
-    "rimraf": "^2.6.1",
-    "node-opcua": "^2.14.0",
-    "async": "~3.2.0"
+    "uuid": "^3.4.0"
   },
   "author": "",
   "license": "ISC",
