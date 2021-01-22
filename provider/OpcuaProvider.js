@@ -3,7 +3,10 @@ import ThingsMappingRepo from '../repo/things_mapping_repo'
 
 import { returnType } from "../opcua/returnType";
 
-import OpcuaSessionHelper from '../opcua/opcua_session'
+import OpcuaSessionHelper from '../opcua/opcua_session';
+import SENSOR_RANGES from '../constants/sensor.ranges';
+import { Common } from "../utilis/common";
+
 const opcuaSessionHelper = new OpcuaSessionHelper();
 
 const opcua = require("node-opcua");
@@ -236,19 +239,26 @@ class OpcuaProvider {
     }
      getMeLabel(identifier, value) {
         console.log("Identifier", identifier);
-        let status;
-        if (identifier==='SENSOR_CO2') {
-            status="GOOD"
-        }else if(identifier==='SENSOR_VOC'){
-            status="LOW"
-        }else if(identifier==='SENSOR_HUMIDITY'){
-            status="IDEAL"
-        }else{
-            status=""
-        }
-        console.log("value", value);
-        return status;
+         for( let range in SENSOR_RANGES[identifier]) {
+             if(Common.inRange(value, range)) {
+                 return SENSOR_RANGES[identifier][range];
+             }
+         }
+        
+        // let status;
+        // if (identifier==='SENSOR_CO2') {
+        //     status="GOOD"
+        // }else if(identifier==='SENSOR_VOC'){
+        //     status="LOW"
+        // }else if(identifier==='SENSOR_HUMIDITY'){
+        //     status="IDEAL"
+        // }else{
+        //     status=""
+        // }
+        // console.log("value", value);
+        // return status;
     }
+    
 
 }
 export default OpcuaProvider
