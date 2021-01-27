@@ -4,7 +4,7 @@ import ThingsMappingRepo from '../repo/things_mapping_repo'
 import { returnType } from "../opcua/returnType";
 
 import OpcuaSessionHelper from '../opcua/opcua_session';
-import {SENSOR_RANGES} from '../constants/sensor.ranges';
+import { SENSOR_RANGES } from '../constants/sensor.ranges';
 import { Common } from "../utilis/common";
 
 const opcuaSessionHelper = new OpcuaSessionHelper();
@@ -37,7 +37,7 @@ class OpcuaProvider {
             let serverUrl = getThingType.serverUrl;
             let index = getThingType.index;
             const executeCommand = this.buildOpcuaCommand(thingsIotmappingConfig, index);
-            console.log("cmd", executeCommand);
+            console.info("Executing command", JSON.stringify(executeCommand));
             return await this.buildOpcuaReadCommand(executeCommand, serverUrl)
         } else {
             return undefined;
@@ -71,9 +71,9 @@ class OpcuaProvider {
     }
 
     async buildOpcuaReadCommand(cmd, serverUrl) {
-        console.log("cmd", cmd);
+        console.info("Getting command", JSON.stringify(cmd));
         const dataValue = await opcuaSessionHelper.readNode(serverUrl, cmd);
-        console.log("dataValue", dataValue);
+        console.info("dataValue",JSON.stringify(dataValue.value.value));
         if (dataValue.value.value !== null) {
             return dataValue.value;
         } else {
@@ -97,9 +97,9 @@ class OpcuaProvider {
         let executeCommand = getThingType.command;
         const readWrite = getThingType.operation
 
-        console.log("Operation", readWrite);
+        console.info("Operation", readWrite);
         if (readWrite == "R") {
-            console.log("OperationR", readWrite);
+            console.info("OperationR", readWrite);
             const data = await this.buildOpcuaReadCommand(executeCommand, serverUrl)
             return data;
         } else {
@@ -235,14 +235,14 @@ class OpcuaProvider {
         }
 
     }
-     getMeLabel(identifier, value) {
+    getMeLabel(identifier, value) {
         console.log("Identifier", identifier);
-         for( let range in SENSOR_RANGES[identifier]) {
-             if(Common.inRange(value, range)) {
-                 return SENSOR_RANGES[identifier][range];
-             }
-         }
-        
+        for (let range in SENSOR_RANGES[identifier]) {
+            if (Common.inRange(value, range)) {
+                return SENSOR_RANGES[identifier][range];
+            }
+        }
+
         // let status;
         // if (identifier==='SENSOR_CO2') {
         //     status="GOOD"
@@ -256,7 +256,7 @@ class OpcuaProvider {
         // console.log("value", value);
         // return status;
     }
-    
+
 
 }
 export default OpcuaProvider

@@ -2,6 +2,9 @@ var datetime = new Date();
 var date = datetime.getDate() +"-"+  (datetime.getMonth() + 1) + "-" + datetime.getFullYear();
 const fs = require("fs");
 (function () {
+  if(!fs.existsSync(__dirname+'/logs')) {
+    fs.mkdirSync(__dirname+'/logs');
+  }
   if(!fs.existsSync(__dirname+'/logs/' + date)) {
     fs.mkdirSync(__dirname+'/logs/' + date);
   }
@@ -15,17 +18,7 @@ module.exports = {
     error_file: "logs/" + date + "/err.log",
     out_file: "logs/" + date + "/out.log",
     env:  {
-      "NODE_ENV": "dev"
-    }
-  },
-  {
-    script: 'npm run build && node dist/server.js',
-    watch: '.',
-    time: true,
-    error_file: "logs/" + date + "/err.log",
-    out_file: "logs/" + date + "/out.log",
-    env_production:  {
-      "NODE_ENV": "prod"
+      "NODE_ENV": "development"
     }
   }
 ],

@@ -6,7 +6,7 @@
   "scripts": {
     "start": "npm run build && node dist/server.js",
     "build": "rimraf dist/ && babel ./ --out-dir dist/   --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
-    "dev": "pm2 start --env "
+    "dev": "pm2 start"
   },
   "dependencies": {
     "@babel/cli": "^7.10.5",
