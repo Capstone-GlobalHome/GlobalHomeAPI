@@ -12,6 +12,7 @@ const fs = require("fs");
 
 module.exports = {
   apps : [{
+    name: "local",
     script: 'nodemon --exec babel-node server.js',
     watch: '.',
     time: true,
@@ -19,6 +20,17 @@ module.exports = {
     out_file: "logs/" + date + "/out.log",
     env:  {
       "NODE_ENV": "development"
+    }
+  },
+  {
+    name: "prod",
+    script: 'dist/server.js',
+    watch: '.',
+    time: true,
+    error_file: "logs/" + date + "/err.log",
+    out_file: "logs/" + date + "/out.log",
+    env:  {
+      "NODE_ENV": "production"
     }
   }
 ],
