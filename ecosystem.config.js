@@ -25,7 +25,6 @@ module.exports = {
   {
     name: "prod",
     script: 'dist/server.js',
-    watch: '.',
     time: true,
     error_file: "logs/" + date + "/err.log",
     out_file: "logs/" + date + "/out.log",
