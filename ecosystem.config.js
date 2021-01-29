@@ -5,19 +5,13 @@ const fs = require("fs");
   if(!fs.existsSync(__dirname+'/logs')) {
     fs.mkdirSync(__dirname+'/logs');
   }
-  if(!fs.existsSync(__dirname+'/logs/' + date)) {
-    fs.mkdirSync(__dirname+'/logs/' + date);
-  }
 })();
 
 module.exports = {
   apps : [{
     name: "local",
     script: 'nodemon --exec babel-node server.js',
-    watch: '.',
-    time: true,
-    error_file: "logs/" + date + "/err.log",
-    out_file: "logs/" + date + "/out.log",
+    log_file: "logs/" + date + ".log",
     env:  {
       "NODE_ENV": "development"
     }
@@ -25,9 +19,7 @@ module.exports = {
   {
     name: "prod",
     script: 'dist/server.js',
-    time: true,
-    error_file: "logs/" + date + "/err.log",
-    out_file: "logs/" + date + "/out.log",
+    log_file: "logs/" + date + ".log",
     env:  {
       "NODE_ENV": "production"
     }
