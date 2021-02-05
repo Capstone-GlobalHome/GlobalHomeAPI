@@ -1,0 +1,279 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Global Home Stub Api's",
+    "description": "Node STUB API's for GlobalHome.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/signup": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "signup new user.",
+        "description": "signup new user with name, email, password. All are required.",
+        "requestBody": {
+          "description": "Enter name, email and password for new user.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "name",
+                  "email",
+                  "password"
+                ],
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "email": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "password": {
+                    "type": "string",
+                    "required": true
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid status",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/signin": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "User Authentication",
+        "description": "Authenticate user with Email and Password.",
+        "requestBody": {
+          "description": "Enter Email and Password.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "password",
+                  "email"
+                ],
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "password": {
+                    "type": "string",
+                    "required": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "405": {
+            "description": "Invalid Inputs"
+          }
+        }
+      }
+    },
+    "/verify/code": {
+      "post": {
+        "tags": [
+          "Verification"
+        ],
+        "summary": "Verify verification code",
+        "description": "Verify verification code",
+        "requestBody": {
+          "description": "Enter verification code.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "userId",
+                  "verification_code"
+                ],
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "integer"
+                  },
+                  "verification_code": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid status",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/resend/code": {
+      "post": {
+        "tags": [
+          "Verification"
+        ],
+        "summary": "Resend verification code.",
+        "description": "Resend verification code.",
+        "requestBody": {
+          "description": "Resend verification code",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "userId",
+                  "email"
+                ],
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "integer"
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid status value"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/forgot/password": {
+      "post": {
+        "tags": [
+          "Forgot Password"
+        ],
+        "summary": "Forgot Password",
+        "description": "Enter field as Email to reset password",
+        "requestBody": {
+          "description": "Enter field as Email of user for which password needs to reset.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "email"
+                ],
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid status value"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Users": {
+        "required": [
+          "email"
+        ],
+        "type": "object",
+        "properties": {
+          "fullname": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "rememberToken": {
+            "type": "string"
+          },
+          "notifications": {
+            "type": "boolean"
+          },
+          "lastLogin": {
+            "type": "string"
+          }
+        }
+      }
+    },
+    "securitySchemes": {
+      "JWT": {
+        "type": "apiKey",
+        "name": "x-access-token",
+        "in": "header"
+      }
+    }
+  }
+}

@@ -1,0 +1,3253 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Global Home Stub Api's",
+    "description": "Backend API's for GlobalHome.",
+    "version": "1.0.0"
+  },
+  "paths": {
+    "/user/signup": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Signup new user",
+        "description": "signup new user with name, email, password. All are required.",
+        "requestBody": {
+          "description": "Enter name, email and password for new user.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "name",
+                  "email",
+                  "password"
+                ],
+                "type": "object",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "email": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "password": {
+                    "type": "string",
+                    "required": true
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid status",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/user/signin": {
+      "post": {
+        "tags": [
+          "User"
+        ],
+        "summary": "User signin",
+        "description": "Authenticate user with Email and Password.",
+        "requestBody": {
+          "description": "Enter Email and Password.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "password",
+                  "email"
+                ],
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "password": {
+                    "type": "string",
+                    "required": true
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "404": {
+            "description": "Not Found"
+          },
+          "405": {
+            "description": "Invalid Inputs"
+          }
+        }
+      }
+    },
+    "/user/verify/code": {
+      "put": {
+        "tags": [
+          "Verification"
+        ],
+        "summary": "Verify verification code",
+        "description": "Verify verification code",
+        "requestBody": {
+          "description": "Enter verification code.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "userId",
+                  "verification_code"
+                ],
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "integer"
+                  },
+                  "verification_code": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid status",
+            "content": {}
+          },
+          "404": {
+            "description": "Not Found",
+            "content": {}
+          }
+        }
+      }
+    },
+    "/user/resend/code": {
+      "post": {
+        "tags": [
+          "Verification"
+        ],
+        "summary": "Resend verification code.",
+        "description": "Resend verification code.",
+        "requestBody": {
+          "description": "Resend verification code",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "userId",
+                  "email"
+                ],
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "integer"
+                  },
+                  "email": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid status value"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/user/forgot/password": {
+      "post": {
+        "tags": [
+          "Forgot Password"
+        ],
+        "summary": "Forgot Password",
+        "description": "Enter field as Email to reset password",
+        "requestBody": {
+          "description": "Enter field as Email of user for which password needs to reset.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "email"
+                ],
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid status value"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/user/set/password": {
+      "put": {
+        "tags": [
+          "Forgot Password"
+        ],
+        "summary": "Set Password",
+        "description": "Enter field as userId, password, confirm_password and verification_code to set password",
+        "requestBody": {
+          "description": "Enter field as userId, password, confirm_password and verification_code of user for which set password.",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "email",
+                  "password",
+                  "confirm_password",
+                  "verification_code"
+                ],
+                "type": "object",
+                "properties": {
+                  "email": {
+                    "type": "string"
+                  },
+                  "password": {
+                    "type": "string"
+                  },
+                  "confirm_password": {
+                    "type": "string"
+                  },
+                  "verification_code": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "successful operation"
+          },
+          "400": {
+            "description": "Invalid status value"
+          },
+          "404": {
+            "description": "Not Found"
+          }
+        }
+      }
+    },
+    "/user/userDetail": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Get user Info detail.",
+        "description": "User information",
+        "operationId": "getUser",
+        "responses": {
+          "200": {
+            "description": "Successfully user Detail show",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "User detail information info  successfully.",
+                  "data": {
+                    "id": "234324242423",
+                    "name": "test name",
+                    "Email": "email@email.com",
+                    "status": "0/1/2"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No information found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/properties/{propertyId}/buildings/{buildingId}/units": {
+      "get": {
+        "tags": [
+          "units"
+        ],
+        "summary": "List the living or working units associated with this Property.",
+        "description": "List all units registered within a Property.",
+        "operationId": "listUnits",
+        "parameters": [
+          {
+            "name": "propertyId",
+            "in": "path",
+            "description": "The ID of the location/development.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "buildingId",
+            "in": "path",
+            "description": "The ID of the building within the development.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccessList"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "List of data  successfully.",
+                  "data": [
+                    {
+                      "id": "234324242423",
+                      "name": "test name",
+                      "unit_type": "building",
+                      "property_id": "2133214",
+                      "building_id": "243243",
+                      "physical_location": "Delhi",
+                      "updatedAt": "2020-09-08T06:33:32.458Z",
+                      "createdAt": "2020-09-08T06:33:32.458Z"
+                    },
+                    {
+                      "id": "234324242423",
+                      "name": "test name",
+                      "unit_type": "building",
+                      "property_id": "2133214",
+                      "building_id": "243243",
+                      "physical_location": "Delhi",
+                      "updatedAt": "2020-09-08T06:33:32.458Z",
+                      "createdAt": "2020-09-08T06:33:32.458Z"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No information found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "units"
+        ],
+        "summary": "Create a Unit.",
+        "description": "Create a Unit within a Property.\n",
+        "operationId": "createUnit",
+        "parameters": [
+          {
+            "name": "propertyId",
+            "in": "path",
+            "description": "The ID of the location/development.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "buildingId",
+            "in": "path",
+            "description": "The ID of the building within the development.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Create unit request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateUnitRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Unit created successfully.",
+                  "data": {
+                    "id": "234324242423",
+                    "name": "test name",
+                    "unit_type": "building",
+                    "property_id": "2133214",
+                    "building_id": "243243",
+                    "physical_location": "Delhi",
+                    "updatedAt": "2020-09-08T06:33:32.458Z",
+                    "createdAt": "2020-09-08T06:33:32.458Z"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/properties/units/{unitId}": {
+      "get": {
+        "tags": [
+          "units"
+        ],
+        "summary": "Get individual units detail associated with this Property.",
+        "description": "Get individual units detail associated with this Property",
+        "operationId": "getUnitByid",
+        "parameters": [
+          {
+            "name": "unitId",
+            "in": "path",
+            "description": "The ID of the unit.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Unit info  successfully.",
+                  "data": {
+                    "id": "234324242423",
+                    "name": "test name",
+                    "unit_type": "building",
+                    "property_id": "2133214",
+                    "building_id": "243243",
+                    "physical_location": "Delhi",
+                    "updatedAt": "2020-09-08T06:33:32.458Z",
+                    "createdAt": "2020-09-08T06:33:32.458Z"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No information found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "units"
+        ],
+        "summary": "Update individual units detail associated with this Property.",
+        "description": "Update individual units detail associated with this Property",
+        "operationId": "updateUnit",
+        "parameters": [
+          {
+            "name": "unitId",
+            "in": "path",
+            "description": "The ID of the unit.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated unit request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateUnitRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Unit updated successfully.",
+                  "data": {
+                    "id": "234324242423",
+                    "name": "test name",
+                    "unit_type": "building",
+                    "property_id": "2133214",
+                    "building_id": "243243",
+                    "physical_location": "Delhi",
+                    "updatedAt": "2020-09-08T06:33:32.458Z",
+                    "createdAt": "2020-09-08T06:33:32.458Z"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "units"
+        ],
+        "summary": "Delete unit detail",
+        "description": "Delete unit detail",
+        "operationId": "deleteUnit",
+        "parameters": [
+          {
+            "name": "unitId",
+            "in": "path",
+            "description": "The ID of the unit.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Unit detail deleted successfully.",
+                  "data": null
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "500": {
+            "description": "Error on delete operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rooms/create": {
+      "post": {
+        "tags": [
+          "rooms"
+        ],
+        "summary": "Create a room.",
+        "description": "Create a room within a unit.\n",
+        "operationId": "createRoom",
+        "requestBody": {
+          "description": "Create room request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateRoomRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Room created successfully.",
+                  "data": {
+                    "id": "234324242423",
+                    "nick_name": "Test room name name",
+                    "type": "building",
+                    "fk_unit_id": "857fc2f0-f128-11ea-843d-c56569c85c6c",
+                    "physical_location": "Delhi"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rooms/{roomId}": {
+      "get": {
+        "tags": [
+          "rooms"
+        ],
+        "summary": "Get individual room details .",
+        "description": "Room detail information",
+        "operationId": "getRoomById",
+        "parameters": [
+          {
+            "name": "roomId",
+            "in": "path",
+            "description": "The ID of the room.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success room detail found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Room info  detail.",
+                  "data": {
+                    "id": "234324242423",
+                    "nick_name": "rooms2",
+                    "type": "roominddor",
+                    "physical_location": "Delhi",
+                    "fk_unit_id": "857fc2f0-f128-11ea-843d-c56569c85c6c"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No information found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "rooms"
+        ],
+        "summary": "Update rooms information",
+        "description": "Room informaton update api",
+        "operationId": "updateRoom",
+        "parameters": [
+          {
+            "name": "roomId",
+            "in": "path",
+            "description": "The ID of the room.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "description": "Updated room request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateRoomRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully updated",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Room info updated successfully.",
+                  "data": {
+                    "id": "234324242423",
+                    "nick_name": "test name",
+                    "type": "building",
+                    "physical_location": "Apartment 532A Apartment 532A "
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "rooms"
+        ],
+        "summary": "Delete room detail",
+        "description": "Delete room detail",
+        "operationId": "deleteRoom",
+        "parameters": [
+          {
+            "name": "roomId",
+            "in": "path",
+            "description": "The ID of the room.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Unit detail deleted successfully.",
+                  "data": null
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "500": {
+            "description": "Error on delete operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/rooms/unit/{unitId}": {
+      "get": {
+        "tags": [
+          "rooms"
+        ],
+        "summary": "List the rooms associated with this Unit id.",
+        "description": "List all rooms registered within a Unit.",
+        "operationId": "listRooms",
+        "parameters": [
+          {
+            "name": "unitId",
+            "in": "path",
+            "description": "The ID of the Unit.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Rooms detail found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccessList"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "List of data  successfully.",
+                  "data": [
+                    {
+                      "id": "234324242423",
+                      "nick_name": "rooms2",
+                      "type": "roominddor",
+                      "physical_location": "Delhi",
+                      "fk_unit_id": "857fc2f0-f128-11ea-843d-c56569c85c6c"
+                    },
+                    {
+                      "id": "234324242423",
+                      "nick_name": "rooms2",
+                      "type": "roominddor",
+                      "physical_location": "Delhi",
+                      "fk_unit_id": "857fc2f0-f128-11ea-843d-c56569c85c6c"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No information found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/home/features": {
+      "get": {
+        "tags": [
+          "home"
+        ],
+        "summary": "List the features showing on home screen",
+        "description": "List of all features showing",
+        "operationId": "listHomeFeatures",
+        "responses": {
+          "200": {
+            "description": "Global Feature list successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccessList"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Global Feature list successfully.",
+                  "data": [
+                    {
+                      "id": "8192b4f0-fbd6-11ea-bacc-590b0efd0459",
+                      "title": "Concierge",
+                      "identifier": "Concierge",
+                      "image": "http://104.237.5.179:4000/concierge.png",
+                      "position": 0,
+                      "status": 1
+                    },
+                    {
+                      "id": "8192b4f0-fbd6-11ea-bacc-590b0efd0459",
+                      "title": "Gh connect",
+                      "identifier": "Concierge",
+                      "image": "http://104.237.5.179:4000/concierge.png",
+                      "position": 1,
+                      "status": 1
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No information found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "post": {
+        "tags": [
+          "home"
+        ],
+        "summary": "Create a Global home feature config.",
+        "description": "Create a Global home feature config. It will be access by backend support tream",
+        "operationId": "createFeature",
+        "requestBody": {
+          "description": "Create feature request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateFeatureRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Feature config created successfully.",
+                  "data": {
+                    "id": "8192b4f0-fbd6-11ea-bacc-590b0efd0459",
+                    "title": "Concierge",
+                    "identifier": "Concierge",
+                    "image": "http://104.237.5.179:4000/concierge.png",
+                    "position": 1,
+                    "status": 1
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "home"
+        ],
+        "summary": "Update a Global home feature config.",
+        "description": "update a Global home feature config. It will be access by backend support tream",
+        "operationId": "updateFeature",
+        "requestBody": {
+          "description": "Upade Global feature request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateFeatureRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully Updated a Global home feature",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Feature config updated successfully.",
+                  "data": {
+                    "id": "8192b4f0-fbd6-11ea-bacc-590b0efd0459",
+                    "title": "Concierge",
+                    "identifier": "Concierge",
+                    "image": "http://104.237.5.179:4000/concierge.png",
+                    "position": 1,
+                    "status": 1
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "delete": {
+        "tags": [
+          "home"
+        ],
+        "summary": "Delete Gh feature config",
+        "description": "Delete feature Config",
+        "operationId": "deleteFeatureConfig",
+        "requestBody": {
+          "description": "Id of the config object",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "id"
+                ],
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string",
+                    "required": true
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Information deleted successfully.",
+                  "data": null
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "500": {
+            "description": "Error on delete operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/home/features/{featureId}": {
+      "get": {
+        "tags": [
+          "home"
+        ],
+        "summary": "Get individual Gh feature config  details .",
+        "description": "Gh feature detail information",
+        "operationId": "getFeatureById",
+        "parameters": [
+          {
+            "name": "featureId",
+            "in": "path",
+            "description": "The ID of the Feature.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Success room detail found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Room info  detail.",
+                  "data": {
+                    "id": "dea33600-fbd7-11ea-b7df-2d7dc4aed519",
+                    "title": "GH connect",
+                    "identifier": "Concierge",
+                    "image": "http://104.237.5.179:4000/concierge.png",
+                    "position": 1,
+                    "status": 1
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No information found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/home/addShortcuts": {
+      "post": {
+        "tags": [
+          "home"
+        ],
+        "summary": "Create a user shortcut for feature config.",
+        "description": "Create a user shortcut for feature config.",
+        "operationId": "createShortCut",
+        "requestBody": {
+          "description": "Add User id and featureId to create a Shortcut",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "userId",
+                  "featureId"
+                ],
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string",
+                    "required": true
+                  },
+                  "featureId": {
+                    "type": "string",
+                    "required": true
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Feature config created successfully.",
+                  "data": {
+                    "id": "3f244890-fbe0-11ea-b746-7d0fcc092245",
+                    "userId": "392e20-f97b-11ea-9ee9-45641bbfb791",
+                    "fk_feature_id": "dea33600-fbd7-11ea-b7df-2d7dc4aed519",
+                    "access_count": 0
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/home/userShortcuts": {
+      "get": {
+        "tags": [
+          "home"
+        ],
+        "summary": "List the shortcut on the basis of access count",
+        "description": "List shortcut ",
+        "operationId": "listShortCut",
+        "requestBody": {
+          "description": "Add User id and featureId to create a Shortcut",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "userId"
+                ],
+                "type": "object",
+                "properties": {
+                  "userId": {
+                    "type": "string",
+                    "required": true
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "List shortcut",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccessList"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Global Feature list successfully.",
+                  "data": [
+                    {
+                      "id": "3f244890-fbe0-11ea-b746-7d0fcc092245",
+                      "access_count": 0,
+                      "user_feature": {
+                        "id": "dea33600-fbd7-11ea-b7df-2d7dc4aed519",
+                        "title": "GH connect",
+                        "identifier": "Concierge",
+                        "image": "http://104.237.5.179:4000/concierge.png",
+                        "position": 1,
+                        "status": 1
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No information found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/things/create": {
+      "post": {
+        "tags": [
+          "things"
+        ],
+        "summary": "Create a things information in the database.",
+        "description": "Create a things information in the database.",
+        "operationId": "createDevice",
+        "requestBody": {
+          "description": "Create things request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateThingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Thing config created successfully.",
+                  "data": {
+                    "id": 2,
+                    "name": "Living",
+                    "identifier": "Living",
+                    "image": "http://104.237.5.179:4000/concierge.png",
+                    "type": 0,
+                    "status": 1,
+                    "fk_room_id": "3adad6e0-f9a2-11ea-b93d-df07a6f5c7a7"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "put": {
+        "tags": [
+          "things"
+        ],
+        "summary": "Things device information updation api",
+        "description": "Update things device informaiton to the backend",
+        "operationId": "updateDevice",
+        "requestBody": {
+          "description": "Upade Things request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateThingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Things config updated successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Things config updated successfully.",
+                  "data": {
+                    "id": 2,
+                    "name": "Living",
+                    "identifier": "Living",
+                    "image": "http://104.237.5.179:4000/concierge.png",
+                    "type": 0,
+                    "status": 1,
+                    "fk_room_id": "3adad6e0-f9a2-11ea-b93d-df07a6f5c7a7"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/things/list": {
+      "post": {
+        "tags": [
+          "things"
+        ],
+        "summary": "Getting list of things inside a rooms.",
+        "description": "Getting list of things inside a rooms.",
+        "operationId": "listThingsInRooms",
+        "requestBody": {
+          "description": "Request body has roomId for which we fetch list of available things",
+          "content": {
+            "application/json": {
+              "schema": {
+                "required": [
+                  "roomId"
+                ],
+                "type": "object",
+                "properties": {
+                  "roomId": {
+                    "type": "string",
+                    "required": true
+                  }
+                }
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully information retrived",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Available list of devices",
+                  "data": [
+                    {
+                      "id": 2,
+                      "name": "Living",
+                      "identifier": "Living",
+                      "image": "http://104.237.5.179:4000/concierge.png",
+                      "type": 0,
+                      "status": 1,
+                      "fk_room_id": "3adad6e0-f9a2-11ea-b93d-df07a6f5c7a7"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/things/list/{parentId}": {
+      "get": {
+        "tags": [
+          "things"
+        ],
+        "summary": "Get Child individual things device information",
+        "description": "Get Childindividual things device information",
+        "operationId": "getChildThingsByParentId",
+        "parameters": [
+          {
+            "name": "parentId",
+            "in": "path",
+            "description": "The parentId of the Things.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully return information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccessList"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Room info  detail.",
+                  "data": [
+                    {
+                      "id": 5,
+                      "name": "Things group",
+                      "identifier": "Living",
+                      "image": "http://104.237.5.179:4000/concierge.png",
+                      "type": 1,
+                      "status": 1,
+                      "createdAt": "2020-09-21T11:41:08.350Z",
+                      "updatedAt": "2020-09-21T11:41:08.350Z",
+                      "fk_room_id": null,
+                      "parent_id": 4
+                    },
+                    {
+                      "id": 6,
+                      "name": "Things group 1",
+                      "identifier": "Living",
+                      "image": "http://104.237.5.179:4000/concierge.png",
+                      "type": 1,
+                      "status": 1,
+                      "createdAt": "2020-09-21T11:42:13.976Z",
+                      "updatedAt": "2020-09-21T11:42:13.976Z",
+                      "fk_room_id": "23e53e80-fbff-11ea-81cc-5f8a5dfc1990",
+                      "parent_id": 4
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No information found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/things/{id}": {
+      "get": {
+        "tags": [
+          "things"
+        ],
+        "summary": "Get individual things device information",
+        "description": "Get individual things device information",
+        "operationId": "getThingsById",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the Things.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully retrun information",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Room info  detail.",
+                  "data": {
+                    "id": 2,
+                    "name": "Living",
+                    "identifier": "Living",
+                    "image": "http://104.237.5.179:4000/concierge.png",
+                    "type": 0,
+                    "status": 1,
+                    "fk_room_id": "3adad6e0-f9a2-11ea-b93d-df07a6f5c7a7"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No information found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/things/delete/{id}": {
+      "delete": {
+        "tags": [
+          "things"
+        ],
+        "summary": "Delete Gh feature config",
+        "description": "Delete feature Config",
+        "operationId": "deleteFeatureConfig",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of the Things.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully deleted",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Information deleted successfully.",
+                  "data": null
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "500": {
+            "description": "Error on delete operation",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ErrorResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/things/config/create": {
+      "post": {
+        "tags": [
+          "things"
+        ],
+        "summary": "Create a things configuration for IOT operation.",
+        "description": "Create a things configuration for IOT operation",
+        "operationId": "createThingConfig",
+        "requestBody": {
+          "description": "Create things request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateThingConfigRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Thing config created successfully.",
+                  "data": {
+                    "id": "e750e550-23ea-11eb-9c75-5374cff90c7b",
+                    "index": "0",
+                    "thing_id": "c0725590-23ea-11eb-9c75-5374cff90c7b",
+                    "identifier": "DIMMABLE_LIGHT",
+                    "serverUrl": "opc.tcp://25.21.162.217:48050",
+                    "command_protocal": "opcua",
+                    "updatedAt": "2020-11-11T06:55:37.509Z",
+                    "createdAt": "2020-11-11T06:55:37.509Z"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/things/mapping/create": {
+      "post": {
+        "tags": [
+          "things"
+        ],
+        "summary": "Create a things IOT mapping information ",
+        "description": "Create a things IOT mapping information about detail of required field for execution of command ",
+        "operationId": "createThingIOTMapping",
+        "requestBody": {
+          "description": "Create things request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CreateThingIOTMappingRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Thing config created successfully.",
+                  "data": {
+                    "id": "633ec9e0-23ee-11eb-b835-0fa11b33bb2d",
+                    "identifier": "DIMMABLE_LIGHT",
+                    "target_function": "switch",
+                    "name_space": "ns=13",
+                    "executing_command": "ns=13;s=GVL.astDALIFixture[index].bSetLevel",
+                    "command": "setOn",
+                    "argument_type": "boolean",
+                    "return_type": "",
+                    "read_or_write": "W",
+                    "updatedAt": "2020-11-11T07:20:33.918Z",
+                    "createdAt": "2020-11-11T07:20:33.918Z"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/things/execute": {
+      "post": {
+        "tags": [
+          "things"
+        ],
+        "summary": "Execute a write operation to IOT server",
+        "description": "Execute a write operation command , which is configure at the backend ",
+        "operationId": "execute",
+        "requestBody": {
+          "description": "Create things request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ExecuteCmdRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Things command executed successfully.",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No record found with given data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/things/read": {
+      "post": {
+        "tags": [
+          "things"
+        ],
+        "summary": "Read IOT device status",
+        "description": "Api to execute a command to the IOT server which send us back the current status of device",
+        "operationId": "readDeviceState",
+        "requestBody": {
+          "description": "Create things request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReadDataRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Things command executed successfully.",
+                  "data": {
+                    "dataType": "Boolean",
+                    "arrayType": "Scalar",
+                    "value": true
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No record found with given data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/things/blind/execute": {
+      "post": {
+        "tags": [
+          "things"
+        ],
+        "summary": "Writing blind functions IOT device status",
+        "description": "Api to execute a command to the IOT server which perform blind operations status of device",
+        "operationId": "writeBlindDeviceState",
+        "requestBody": {
+          "description": "Create things request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WriteBlindDataRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Things command executed successfully.",
+                  "data": {
+                    "dataType": "Boolean",
+                    "arrayType": "Scalar",
+                    "value": true
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No record found with given data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/things/dmx/execute": {
+      "post": {
+        "tags": [
+          "things"
+        ],
+        "summary": "Writing Dmx functions IOT device status",
+        "description": "Api to execute a command to the DMX device which perform DMX operations status of device",
+        "operationId": "writeDmxDeviceState",
+        "requestBody": {
+          "description": "Create things request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WriteDMXDataRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Things command executed successfully.",
+                  "data": {
+                    "dataType": "Boolean",
+                    "arrayType": "Scalar",
+                    "value": true
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No record found with given data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/things/blind/read": {
+      "post": {
+        "tags": [
+          "things"
+        ],
+        "summary": "Reading blinds IOT device status",
+        "description": "Api to execute a command to the IOT server which perform blind  operation  read state of device",
+        "operationId": "readBlindDeviceState",
+        "requestBody": {
+          "description": "Create things request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReadBlindDataRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Things command executed successfully.",
+                  "data": [
+                    {
+                      "t_blind_1": 10
+                    },
+                    {
+                      "t_blind_2": 0
+                    },
+                    {
+                      "t_blind_3": 0
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No record found with given data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/things/dmx/read": {
+      "post": {
+        "tags": [
+          "things"
+        ],
+        "summary": "Reading Dmx IOT device status",
+        "description": "Api to execute a command to the IOT server which perform DMX  operation  read state of device",
+        "operationId": "readDmxDeviceState",
+        "requestBody": {
+          "description": "Create things request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReadDMXDataRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Things command executed successfully.",
+                  "data": {
+                    "t_dmx_5_4": [
+                      168,
+                      60,
+                      50,
+                      80
+                  ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No record found with given data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "Users": {
+        "required": [
+          "name",
+          "email",
+          "password"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string"
+          },
+          "password": {
+            "type": "string"
+          },
+          "verification_code": {
+            "type": "integer"
+          },
+          "resend_code_time": {
+            "type": "integer"
+          },
+          "password_reset_date": {
+            "type": "date"
+          },
+          "status": {
+            "type": "integer"
+          },
+          "createdAt": {
+            "type": "date"
+          },
+          "updatedAt": {
+            "type": "date"
+          }
+        }
+      },
+      "ValidationError": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "Status code 422"
+          },
+          "status": {
+            "type": "string",
+            "description": "Error or success"
+          },
+          "message": {
+            "type": "array",
+            "description": "array of falied validation message"
+          },
+          "data": {
+            "type": "object",
+            "description": "Data object comes null in case of error"
+          }
+        },
+        "example": {
+          "statusCode": 422,
+          "status": "error",
+          "message": [
+            "The name field is mandatory."
+          ],
+          "data": null
+        }
+      },
+      "ErrorResponse": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "Status code 422"
+          },
+          "status": {
+            "type": "string",
+            "description": "Error or success"
+          },
+          "message": {
+            "type": "array",
+            "description": "array of falied validation message"
+          },
+          "data": {
+            "type": "object",
+            "description": "Data object comes null in case of error"
+          }
+        },
+        "example": {
+          "statusCode": 500,
+          "status": "error",
+          "message": "Something went wrong",
+          "data": null
+        }
+      },
+      "NotFoundError": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "Status code 404"
+          },
+          "status": {
+            "type": "string",
+            "description": "Error or success"
+          },
+          "message": {
+            "type": "string",
+            "description": "No information found"
+          },
+          "data": {
+            "type": "object",
+            "description": "Data object comes null in case of error"
+          }
+        },
+        "example": {
+          "statusCode": 404,
+          "status": "error",
+          "message": "Data not found ",
+          "data": null
+        }
+      },
+      "ResponseSuccess": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "Status code 200"
+          },
+          "status": {
+            "type": "string",
+            "description": "success"
+          },
+          "message": {
+            "type": "string",
+            "description": "Success message"
+          },
+          "data": {
+            "type": "object",
+            "description": "Data object comes null in case of error"
+          }
+        }
+      },
+      "ResponseSuccessList": {
+        "type": "object",
+        "properties": {
+          "statusCode": {
+            "type": "integer",
+            "description": "Status code 200"
+          },
+          "status": {
+            "type": "string",
+            "description": "success"
+          },
+          "message": {
+            "type": "string",
+            "description": "Success message"
+          },
+          "data": {
+            "type": "array",
+            "description": "List of Data object comes"
+          }
+        }
+      },
+      "CreateRoomRequest": {
+        "required": [
+          "nick_name",
+          "type",
+          "physical_location",
+          "unit_id"
+        ],
+        "type": "object",
+        "properties": {
+          "nick_name": {
+            "type": "string",
+            "required": true
+          },
+          "type": {
+            "type": "string",
+            "required": true
+          },
+          "physical_location": {
+            "type": "string"
+          },
+          "unit_id": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "nick_name": "rooms2",
+          "type": "roominddor",
+          "physical_location": "Delhi",
+          "unit_id": "857fc2f0-f128-11ea-843d-c56569c85c6c"
+        }
+      },
+      "UpdateRoomRequest": {
+        "required": [
+          "id",
+          "nick_name",
+          "type"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "nick_name": {
+            "type": "string",
+            "required": true
+          },
+          "type": {
+            "type": "string",
+            "required": true
+          },
+          "physical_location": {
+            "type": "string"
+          }
+        },
+        "example": {
+          "id": "ASDADS-SDDSA-ADSADS-ASDDSA",
+          "nick_name": "rooms2",
+          "type": "roominddor",
+          "physical_location": "Delhi"
+        }
+      },
+      "CreateUnitRequest": {
+        "required": [
+          "name",
+          "unit_type",
+          "physical_location"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "unit_type": {
+            "type": "string",
+            "required": true
+          },
+          "physical_location": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "name": "Apartment 532A",
+          "unit_type": "Residential",
+          "physical_location": "Apartment 532A Apartment 532A "
+        }
+      },
+      "UpdateUnitRequest": {
+        "required": [
+          "id",
+          "name",
+          "unit_type",
+          "physical_location"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "unit_type": {
+            "type": "string",
+            "required": true
+          },
+          "physical_location": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "id": "ASDADS-SDDSA-ADSADS-ASDDSA",
+          "name": "Apartment 532A",
+          "unit_type": "Residential",
+          "physical_location": "Apartment 532A Apartment 532A "
+        }
+      },
+      "CreateFeatureRequest": {
+        "required": [
+          "position",
+          "title",
+          "identifier",
+          "image",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "position": {
+            "type": "integer",
+            "required": true
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "identifier": {
+            "type": "string",
+            "required": true
+          },
+          "image": {
+            "type": "string",
+            "required": true
+          },
+          "status": {
+            "type": "integer",
+            "required": true
+          }
+        },
+        "example": {
+          "position": 1,
+          "title": "Concierge",
+          "identifier": "Concierge",
+          "image": "http://104.237.5.179:4000/concierge.png",
+          "status": 1
+        }
+      },
+      "UpdateFeatureRequest": {
+        "required": [
+          "id",
+          "position",
+          "title",
+          "identifier",
+          "image",
+          "status"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "position": {
+            "type": "integer",
+            "required": true
+          },
+          "title": {
+            "type": "string",
+            "required": true
+          },
+          "identifier": {
+            "type": "string",
+            "required": true
+          },
+          "image": {
+            "type": "string",
+            "required": true
+          },
+          "status": {
+            "type": "integer",
+            "required": true
+          }
+        },
+        "example": {
+          "id": "8192b4f0-fbd6-11ea-bacc-590b0efd0459",
+          "position": 1,
+          "title": "Concierge",
+          "identifier": "Concierge",
+          "image": "http://104.237.5.179:4000/concierge.png",
+          "status": 1
+        }
+      },
+      "CreateThingRequest": {
+        "required": [
+          "name",
+          "identifier",
+          "image",
+          "type",
+          "status",
+          "roomId"
+        ],
+        "type": "object",
+        "properties": {
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "identifier": {
+            "type": "string",
+            "required": true
+          },
+          "image": {
+            "type": "string",
+            "required": true
+          },
+          "type": {
+            "type": "string",
+            "required": true
+          },
+          "status": {
+            "type": "integer",
+            "required": true
+          },
+          "roomId": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "name": "Living",
+          "identifier": "Living",
+          "image": "http://104.237.5.179:4000/concierge.png",
+          "status": 1,
+          "type": 0,
+          "roomId": "3adad6e0-f9a2-11ea-b93d-df07a6f5c7a7"
+        }
+      },
+      "UpdateThingRequest": {
+        "required": [
+          "id",
+          "name",
+          "identifier",
+          "image",
+          "type",
+          "status",
+          "roomId"
+        ],
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "required": true
+          },
+          "name": {
+            "type": "string",
+            "required": true
+          },
+          "identifier": {
+            "type": "string",
+            "required": true
+          },
+          "image": {
+            "type": "string",
+            "required": true
+          },
+          "type": {
+            "type": "string",
+            "required": true
+          },
+          "status": {
+            "type": "integer",
+            "required": true
+          },
+          "roomId": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "id": "3f244890-fbe0-11ea-b746-7d0fcc092245",
+          "name": "Living",
+          "identifier": "Living",
+          "image": "http://104.237.5.179:4000/concierge.png",
+          "status": 1,
+          "type": 0,
+          "roomId": "3adad6e0-f9a2-11ea-b93d-df07a6f5c7a7"
+        }
+      },
+      "CreateThingConfigRequest": {
+        "required": [
+          "thing_id",
+          "identifier",
+          "index",
+          "serverUrl",
+          "command_protocal"
+        ],
+        "type": "object",
+        "properties": {
+          "thing_id": {
+            "type": "string",
+            "required": true
+          },
+          "identifier": {
+            "type": "string",
+            "required": true
+          },
+          "index": {
+            "type": "string",
+            "required": true
+          },
+          "serverUrl": {
+            "type": "string",
+            "required": true
+          },
+          "command_protocal": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "thing_id": "c0725590-23ea-11eb-9c75-5374cff90c7b",
+          "index": "0",
+          "identifier": "DIMMABLE_LIGHT",
+          "serverUrl": "opc.tcp://25.21.162.217:48050",
+          "command_protocal": "opcua"
+        }
+      },
+      "CreateThingIOTMappingRequest": {
+        "required": [
+          "identifier",
+          "target_function",
+          "command",
+          "argument_type",
+          "return_type",
+          "read_or_write",
+          "name_space",
+          "executing_command"
+        ],
+        "type": "object",
+        "properties": {
+          "identifier": {
+            "type": "string",
+            "required": true
+          },
+          "target_function": {
+            "type": "string",
+            "required": true
+          },
+          "command": {
+            "type": "string",
+            "required": true
+          },
+          "argument_type": {
+            "type": "string",
+            "required": true
+          },
+          "return_type": {
+            "type": "string",
+            "required": true
+          },
+          "read_or_write": {
+            "type": "string",
+            "required": true
+          },
+          "name_space": {
+            "type": "string",
+            "required": true
+          },
+          "executing_command": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "identifier": "DIMMABLE_LIGHT",
+          "target_function": "switch",
+          "command": "setOn",
+          "argument_type": "boolean",
+          "return_type": "",
+          "read_or_write": "W",
+          "name_space": "ns=13",
+          "executing_command": "ns=13;s=GVL.astDALIFixture[index].bSetLevel"
+        }
+      },
+      "ExecuteCmdRequest": {
+        "required": [
+          "thing_id",
+          "identifier",
+          "target_function",
+          "command",
+          "argValue"
+        ],
+        "type": "object",
+        "properties": {
+          "thing_id": {
+            "type": "string",
+            "required": true
+          },
+          "identifier": {
+            "type": "string",
+            "required": true
+          },
+          "target_function": {
+            "type": "string",
+            "required": true
+          },
+          "command": {
+            "type": "string",
+            "required": true
+          },
+          "argValue": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "thing_id": "c0725590-23ea-11eb-9c75-5374cff90c7b",
+          "identifier": "DIMMABLE_LIGHT",
+          "target_function": "switch",
+          "command": "setOn",
+          "argValue": false
+        }
+      },
+      "ReadDataRequest": {
+        "required": [
+          "thing_id",
+          "identifier",
+          "target_function",
+          "command"
+        ],
+        "type": "object",
+        "properties": {
+          "thing_id": {
+            "type": "string",
+            "required": true
+          },
+          "identifier": {
+            "type": "string",
+            "required": true
+          },
+          "target_function": {
+            "type": "string",
+            "required": true
+          },
+          "command": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "thing_id": "c0725590-23ea-11eb-9c75-5374cff90c7b",
+          "identifier": "DIMMABLE_LIGHT",
+          "target_function": "switch",
+          "command": "getOn"
+        }
+      },
+      "WriteBlindDataRequest": {
+        "required": [
+          "thing_ids",
+          "identifier",
+          "target_function",
+          "command",
+          "argValue"
+        ],
+        "type": "object",
+        "properties": {
+          "thing_ids": {
+            "type": "array",
+            "required": true
+          },
+          "identifier": {
+            "type": "string",
+            "required": true
+          },
+          "target_function": {
+            "type": "string",
+            "required": true
+          },
+          "command": {
+            "type": "string",
+            "required": true
+          },
+          "argValue": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "thing_ids": [
+            "t_blind_1"
+          ],
+          "identifier": "BLIND",
+          "target_function": "parent",
+          "command": "setPosition",
+          "argValue": 10
+        }
+      },
+      "WriteDMXDataRequest": {
+        "required": [
+          "thing_id",
+          "identifier",
+          "target_function",
+          "command",
+          "argValue"
+        ],
+        "type": "object",
+        "properties": {
+          "thing_ids": {
+            "type": "string",
+            "required": true
+          },
+          "identifier": {
+            "type": "string",
+            "required": true
+          },
+          "target_function": {
+            "type": "string",
+            "required": true
+          },
+          "command": {
+            "type": "string",
+            "required": true
+          },
+          "argValue": {
+            "type": "array",
+            "required": true
+          }
+        },
+        "example": {
+          "thing_id": "t_dmx_5_4",
+          "identifier": "DMX",
+          "target_function": "intensity",
+          "command": "setDMXValue",
+          "argValue": [168, 60, 50,80]
+        }
+      },
+      "ReadBlindDataRequest": {
+        "required": [
+          "thing_ids",
+          "identifier",
+          "target_function",
+          "command"
+        ],
+        "type": "object",
+        "properties": {
+          "thing_ids": {
+            "type": "array",
+            "required": true
+          },
+          "identifier": {
+            "type": "string",
+            "required": true
+          },
+          "target_function": {
+            "type": "string",
+            "required": true
+          },
+          "command": {
+            "type": "string",
+            "required": true
+          },
+          "argValue": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "thing_ids": [
+            "t_blind_1"
+          ],
+          "identifier": "BLIND",
+          "target_function": "parent",
+          "command": "getPosition"
+        }
+      },
+      "ReadDMXDataRequest": {
+        "required": [
+          "thing_id",
+          "identifier",
+          "target_function",
+          "command"
+        ],
+        "type": "object",
+        "properties": {
+          "thing_id": {
+            "type": "string",
+            "required": true
+          },
+          "identifier": {
+            "type": "string",
+            "required": true
+          },
+          "target_function": {
+            "type": "string",
+            "required": true
+          },
+          "command": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "thing_id": "t_dmx_5_4",
+          "identifier": "DMX",
+          "target_function": "intensity",
+          "command": "getDMXValue"
+        }
+      }
+    },
+    "securitySchemes": {
+      "JWT": {
+        "type": "apiKey",
+        "name": "Authorization",
+        "in": "header"
+      }
+    }
+  }
+}
