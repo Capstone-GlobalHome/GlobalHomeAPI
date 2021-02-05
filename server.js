@@ -37,7 +37,7 @@ app.listen(environment.PORT, () => {
   db.sequelize.sync({ force: false }).then((data) => {
     console.log('Postgres server started and tables created successfully...')
   }).catch((error) => {
-    console.log('Error... Postgres connection error, not connect with db')
+    console.error('Error... Postgres connection error, not connect with db',JSON.stringify(error))
   })
   console.log(`GlobalHome server listen on port ${environment.PORT}...`);
 });

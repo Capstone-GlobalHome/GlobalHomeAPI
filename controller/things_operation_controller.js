@@ -129,7 +129,6 @@ class ThingsOperationController {
             const protocol = new ProviderFactory();
             protocol.getProvider(req.body.protocol);
             const data = await protocol.provider.tstCmd(req.body)
-            console.log("Data", data)
             if (typeof data !== 'undefined' && data !== null) {
                 res.status(200).json({
                     statusCode: 200,
@@ -211,7 +210,6 @@ class ThingsOperationController {
                     const value = await protocol.provider.read(item, res);
                     // let map = new Map();
                     // map.set();
-                    // console.log(map);
                     arrayValue.push({ [item.thing_id]: value.value });
                 }
                 res.status(200).json({
@@ -331,7 +329,6 @@ class ThingsOperationController {
             //         const value = await protocol.provider.read(item, res);
             //         // let map = new Map();
             //         // map.set();
-            //         // console.log(map);
             //         arrayValue.push({ [item.thing_id]: value.value });
             //     }
             //     res.status(200).json({
@@ -369,10 +366,10 @@ class ThingsOperationController {
                     item.target_function = "sensor";
                     item.command = "get";
                     const value = await protocol.provider.readSenorsData(item, res);
-                   
+
                     arrayValue.push({
                         [item.identifier]: value.value,
-                        "label":value.label
+                        "label": value.label
                     });
                 }
                 res.status(200).json({
@@ -395,7 +392,7 @@ class ThingsOperationController {
         }
     }
 
-  
+
 
 }
 

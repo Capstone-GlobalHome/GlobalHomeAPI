@@ -19,10 +19,11 @@ class OpcuaProvider {
             let serverUrl = getThingType.serverUrl;
             let index = getThingType.index;
             const executeCommand = this.buildOpcuaCommand(thingsIotmappingConfig, index);
-            console.log("cmd", executeCommand);
+            console.info("Info", "Executing command: " + executeCommand);
             thingsIotmappingConfig.argValue = getThingType.argValue;
             await this.buildOpcuaExecutionCommand(thingsIotmappingConfig, executeCommand, serverUrl, false)
         } else {
+            console.info("Error", "Things mapping configuration not found for " + getThingType.identifie);
             res.status(404).json({
                 status: "error",
                 message: "Things mapping configuration not found.",
@@ -37,7 +38,7 @@ class OpcuaProvider {
             let serverUrl = getThingType.serverUrl;
             let index = getThingType.index;
             const executeCommand = this.buildOpcuaCommand(thingsIotmappingConfig, index);
-            console.info("Executing command", JSON.stringify(executeCommand));
+            console.info("Info", "Read operation command :" + executeCommand);
             return await this.buildOpcuaReadCommand(executeCommand, serverUrl)
         } else {
             return undefined;
@@ -71,12 +72,12 @@ class OpcuaProvider {
     }
 
     async buildOpcuaReadCommand(cmd, serverUrl) {
-        console.info("Getting command", JSON.stringify(cmd));
         const dataValue = await opcuaSessionHelper.readNode(serverUrl, cmd);
-        console.info("dataValue",JSON.stringify(dataValue.value.value));
         if (dataValue.value.value !== null) {
+            console.info("Info", "Getting data from backoff " + JSON.stringify(dataValue.value));
             return dataValue.value;
         } else {
+            console.info("Info", "Data not found from backoff " + JSON.stringify(dataValue));
             return dataValue;
         }
     }
@@ -97,13 +98,10 @@ class OpcuaProvider {
         let executeCommand = getThingType.command;
         const readWrite = getThingType.operation
 
-        console.info("Operation", readWrite);
         if (readWrite == "R") {
-            console.info("OperationR", readWrite);
             const data = await this.buildOpcuaReadCommand(executeCommand, serverUrl)
             return data;
         } else {
-            console.log("OperationW", readWrite);
             let dataType = getThingType.dataType
             let argValue = getThingType.argValue;
             let config = {
@@ -112,6 +110,7 @@ class OpcuaProvider {
             }
             const data = await opcuaSessionHelper.writeToNode(serverUrl, executeCommand, this.buildWriteValueObject(config.argument_type,
                 config.argValue, false));
+            console.info("Info", "Data recieved for given command:" + JSON.stringify(data))
             return data;
         }
 
@@ -128,7 +127,7 @@ class OpcuaProvider {
                 name_space: "ns=13",
                 executing_command: "s=GVL.astSMIDevice[index].bSetPosition"
             }, index);
-            console.log("execute motor Off", executeCmdForMotorOff);
+            console.info("Info", "Blinds cmd1", executeCmdForMotorOff);
             await this.buildOpcuaExecutionCommand({
                 argument_type: "boolean",
                 argValue: false
@@ -136,7 +135,7 @@ class OpcuaProvider {
 
             // Lets write value to blinds
             const executeCommand = this.buildOpcuaCommand(thingsIotmappingConfig, index);
-            console.log("cmd", executeCommand);
+            console.info("Info", "Blinds cmd2", executeCommand);
             thingsIotmappingConfig.argValue = getThingType.argValue;
             await this.buildOpcuaExecutionCommand(thingsIotmappingConfig, executeCommand, serverUrl, false)
 
@@ -145,7 +144,7 @@ class OpcuaProvider {
                 name_space: "ns=13",
                 executing_command: "s=GVL.astSMIDevice[index].bSetPosition"
             }, index);
-            console.log("execute  motor On", executeCmdForMotorOn);
+            console.info("Info", "Blinds cmd3", executeCmdForMotorOn);
             await this.buildOpcuaExecutionCommand({
                 argument_type: "boolean",
                 argValue: true
@@ -168,7 +167,6 @@ class OpcuaProvider {
         for (let i = 0; i < noOfElements; i++) {
             elements[i] = getThingType.argValue[i];
         }
-        console.log("THings", elements);
 
         if (typeof thingsIotmappingConfig !== 'undefined' && thingsIotmappingConfig !== null) {
             let serverUrl = getThingType.serverUrl;
@@ -203,14 +201,10 @@ class OpcuaProvider {
             const keys = getThingType.thing_id.split('_');
             const statAddress = parseInt(keys[2]);
             const noOfElements = parseInt(keys[3]);
-            // console.log("statAddress", statAddress);
-            // console.log("noOfElements", statAddress + noOfElements - 1);
             let values = new Array();
             for (let index = statAddress - 1; index < (statAddress + noOfElements - 1); index++) {
-                console.log("data", (output.value[index]));
                 values.push(output.value[index])
             }
-            console.log("Values", values);
             return { [getThingType.thing_id]: values }
         } else {
             res.status(404).json({
@@ -227,34 +221,23 @@ class OpcuaProvider {
             let serverUrl = getThingType.serverUrl;
             let index = getThingType.index;
             const executeCommand = this.buildOpcuaCommand(thingsIotmappingConfig, index);
+            console.info("Info", "Senors:Command", executeCommand)
             const output = await this.buildOpcuaReadCommand(executeCommand, serverUrl)
             output.label = this.getMeLabel(getThingType.identifier, output.value);
+            console.info("Info", "Senors:Output", output)
             return output;
         } else {
             return undefined;
         }
 
     }
-    getMeLabel(identifier, value) {
-        console.log("Identifier", identifier);
+    getMeLabel(identifiers, value) {
+        // console.log("Identifier", identifier);
         for (let range in SENSOR_RANGES[identifier]) {
             if (Common.inRange(value, range)) {
                 return SENSOR_RANGES[identifier][range];
             }
         }
-
-        // let status;
-        // if (identifier==='SENSOR_CO2') {
-        //     status="GOOD"
-        // }else if(identifier==='SENSOR_VOC'){
-        //     status="LOW"
-        // }else if(identifier==='SENSOR_HUMIDITY'){
-        //     status="IDEAL"
-        // }else{
-        //     status=""
-        // }
-        // console.log("value", value);
-        // return status;
     }
 
 

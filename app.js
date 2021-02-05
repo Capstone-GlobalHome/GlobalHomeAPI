@@ -44,6 +44,7 @@ app.use((req, res, next) => {
 
 // handle errors
 app.use((err, req, res, next) => {
+  console.error("Error",err);
   if (err.status === 404) {
     res.status(404).json({
       status: "error",
