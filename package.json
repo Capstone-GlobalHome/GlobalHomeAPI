@@ -4,9 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start": "npm run build && node dist/server.js",
-    "build": "rimraf dist/ && babel ./ --out-dir dist/   --ignore ./node_modules,./.babelrc,./package.json,./npm-debug.log --copy-files",
-    "dev": "nodemon --exec babel-node server"
+    "start": "npm run build && node ./dist/server.js",
+    "build": "rimraf dist/ && babel ./src/ --out-dir dist/  --copy-files",
+    "dev": "nodemon --exec babel-node ./src/server"
   },
   "dependencies": {
     "@babel/cli": "^7.10.5",
