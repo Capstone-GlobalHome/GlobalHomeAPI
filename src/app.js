@@ -6,10 +6,11 @@ import cors from "cors";
 
 import swaggerUi from "swagger-ui-express";
 import swaggerDocument from "./swagger.json";
+import comppression from "compression";
 
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({ extended: true }));
-
+app.use(comppression());
 app.get("/", (req, res) => {
   res.json({ message: "Welcome to Global Homes App" });
 });
