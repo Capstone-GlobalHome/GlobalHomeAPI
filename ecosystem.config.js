@@ -24,6 +24,7 @@ module.exports = {
     script: 'dist/server.js',
     time: true,
     log_file: "logs/" + date + ".log",
+    instances: "max",
     env:  {
       "NODE_ENV": "production"
     }
