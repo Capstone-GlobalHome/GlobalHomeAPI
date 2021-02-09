@@ -11,6 +11,14 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      global_feature_config.hasMany(
+        global_feature_config,
+        {
+          as: "child",
+          foreignKey: 'parentId',
+          onDelete: "cascade"
+        }
+      )
     }
   };
   global_feature_config.init({
@@ -23,7 +31,12 @@ module.exports = (sequelize, DataTypes) => {
     identifier: DataTypes.STRING,
     image: DataTypes.STRING,
     position: DataTypes.INTEGER,
-    status: DataTypes.INTEGER
+    status: DataTypes.INTEGER,
+    isParent: DataTypes.BOOLEAN,
+    parentId: {
+      type: DataTypes.UUID,
+      allowNull: true
+    }
   }, {
     sequelize,
     modelName: 'global_feature_config',

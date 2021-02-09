@@ -76,7 +76,9 @@ class HomeController {
                 identifier: 'required',
                 image: 'required',
                 position: 'required',
-                status: 'required'
+                status: 'required',
+                isParent: 'required',
+                parentId: req.body.isParent ? 'string' : 'required'
             })
             const matched = await v.check()
             if (!matched) {
@@ -93,7 +95,9 @@ class HomeController {
                     identifier: req.body.identifier,
                     image: req.body.image,
                     position: req.body.position,
-                    status: req.body.status
+                    status: req.body.status,
+                    parentId: req.body.parentId,
+                    isParent: req.body.isParent
                 }).then((config) => {
                     res.status(200).json({
                         statusCode: 200,
