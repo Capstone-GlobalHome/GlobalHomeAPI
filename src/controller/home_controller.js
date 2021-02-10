@@ -5,7 +5,7 @@ import _ from "lodash"
 // Models
 import db from '../models'
 const GlobalFeatureConfig = db.global_feature_config
-const UserShortCut = db.user_shortcut
+const UserShortCut = db.user_shortcut;
 
 class HomeController {
 
@@ -282,6 +282,71 @@ class HomeController {
         } catch (error) {
             next(error);
         }
+    }
+    async prepareHome(req, res, next) {
+        let resonseBody = {
+            features: [],
+            shortcuts: []
+        };
+        const v = new Validator(req.body, {
+            email: 'required'
+        })
+        const matched = await v.check()
+        if (!matched) {
+            const errors = _.map(v.errors, value => value.message);
+            res.status(422).json({
+                statusCode: 422,
+                status: "error",
+                message: errors,
+                data: null
+            })
+        } else {
+            GlobalFeatureConfig.findAll({
+                where: {
+                    isParent: true
+                },
+            }).then((data) => {
+                resonseBody.features = data;
+            }).then((data) => {
+                UserShortCut.findAll({ 
+                    where: { email: req.body.email },
+                    order: [["access_count","DESC"]],
+                    limit: 6
+                }).then((shrt)=> {
+                    if(shrt.length) {
+                        resonseBody.shortcuts = shrt;
+                        res.status(200).json({
+                            data: resonseBody
+                        });
+                    } else {
+                        let newShortCut = JSON.parse(JSON.stringify(resonseBody.features));
+                        newShortCut = newShortCut.map((item)=> {
+                            item.email = req.body.email;
+                            item.fk_feature_id = item.id;
+                            item.access_count = 0;
+                            delete item.createdAt;
+                            delete item.updatedAt;
+                            delete item.id;
+                            return item;
+                        })
+                        UserShortCut.bulkCreate(newShortCut).then(() => {
+                            return UserShortCut.findAll();
+                        }).then((newShrts)=> {
+                            resonseBody.shortcuts = newShrts;
+                            res.status(200).json({
+                                data: resonseBody
+                            });
+                        });
+                    }
+                }).catch((err)=> {
+                    console.log(err);
+                    res.status(404);
+                })
+            });
+        }
+    }
+    async addShortCut(req, res, next) {
+
     }
 
 

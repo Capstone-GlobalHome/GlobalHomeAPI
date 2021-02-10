@@ -13,7 +13,8 @@ module.exports = (sequelize, DataTypes) => {
       // define association here
       user_shortcut.belongsTo(models.global_feature_config, {
         foreignKey: 'fk_feature_id',
-        as: 'user_feature'
+        as: 'user_feature',
+        onDelete: "cascade"
       })
      
     }
@@ -24,13 +25,17 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV1,
       primaryKey: true
     },
-    userId: {
+    email: {
       type: DataTypes.STRING
     },
     access_count: {
       type: DataTypes.INTEGER,
       defaultValue: 0,
-    }
+    },
+    title: DataTypes.STRING,
+    identifier: DataTypes.STRING,
+    image: DataTypes.STRING,
+    isParent: DataTypes.BOOLEAN
   }, {
     sequelize,
     modelName: 'user_shortcut',
