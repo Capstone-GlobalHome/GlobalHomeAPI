@@ -1021,6 +1021,91 @@
         }
       }
     },
+    "/home/view": {
+      "post": {
+        "tags": [
+          "home"
+        ],
+        "summary": "List api for gh home screen features and shortcut.",
+        "description": "List api for gh home screen features and shortcut.",
+        "operationId": "ghhome",
+        "requestBody": {
+          "description": "request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HomeFeatureRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Feature config created successfully.",
+                  "data": {
+                    "features": [
+                      {
+                          "id": "d36c2ce0-6d08-11eb-9c61-d9dd6d05bc4a",
+                          "title": "Concierge",
+                          "identifier": "concierge",
+                          "image": "http://104.237.5.179:4000/concierge.png",
+                          "position": 2,
+                          "status": 1,
+                          "isParent": true,
+                          "parentId": null,
+                          "createdAt": "2021-02-12T08:03:43.921Z",
+                          "updatedAt": "2021-02-12T08:03:43.921Z"
+                      }
+                  ],
+                  "shortcuts": [
+                      {
+                          "id": "cb16e2a0-6d09-11eb-9c61-d9dd6d05bc4a",
+                          "userId": "79e18ca0-1ff7-11eb-a671-09c7a64b0eac",
+                          "access_count": 3,
+                          "title": "Concierge",
+                          "identifier": "concierge",
+                          "image": "http://104.237.5.179:4000/concierge.png",
+                          "isParent": true,
+                          "createdAt": "2021-02-12T08:10:39.433Z",
+                          "updatedAt": "2021-02-12T08:12:54.745Z",
+                          "fk_feature_id": "d36c2ce0-6d08-11eb-9c61-d9dd6d05bc4a"
+                      }
+                  ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/home/features": {
       "get": {
         "tags": [
@@ -1301,14 +1386,14 @@
                   "statusCode": 200,
                   "status": "success",
                   "message": "Room info  detail.",
-                  "data": {
+                  "data": [{
                     "id": "dea33600-fbd7-11ea-b7df-2d7dc4aed519",
                     "title": "GH connect",
                     "identifier": "Concierge",
                     "image": "http://104.237.5.179:4000/concierge.png",
                     "position": 1,
                     "status": 1
-                  }
+                  }]
                 }
               }
             }
@@ -2416,7 +2501,7 @@
                       60,
                       50,
                       80
-                  ]
+                    ]
                   }
                 }
               }
@@ -2778,6 +2863,21 @@
           "identifier": "Concierge",
           "image": "http://104.237.5.179:4000/concierge.png",
           "status": 1
+        }
+      },
+      "HomeFeatureRequest": {
+        "required": [
+          "userId"
+        ],
+        "type": "object",
+        "properties": {
+          "userId": {
+            "type": "strine",
+            "required": true
+          }
+        },
+        "example": {
+          "userId":"79e18ca0-1ff7-11eb-a671-09c7a64b0eac"
         }
       },
       "UpdateFeatureRequest": {
@@ -3166,7 +3266,12 @@
           "identifier": "DMX",
           "target_function": "intensity",
           "command": "setDMXValue",
-          "argValue": [168, 60, 50,80]
+          "argValue": [
+            168,
+            60,
+            50,
+            80
+          ]
         }
       },
       "ReadBlindDataRequest": {
