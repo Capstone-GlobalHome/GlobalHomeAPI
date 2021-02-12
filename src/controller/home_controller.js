@@ -289,7 +289,7 @@ class HomeController {
             shortcuts: []
         };
         const v = new Validator(req.body, {
-            email: 'required'
+            userId: 'required'
         })
         const matched = await v.check()
         if (!matched) {
@@ -309,7 +309,7 @@ class HomeController {
                 resonseBody.features = data;
             }).then((data) => {
                 UserShortCut.findAll({ 
-                    where: { email: req.body.email },
+                    where: { userId: req.body.userId },
                     order: [["access_count","DESC"]],
                     limit: 6
                 }).then((shrt)=> {
@@ -321,7 +321,7 @@ class HomeController {
                     } else {
                         let newShortCut = JSON.parse(JSON.stringify(resonseBody.features));
                         newShortCut = newShortCut.map((item)=> {
-                            item.email = req.body.email;
+                            item.userId = req.body.userId;
                             item.fk_feature_id = item.id;
                             item.access_count = 0;
                             delete item.createdAt;
