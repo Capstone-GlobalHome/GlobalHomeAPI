@@ -68,6 +68,53 @@ class HomeController {
         }
     }
 
+    
+    // Get list of home features
+    async getAllChildren(req, res, next) {
+            const featureId = req.params.featureId;
+            if(featureId) {
+                GlobalFeatureConfig.findAll({
+                    where: {
+                        parentId: featureId
+                    }
+                }).then(result => {
+                    if (!result.length) {
+                        console.log("getAllChilder Api success, but no data found", result);
+                        res.status(404).json({
+                            status: "error",
+                            message: "No information is found with given id:" + featureId,
+                            statusCode: 404,
+                            data: null
+                        });
+                    } else {
+                        console.log("getAllChilder Api success", result);
+                        res.status(200).json({
+                            statusCode: 200,
+                            status: "success",
+                            message: "Feature information found successfully.",
+                            data: result,
+                        });
+    
+                    }
+                }).catch(err=> {
+                    console.log("getAllChilder Api ended with errors", err);
+                    res.status(500).json({
+                        status: "error",
+                        message: "There was an error processing this request",
+                        statusCode: 500,
+                        data: null
+                    });
+                })
+            } else {
+                res.status(422).json({
+                    statusCode: 422,
+                    status: "error",
+                    message: "Incorrect value in get parameter",
+                    data: null
+                })
+            }
+    }
+
     //Create Feature entry
     async create(req, res, next) {
         try {
@@ -345,10 +392,6 @@ class HomeController {
             });
         }
     }
-    async addShortCut(req, res, next) {
-
-    }
-
 
 }
 
