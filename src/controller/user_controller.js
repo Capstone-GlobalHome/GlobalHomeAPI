@@ -185,10 +185,9 @@ class UserController {
   //Resend verification code
   async resendCode(req, res, next) {
     try {
-      const v = new Validator(req.body, {
-        userId: 'required',
-        email: 'required|email'
-      })
+      let v = new Validator(req.body, {
+        email: 'required'
+      });
       const matched = await v.check()
       if (!matched) {
         const errors = _.map(v.errors, value => value.message);
@@ -199,7 +198,7 @@ class UserController {
           data: null
         });
       } else {
-        const user = await User.findOne({ where: { id: req.body.userId, email: req.body.email } })
+        const user = await User.findOne({ where: { email: req.body.email } })
         if (typeof user !== 'undefined' && user !== null) {
           if (user.status === STATUS.BLOCK) {
             res.status(423).json({
@@ -209,7 +208,12 @@ class UserController {
               message: MESSAGES.ACCOUNT_BLOCK
             })
           } else {
-            let time = Helper.checkResendCodeTime(user.resend_code_time)
+            let time
+            if (req.body.isForgotPassword) {
+              time = user.resend_code_time;
+            } else {
+              time = Helper.checkResendCodeTime(user.resend_code_time)
+            }
             if (time === RESEND_CODE_TIME.ACCOUNT_BLOCK) {
               await user.update({ verification_code: null, resend_code_time: time, status: STATUS.BLOCK })
               res.status(423).json({
@@ -240,7 +244,6 @@ class UserController {
                   status: "error",
                   data: null,
                   message: MESSAGES.EMAIL_SERVER_ERROR
-
                 })
               }
             }
@@ -296,7 +299,7 @@ class UserController {
               res.status(403).json({
                 statusCode: 403,
                 status: "error",
-                data: null,
+                data: { email: user.email, userId: user.id },
                 message: "Account verification is pending."
               })
             } else {
@@ -401,7 +404,7 @@ class UserController {
                 statusCode: 200,
                 status: "success",
                 message: MESSAGES.SENT_VERIFICATION_CODE,
-                userId: user.email
+                userId: user.id
               });
             } else {
               res.status(400).json({

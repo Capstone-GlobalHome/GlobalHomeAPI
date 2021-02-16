@@ -335,70 +335,56 @@ class HomeController {
             features: [],
             shortcuts: []
         };
-        const v = new Validator(req.body, {
-            userId: 'required'
-        })
-        const matched = await v.check()
-        if (!matched) {
-            const errors = _.map(v.errors, value => value.message);
-            res.status(422).json({
-                statusCode: 422,
-                status: "error",
-                message: errors,
-                data: null
-            })
-        } else {
-            GlobalFeatureConfig.findAll({
-                where: {
-                    isParent: true
-                },
-            }).then((data) => {
-                resonseBody.features = data;
-            }).then((data) => {
-                UserShortCut.findAll({
-                    where: { userId: req.body.userId },
-                    order: [["access_count", "DESC"]],
-                    limit: 6
-                }).then((shrt) => {
-                    if (shrt.length) {
-                        resonseBody.shortcuts = shrt;
+        GlobalFeatureConfig.findAll({
+            where: {
+                isParent: true
+            },
+        }).then((data) => {
+            resonseBody.features = data;
+        }).then((data) => {
+            UserShortCut.findAll({
+                where: { userId: req.user.id },
+                order: [["access_count", "DESC"]],
+                limit: 6
+            }).then((shrt) => {
+                if (shrt.length) {
+                    resonseBody.shortcuts = shrt;
+                    res.status(200).json({
+                        statusCode: 200,
+                        status: "success",
+                        data: resonseBody
+                    });
+                } else {
+                    let newShortCut = JSON.parse(JSON.stringify(resonseBody.features));
+                    newShortCut = newShortCut.map((item) => {
+                        item.userId = req.body.userId;
+                        item.fk_feature_id = item.id;
+                        item.access_count = 0;
+                        delete item.createdAt;
+                        delete item.updatedAt;
+                        delete item.id;
+                        return item;
+                    })
+                    UserShortCut.bulkCreate(newShortCut).then(() => {
+                        return UserShortCut.findAll();
+                    }).then((newShrts) => {
+                        resonseBody.shortcuts = newShrts;
                         res.status(200).json({
                             statusCode: 200,
                             status: "success",
                             data: resonseBody
                         });
-                    } else {
-                        let newShortCut = JSON.parse(JSON.stringify(resonseBody.features));
-                        newShortCut = newShortCut.map((item) => {
-                            item.userId = req.body.userId;
-                            item.fk_feature_id = item.id;
-                            item.access_count = 0;
-                            delete item.createdAt;
-                            delete item.updatedAt;
-                            delete item.id;
-                            return item;
-                        })
-                        UserShortCut.bulkCreate(newShortCut).then(() => {
-                            return UserShortCut.findAll();
-                        }).then((newShrts) => {
-                            resonseBody.shortcuts = newShrts;
-                            res.status(200).json({
-                                statusCode: 200,
-                                status: "success",
-                                data: resonseBody
-                            });
-                        });
-                    }
-                }).catch((err) => {
-                    console.log("home view api ended with errors", err);
-                    res.status(500).json({
-                        statusCode: 500,
-                        status: "error not found",
-                        data: null
                     });
-                })
-            });
-        }
+                }
+            }).catch((err) => {
+                console.log("home view api ended with errors", err);
+                res.status(500).json({
+                    statusCode: 500,
+                    status: "error not found",
+                    data: null
+                });
+            })
+        });
     }
 
 }
