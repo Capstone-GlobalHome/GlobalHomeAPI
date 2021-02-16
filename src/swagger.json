@@ -160,16 +160,15 @@
             "application/json": {
               "schema": {
                 "required": [
-                  "userId",
-                  "email"
+                   "email"
                 ],
                 "type": "object",
                 "properties": {
-                  "userId": {
-                    "type": "integer"
-                  },
                   "email": {
                     "type": "string"
+                  },
+                  "isForgotPassword": {
+                    "type": "boolean"
                   }
                 }
               }
@@ -1054,32 +1053,32 @@
                   "data": {
                     "features": [
                       {
-                          "id": "d36c2ce0-6d08-11eb-9c61-d9dd6d05bc4a",
-                          "title": "Concierge",
-                          "identifier": "concierge",
-                          "image": "http://104.237.5.179:4000/concierge.png",
-                          "position": 2,
-                          "status": 1,
-                          "isParent": true,
-                          "parentId": null,
-                          "createdAt": "2021-02-12T08:03:43.921Z",
-                          "updatedAt": "2021-02-12T08:03:43.921Z"
+                        "id": "d36c2ce0-6d08-11eb-9c61-d9dd6d05bc4a",
+                        "title": "Concierge",
+                        "identifier": "concierge",
+                        "image": "http://104.237.5.179:4000/concierge.png",
+                        "position": 2,
+                        "status": 1,
+                        "isParent": true,
+                        "parentId": null,
+                        "createdAt": "2021-02-12T08:03:43.921Z",
+                        "updatedAt": "2021-02-12T08:03:43.921Z"
                       }
-                  ],
-                  "shortcuts": [
+                    ],
+                    "shortcuts": [
                       {
-                          "id": "cb16e2a0-6d09-11eb-9c61-d9dd6d05bc4a",
-                          "userId": "79e18ca0-1ff7-11eb-a671-09c7a64b0eac",
-                          "access_count": 3,
-                          "title": "Concierge",
-                          "identifier": "concierge",
-                          "image": "http://104.237.5.179:4000/concierge.png",
-                          "isParent": true,
-                          "createdAt": "2021-02-12T08:10:39.433Z",
-                          "updatedAt": "2021-02-12T08:12:54.745Z",
-                          "fk_feature_id": "d36c2ce0-6d08-11eb-9c61-d9dd6d05bc4a"
+                        "id": "cb16e2a0-6d09-11eb-9c61-d9dd6d05bc4a",
+                        "userId": "79e18ca0-1ff7-11eb-a671-09c7a64b0eac",
+                        "access_count": 3,
+                        "title": "Concierge",
+                        "identifier": "concierge",
+                        "image": "http://104.237.5.179:4000/concierge.png",
+                        "isParent": true,
+                        "createdAt": "2021-02-12T08:10:39.433Z",
+                        "updatedAt": "2021-02-12T08:12:54.745Z",
+                        "fk_feature_id": "d36c2ce0-6d08-11eb-9c61-d9dd6d05bc4a"
                       }
-                  ]
+                    ]
                   }
                 }
               }
@@ -1103,7 +1102,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/home/features": {
@@ -1386,14 +1390,16 @@
                   "statusCode": 200,
                   "status": "success",
                   "message": "Room info  detail.",
-                  "data": [{
-                    "id": "dea33600-fbd7-11ea-b7df-2d7dc4aed519",
-                    "title": "GH connect",
-                    "identifier": "Concierge",
-                    "image": "http://104.237.5.179:4000/concierge.png",
-                    "position": 1,
-                    "status": 1
-                  }]
+                  "data": [
+                    {
+                      "id": "dea33600-fbd7-11ea-b7df-2d7dc4aed519",
+                      "title": "GH connect",
+                      "identifier": "Concierge",
+                      "image": "http://104.237.5.179:4000/concierge.png",
+                      "position": 1,
+                      "status": 1
+                    }
+                  ]
                 }
               }
             }
@@ -2877,7 +2883,7 @@
           }
         },
         "example": {
-          "userId":"79e18ca0-1ff7-11eb-a671-09c7a64b0eac"
+          "userId": "79e18ca0-1ff7-11eb-a671-09c7a64b0eac"
         }
       },
       "UpdateFeatureRequest": {
