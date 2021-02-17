@@ -337,8 +337,12 @@ class HomeController {
         };
         GlobalFeatureConfig.findAll({
             where: {
-                isParent: true
+                isParent: true,
+                status: 1
             },
+            order: [
+                ['position', 'ASC'],
+            ]
         }).then((data) => {
             resonseBody.features = data;
         }).then((data) => {
@@ -356,14 +360,14 @@ class HomeController {
                     });
                 } else {
                     let newShortCut = JSON.parse(JSON.stringify(resonseBody.features));
-                    newShortCut = newShortCut.map((item) => {
-                        item.userId = req.body.userId;
+                    newShortCut = newShortCut.filter((item) => {
+                        item.userId = req.user.id;
                         item.fk_feature_id = item.id;
                         item.access_count = 0;
                         delete item.createdAt;
                         delete item.updatedAt;
                         delete item.id;
-                        return item;
+                        return item.position != 7;
                     })
                     UserShortCut.bulkCreate(newShortCut).then(() => {
                         return UserShortCut.findAll();

@@ -571,6 +571,7 @@ class UserController {
               name: user.name,
               email: user.email,
               status: user.status,
+              avatar: "http://104.237.5.179:4000/avatar.png",
               createdAt: user.createdAt,
               updatedAt: user.updatedAt
             }
