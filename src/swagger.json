@@ -160,7 +160,7 @@
             "application/json": {
               "schema": {
                 "required": [
-                   "email"
+                  "email"
                 ],
                 "type": "object",
                 "properties": {
@@ -1498,7 +1498,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/home/userShortcuts": {
@@ -1577,7 +1582,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/things/create": {
