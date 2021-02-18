@@ -82,7 +82,7 @@ class OpcuaSessionHelper {
             console.log("Error !!!", err);
         }
     }
-    async readNode(endpointUrl, nodeId) {
+     readNode(endpointUrl, nodeId) {
 
         try {
             console.log("Getting read command at " + endpointUrl + " cmd: " + nodeId);
@@ -98,29 +98,34 @@ class OpcuaSessionHelper {
             client.on("backoff", (retry, delay) => {
                 console.log("Retrying to connect to ", endpointUrl, " attempt ", retry);
             });
-
-            await client.connect(endpointUrl);
-            // console.log("Client connected ");
-            const cb = (err)=> {
-                if(err) {
-                    console.log(err);
+            const cb = (er,ses)=> {
+                if(er) {
+                    console.log("err", er);
 
                 }
                 else {
-                    console.log("session created")
+                    console.log("session created", ses)
                 }
             }
-            const session = await client.createSession(cb);
-            console.log("Session created: ", session);
+
+            client.connect(endpointUrl, (err)=> {
+                if(err) {
+                    console.log("error in connecting", err);
+                } else {
+                   const session = client.createSession(cb);
+                }
+            });
+            // console.log("Client connected ");
+            
            
-            const dataValue = await session.read({ nodeId, attributeId: AttributeIds.Value });
-            if (dataValue.statusCode !== StatusCodes.Good) {
-                console.log("Could not read ", nodeId);
-            }
-            console.log(` data = ${dataValue.value.toString()}`);
-            await session.close();
-            await client.disconnect();
-            return dataValue;
+            // const dataValue = await session.read({ nodeId, attributeId: AttributeIds.Value });
+            // if (dataValue.statusCode !== StatusCodes.Good) {
+            //     console.log("Could not read ", nodeId);
+            // }
+            // console.log(` data = ${dataValue.value.toString()}`);
+            // await session.close();
+            // await client.disconnect();
+            // return dataValue;
         }
         catch (err) {
             console.log("Error !!!", err);
