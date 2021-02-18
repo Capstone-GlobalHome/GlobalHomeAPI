@@ -94,14 +94,23 @@ class OpcuaSessionHelper {
                     maxDelay: 10 * 1000
                 }
             });
-            console.log("Client created ", client);
+            // console.log("Client created ", client);
             client.on("backoff", (retry, delay) => {
                 console.log("Retrying to connect to ", endpointUrl, " attempt ", retry);
             });
 
             await client.connect(endpointUrl);
-            console.log("Client connected ");
-            const session = await client.createSession();
+            // console.log("Client connected ");
+            const cb = (err)=> {
+                if(err) {
+                    console.log(err);
+
+                }
+                else {
+                    console.log("session created")
+                }
+            }
+            const session = await client.createSession(cb);
             console.log("Session created: ", session);
            
             const dataValue = await session.read({ nodeId, attributeId: AttributeIds.Value });
