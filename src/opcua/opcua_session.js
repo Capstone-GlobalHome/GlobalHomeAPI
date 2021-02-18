@@ -97,9 +97,15 @@ class OpcuaSessionHelper {
                 console.log("Retrying to connect to ", endpointUrl, " attempt ", retry);
             });
 
-            await client.connect(endpointUrl);
+            try {
+                await client.connect(endpointUrl);
+            } catch (error) {
+                console.error("Error: on connect",error);
+            }
 
             const session = await client.createSession();
+
+            
 
             // const nodeId = "ns=13;s=GVL.astSMIBlind[1].lrSetPosition";
             // const nodeId = "ns=13;s=GVL.astDALIFixture[1].bSetLevel";
