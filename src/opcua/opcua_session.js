@@ -82,10 +82,9 @@ class OpcuaSessionHelper {
             console.log("Error !!!", err);
         }
     }
-     readNode(endpointUrl, nodeId) {
+    async readNode(endpointUrl, nodeId) {
 
         try {
-            console.log("Getting read command at " + endpointUrl + " cmd: " + nodeId);
             const client = OPCUAClient.create({
                 endpoint_must_exist: false,
                 connectionStrategy: {
@@ -94,38 +93,24 @@ class OpcuaSessionHelper {
                     maxDelay: 10 * 1000
                 }
             });
-            // console.log("Client created ", client);
             client.on("backoff", (retry, delay) => {
                 console.log("Retrying to connect to ", endpointUrl, " attempt ", retry);
             });
-            const cb = (er,ses)=> {
-                if(er) {
-                    console.log("err", er);
 
-                }
-                else {
-                    console.log("session created", ses)
-                }
+            await client.connect(endpointUrl);
+
+            const session = await client.createSession();
+
+            // const nodeId = "ns=13;s=GVL.astSMIBlind[1].lrSetPosition";
+            // const nodeId = "ns=13;s=GVL.astDALIFixture[1].bSetLevel";
+            const dataValue = await session.read({ nodeId, attributeId: AttributeIds.Value });
+            if (dataValue.statusCode !== StatusCodes.Good) {
+                console.log("Could not read ", nodeId);
             }
-
-            client.connect(endpointUrl, (err)=> {
-                if(err) {
-                    console.log("error in connecting", err);
-                } else {
-                   const session = client.createSession(cb);
-                }
-            });
-            // console.log("Client connected ");
-            
-           
-            // const dataValue = await session.read({ nodeId, attributeId: AttributeIds.Value });
-            // if (dataValue.statusCode !== StatusCodes.Good) {
-            //     console.log("Could not read ", nodeId);
-            // }
-            // console.log(` data = ${dataValue.value.toString()}`);
-            // await session.close();
-            // await client.disconnect();
-            // return dataValue;
+            console.log(` data = ${dataValue.value.toString()}`);
+            await session.close();
+            await client.disconnect();
+            return dataValue;
         }
         catch (err) {
             console.log("Error !!!", err);
