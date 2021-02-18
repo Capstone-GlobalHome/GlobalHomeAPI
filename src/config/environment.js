@@ -17,4 +17,9 @@ export const environment = {
   resetPasswordTokenTime: 3600000, // 1hour
   refreshExpiryTime: process.env.REFRESH_EXPIRY_TIME || "7d",
   verifyAttempts: process.env.VERIFY_ATTEMPT,
+  awsSendMailCredentials: {
+    region: process.env.AWS_SES_REGION,
+    accessKeyId: process.env.AWS_SES_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SES_SECRET_ACCESS_KEY,
+  }
 };

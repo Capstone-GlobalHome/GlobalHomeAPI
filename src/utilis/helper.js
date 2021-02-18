@@ -4,28 +4,65 @@ import { RESEND_CODE_TIME } from "../constants/user.constant"
 import { environment } from '../config/environment'
 
 
-import jwt from "jsonwebtoken"
+import jwt from "jsonwebtoken";
+var AWS = require('aws-sdk');
 
 class Helper {
   //Send email via provider
-  static async sendMail(subject, bodyOfMail, receiverMailId) {
-    sendgrid.setApiKey(environment.SENDGRID_APIKEY);
-    const msg = {
-      to: receiverMailId,
-      from: environment.SENDER_EMAIL,
-      subject: subject,
-      html: bodyOfMail,
+  static sendMail(subject, bodyOfMail, receiverMailId) {
+    // sendgrid.setApiKey(environment.SENDGRID_APIKEY);
+    var params = {
+      Destination: { /* required */
+        ToAddresses: [
+          receiverMailId,
+          /* more items */
+        ]
+      },
+      Message: { /* required */
+        Body: { /* required */
+          Html: {
+            Charset: "UTF-8",
+            Data: bodyOfMail
+          }
+        },
+        
+        Subject: {
+          Charset: 'UTF-8',
+          Data: subject
+        }
+      },
+      Source: environment.SENDER_EMAIL, /* required */
+
     };
-    await (() => {
-      sendgrid
-        .send(msg)
-        .then(() => {
-          return true
-        })
-        .catch((error) => {
-          return false
+    // const msg = {
+    //   to: receiverMailId,
+    //   from: environment.SENDER_EMAIL,
+    //   subject: subject,
+    //   html: bodyOfMail,
+    // };
+    // await (() => {
+    //   sendgrid
+    //     .send(msg)
+    //     .then(() => {
+    //       return true
+    //     })
+    //     .catch((error) => {
+    //       return false
+    //     });
+    // })();
+
+    // Create the promise and SES service object
+
+    AWS.config.update(environment.awsSendMailCredentials);
+    var sendPromise = new AWS.SES({ apiVersion: '2010-12-01' }).sendEmail(params).promise();
+    // Handle promise's fulfilled/rejected states
+    sendPromise.then(
+      function (data) {
+        console.log(data.MessageId);
+      }).catch(
+        function (err) {
+          console.error(err, err.stack);
         });
-    })();
   }
   // User can resend code only 3 time, after that user account will be blocked
   static checkResendCodeTime(codeResendTime) {
