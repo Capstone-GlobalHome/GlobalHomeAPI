@@ -85,6 +85,7 @@ class OpcuaSessionHelper {
     async readNode(endpointUrl, nodeId) {
 
         try {
+            console.log("Getting read command at " + endpointUrl + " cmd: " + nodeId);
             const client = OPCUAClient.create({
                 endpoint_must_exist: false,
                 connectionStrategy: {
@@ -93,22 +94,16 @@ class OpcuaSessionHelper {
                     maxDelay: 10 * 1000
                 }
             });
+            console.log("Client created ", client);
             client.on("backoff", (retry, delay) => {
                 console.log("Retrying to connect to ", endpointUrl, " attempt ", retry);
             });
 
-            try {
-                await client.connect(endpointUrl);
-            } catch (error) {
-                console.error("Error: on connect",error);
-            }
-
+            await client.connect(endpointUrl);
+            console.log("Client connected ");
             const session = await client.createSession();
-
-            
-
-            // const nodeId = "ns=13;s=GVL.astSMIBlind[1].lrSetPosition";
-            // const nodeId = "ns=13;s=GVL.astDALIFixture[1].bSetLevel";
+            console.log("Session created: ", session);
+           
             const dataValue = await session.read({ nodeId, attributeId: AttributeIds.Value });
             if (dataValue.statusCode !== StatusCodes.Good) {
                 console.log("Could not read ", nodeId);
