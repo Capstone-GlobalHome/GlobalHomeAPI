@@ -9,7 +9,7 @@ var AWS = require('aws-sdk');
 
 class Helper {
   //Send email via provider
-  static sendMail(subject, bodyOfMail, receiverMailId) {
+  static async sendMail(subject, bodyOfMail, receiverMailId) {
     // sendgrid.setApiKey(environment.SENDGRID_APIKEY);
     var params = {
       Destination: { /* required */
@@ -56,13 +56,12 @@ class Helper {
     AWS.config.update(environment.awsSendMailCredentials);
     var sendPromise = new AWS.SES({ apiVersion: '2010-12-01' }).sendEmail(params).promise();
     // Handle promise's fulfilled/rejected states
-    sendPromise.then(
-      function (data) {
-        console.log(data.MessageId);
-      }).catch(
-        function (err) {
-          console.error(err, err.stack);
-        });
+    try {
+      await sendPromise;
+    } catch(err) {
+      console.log("error while sending mail", err.stack );
+    }
+    
   }
   // User can resend code only 3 time, after that user account will be blocked
   static checkResendCodeTime(codeResendTime) {
