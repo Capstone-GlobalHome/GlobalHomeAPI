@@ -21,5 +21,10 @@ export const environment = {
     region: process.env.AWS_SES_REGION,
     accessKeyId: process.env.AWS_SES_ACCESS_KEY,
     secretAccessKey: process.env.AWS_SES_SECRET_ACCESS_KEY,
-  }
+  },
+  awsS3credentials: {
+    accessKeyId: process.env.AWS_SES_ACCESS_KEY,
+    secretAccessKey: process.env.AWS_SES_SECRET_ACCESS_KEY,
+  },
+  s3bucket: process.env.AWS_BUCKET_NAME
 };

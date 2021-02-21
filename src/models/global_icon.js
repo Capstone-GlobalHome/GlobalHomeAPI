@@ -15,7 +15,11 @@ module.exports = (sequelize, DataTypes) => {
   };
   global_icon.init({
     image_url: DataTypes.STRING,
-    label: DataTypes.STRING
+    label: DataTypes.STRING,
+    fk_id: {
+      type: DataTypes.UUID,
+      allowNull: true
+    }
   }, {
     sequelize,
     modelName: 'global_icon',
