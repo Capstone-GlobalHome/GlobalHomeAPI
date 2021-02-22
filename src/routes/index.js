@@ -5,13 +5,16 @@ import rooms from "./rooms_routes";
 import home from "./home_routes";
 import things from "./things_route";
 import image from "./image_routes";
+import routines from "./routine_routes";
 const router = express.Router();
 
 router.use("/user", user);
 router.use("/properties", property_unit_routes);
 router.use("/rooms", rooms);
 router.use("/home", home);
-router.use("/image-icon", image)
+router.use("/image-icon", image);
+
+router.use("/routines", routines);
 router.use("/things", things);
 
 
