@@ -14,8 +14,14 @@ module.exports = (sequelize, DataTypes) => {
     }
   };
   routine.init({
-    name: DataTypes.STRING,
-    image_url: DataTypes.STRING
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV1,
+      primaryKey: true
+    },
+    title: DataTypes.STRING,
+    image: DataTypes.STRING,
+    status: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'routine',

@@ -1422,7 +1422,12 @@
               }
             }
           }
-        }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
       }
     },
     "/home/addShortcuts": {
@@ -1559,6 +1564,74 @@
                         "status": 1
                       }
                     }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No information found",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/routines": {
+      "get": {
+        "tags": [
+          "routine"
+        ],
+        "summary": "List the routines showing on home screen",
+        "description": "List of all features showing",
+        "operationId": "listRoutines",
+        "responses": {
+          "200": {
+            "description": "Global Feature list successfully.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccessList"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Global Feature list successfully.",
+                  "data": [
+                    {
+                      "id": "21ae26f0-75d4-11eb-985a-5372498eeef9",
+                      "title": "Put Zach to bed",
+                      "image": "http://104.237.5.179:4000/shortcut.pdf",
+                      "status": 0,
+                      "createdAt": "2021-02-23T12:39:12.352Z",
+                      "updatedAt": "2021-02-23T12:42:06.324Z"
+                  },
+                  {
+                      "id": "ccdd4870-75d5-11eb-8a14-013dec7e43fe",
+                      "title": "Get Zach ready",
+                      "image": "http://104.237.5.179:4000/shortcut.pdf",
+                      "status": 0,
+                      "createdAt": "2021-02-23T12:51:09.045Z",
+                      "updatedAt": "2021-02-23T12:51:09.045Z"
+                  }
                   ]
                 }
               }
