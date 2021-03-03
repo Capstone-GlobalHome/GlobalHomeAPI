@@ -25,7 +25,7 @@ class Helper {
             Data: bodyOfMail
           }
         },
-        
+
         Subject: {
           Charset: 'UTF-8',
           Data: subject
@@ -58,10 +58,10 @@ class Helper {
     // Handle promise's fulfilled/rejected states
     try {
       await sendPromise;
-    } catch(err) {
-      console.log("error while sending mail", err.stack );
+    } catch (err) {
+      console.log("error while sending mail", err.stack);
     }
-    
+
   }
   // User can resend code only 3 time, after that user account will be blocked
   static checkResendCodeTime(codeResendTime) {
@@ -113,13 +113,17 @@ class Helper {
     })
 
     jwt.verify(token, environment.JWT_SECRET_KEY, (err, user) => {
-      if (err) return res.sendStatus(403).json({
-        statusCode: 403,
-        status: "error",
-        message: "Authentication Token expired or invalid",
-      })
-      req.user = user
-      next() // pass the execution off to whatever request the client intended
+      if (err) {
+        return res.status(403).json({
+          statusCode: 403,
+          status: "error",
+          message: "Authentication Token expired or invalid",
+        })
+      } else {
+        req.user = user
+        next() // pass the execution off to whatever request the client intended
+      }
+
     })
   };
 

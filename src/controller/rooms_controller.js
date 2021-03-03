@@ -4,6 +4,7 @@ import _ from "lodash"
 import { MESSAGES } from "../constants/user.constant"
 // Models
 import db from '../models'
+import { DB_STATUS } from '../constants/modal.constant';
 const Room = db.room
 
 class RoomsController {
@@ -36,7 +37,10 @@ class RoomsController {
   //Get list of rooms inside unit
   async getRoomByUnitID(req, res, next) {
     try {
-      const unitId = req.params.unitId;
+      const unitId = req.user.fk_unit_id;
+      if (!unitId) {
+        res.status(404).json({ error: true, message: MESSAGES.DATA_NOT_FOUND })
+      }
       const rooms = await Room.findAll({ where: { fk_unit_id: unitId } })
       if (typeof rooms !== 'undefined' && rooms !== null) {
         res.status(200).json({ error: false, message: "List of rooms by unit id.", data: rooms });
@@ -54,8 +58,11 @@ class RoomsController {
       const v = new Validator(req.body, {
         nick_name: 'required',
         type: 'required',
-        physical_location: 'required',
-        unit_id: 'required'
+        unit_id: 'required',
+        image: 'required',
+        position: 'required',
+        status: 'required',
+        identifier: 'required'
       })
       const matched = await v.check()
       if (!matched) {
@@ -71,6 +78,10 @@ class RoomsController {
           nick_name: req.body.nick_name,
           type: req.body.type,
           physical_location: req.body.physical_location,
+          image: req.body.image,
+          position: req.body.position,
+          status: req.body.status?req.body.status:DB_STATUS.ACTIVE,
+          identifier: req.body.identifier,
           fk_unit_id: req.body.unit_id
         }).then((unit) => {
           res.status(200).json({
@@ -94,7 +105,11 @@ class RoomsController {
         id: 'required',
         nick_name: 'required',
         type: 'required',
-        physical_location: 'required'
+        physical_location: 'required',
+        image: 'required',
+        position: 'required',
+        status: 'required',
+        identifier: 'required'
       })
       const matched = await v.check()
       if (!matched) {

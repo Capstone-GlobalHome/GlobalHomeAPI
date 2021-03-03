@@ -17,10 +17,7 @@ route.post("/forgot/password", userController.forgotPassword); // Forgot passwor
 route.put("/set/password", userController.setPasswordWithVerifyCode); // Set password route
 
 // Authenticate routess
-route.put("/unit", helper.validateToken, userController.setUserUnitID); // Set password route
+route.put("/unit", userController.setUserUnitID); // Set password route
 route.get("/userDetail", helper.validateToken, userController.getUserDetail); // Set password route
-
-
-
 
 export default route;

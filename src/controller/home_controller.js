@@ -79,7 +79,7 @@ class HomeController {
                 }
             }).then(result => {
                 if (!result.length) {
-                    console.log("getAllChilder Api success, but no data found", result);
+                    console.log("getAllChildern Api success, but no data found");
                     res.status(404).json({
                         status: "error",
                         message: "No information is found with given id:" + featureId,
@@ -87,7 +87,7 @@ class HomeController {
                         data: null
                     });
                 } else {
-                    console.log("getAllChilder Api success", result);
+                    console.log("getAllChilder Api success");
                     res.status(200).json({
                         statusCode: 200,
                         status: "success",

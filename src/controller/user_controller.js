@@ -573,7 +573,8 @@ class UserController {
               status: user.status,
               avatar: "http://104.237.5.179:4000/avatar.png",
               createdAt: user.createdAt,
-              updatedAt: user.updatedAt
+              updatedAt: user.updatedAt,
+              unitID: user.fk_unit_id
             }
           });
         }

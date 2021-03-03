@@ -28,7 +28,11 @@ module.exports = (sequelize, DataTypes) => {
       primaryKey: true
     },
     nick_name: DataTypes.STRING,
+    identifier: DataTypes.STRING,
     type: DataTypes.STRING,
+    image: DataTypes.STRING,
+    position:DataTypes.INTEGER,
+    status:DataTypes.INTEGER,
     physical_location: DataTypes.STRING
   }, {
     sequelize,
