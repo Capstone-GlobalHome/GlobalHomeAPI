@@ -41,7 +41,15 @@ class RoomsController {
       if (!unitId) {
         res.status(404).json({ error: true, message: MESSAGES.DATA_NOT_FOUND })
       }
-      const rooms = await Room.findAll({ where: { fk_unit_id: unitId } })
+      const rooms = await Room.findAll({
+        where: {
+          fk_unit_id: unitId,
+          status: '1'
+        },
+        order: [
+          ['position', 'ASC'],
+        ]
+      })
       if (typeof rooms !== 'undefined' && rooms !== null) {
         res.status(200).json({ error: false, message: "List of rooms by unit id.", data: rooms });
       } else {
@@ -80,7 +88,7 @@ class RoomsController {
           physical_location: req.body.physical_location,
           image: req.body.image,
           position: req.body.position,
-          status: req.body.status?req.body.status:DB_STATUS.ACTIVE,
+          status: req.body.status ? req.body.status : DB_STATUS.ACTIVE,
           identifier: req.body.identifier,
           fk_unit_id: req.body.unit_id
         }).then((unit) => {
