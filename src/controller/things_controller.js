@@ -4,10 +4,7 @@ import { Validator } from 'node-input-validator'
 import _ from "lodash"
 // Models
 import db from '../models'
-import { image } from 'faker';
-const GlobalFeatureConfig = db.global_feature_config
 const ThingDbOps = db.thing
-const UserShortCut = db.user_shortcut
 
 class ThingsController {
 
@@ -18,9 +15,10 @@ class ThingsController {
                 name: 'required',
                 identifier: 'required',
                 image: 'required',
-                type: 'required',
+                isParent: 'required',
                 status: 'required',
-                roomId: 'required'
+                roomId: 'required',
+                position: 'required'
             })
             const matched = await v.check()
             if (!matched) {
@@ -32,14 +30,19 @@ class ThingsController {
                     data: null
                 })
             } else {
+                /**  If is parent is 1(true) then parent_id will be null -->Parent case
+                 *   If parentId is 0 and has no parent_id ---> Independant Thing
+                 *   Parent id is 0 and has parent_id----> child thing.
+                 */
                 ThingDbOps.create({
                     name: req.body.name,
                     identifier: req.body.identifier,
                     image: req.body.image,
-                    type: req.body.type,
+                    isParent: req.body.isParent,
                     status: req.body.status,
                     fk_room_id: req.body.roomId,
-                    parent_id: req.body.parentId
+                    parent_id: req.body.parentId,
+                    position: req.body.position
                 }).then((config) => {
                     res.status(200).json({
                         statusCode: 200,
@@ -63,6 +66,10 @@ class ThingsController {
                 name: 'required',
                 identifier: 'required',
                 image: 'required',
+                isParent: 'required',
+                status: 'required',
+                roomId: 'required',
+                position: 'required'
             })
             const matched = await v.check()
             if (!matched) {
@@ -109,7 +116,9 @@ class ThingsController {
             ThingDbOps.findAll({
                 where: {
                     fk_room_id: roomId
-                }
+                }, order: [
+                    ['position', 'ASC'],
+                ]
             }).then(result => {
                 if (!result) {
                     res.status(404).json({
@@ -121,7 +130,7 @@ class ThingsController {
                     res.status(200).json({
                         statusCode: 200,
                         status: "success",
-                        message: "List of units successfully.",
+                        message: "List of things successfully.",
                         data: result
                     });
 
@@ -134,10 +143,10 @@ class ThingsController {
     // Get list of units associated with given propertyid and building id
     async getChildThings(req, res, next) {
         try {
-            const thingId = req.params.parentId;
+            const parentId = req.params.parentId;
             ThingDbOps.findAll({
                 where: {
-                    parent_id: thingId,
+                    parent_id: parentId,
                     status: 1
                 }
             }).then(result => {

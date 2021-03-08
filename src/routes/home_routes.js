@@ -2,6 +2,8 @@ import express from "express"
 import helper from "../utilis/helper"
 import homeController from "../controller/home_controller"
 
+import RoutineController from "../controller/routine_controller";
+
 const roomsRoute = express.Router();
 
 
@@ -13,6 +15,6 @@ roomsRoute.delete("/features", homeController.delete); //  update room's
 roomsRoute.get("/features/:featureId", helper.validateToken, homeController.getAllChildren); //  update room's
 roomsRoute.post("/addShortcuts", helper.validateToken, homeController.addShortCuts); // create or update room's
 roomsRoute.get("/userShortcuts", homeController.getUserShortCuts); // create or update room's
-
+roomsRoute.get("/routines", helper.validateToken, RoutineController.list); // create or update room's
 
 module.exports = roomsRoute;

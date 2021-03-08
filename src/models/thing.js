@@ -33,8 +33,9 @@ module.exports = (sequelize, DataTypes) => {
     name: DataTypes.STRING,
     identifier: DataTypes.STRING,
     image: DataTypes.STRING,
-    type: DataTypes.INTEGER,
+    isParent: DataTypes.INTEGER,
     status: DataTypes.INTEGER,
+    position: DataTypes.INTEGER
   }, {
     sequelize,
     modelName: 'thing',
