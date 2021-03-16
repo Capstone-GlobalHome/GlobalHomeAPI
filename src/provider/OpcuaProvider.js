@@ -88,6 +88,7 @@ class OpcuaProvider {
         } else {
             writeValue = { "dataType": returnType[type], arrayType: opcua.VariantArrayType.Array, "value": value }
         }
+        console.log("Write Value to Opcua",writeValue)
         return writeValue;
     }
 
@@ -174,8 +175,11 @@ class OpcuaProvider {
             let serverUrl = getThingType.serverUrl;
             // Lets execute 1s command to set elements
             const cmd1 = this.buildOpcuaCommandWithoutIndex(thingsIotmappingConfig[0]);
+            console.log("Cn1",cmd1);
             const cmd2 = this.buildOpcuaCommandWithoutIndex(thingsIotmappingConfig[1]);
+            console.log("Cn1",cmd2);
             const cmd3 = this.buildOpcuaCommandWithoutIndex(thingsIotmappingConfig[2]);
+            console.log("Cn1",cmd3);
             thingsIotmappingConfig[0].argValue = elements;
             // First setup set values to elements
             await this.buildOpcuaExecutionCommand(thingsIotmappingConfig[0], cmd1, serverUrl, true)
