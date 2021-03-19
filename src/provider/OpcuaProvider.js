@@ -123,34 +123,11 @@ class OpcuaProvider {
         if (typeof thingsIotmappingConfig !== 'undefined' && thingsIotmappingConfig !== null) {
             let serverUrl = getThingType.serverUrl;
             let index = getThingType.index;
-
-            // Lets execute motor off before making write function to blinds
-            const executeCmdForMotorOff = this.buildOpcuaCommand({
-                name_space: "ns=13",
-                executing_command: "s=GVL.astSMIDevice[index].bSetPosition"
-            }, index);
-            console.log("execute motor Off", executeCmdForMotorOff);
-            await this.buildOpcuaExecutionCommand({
-                argument_type: "boolean",
-                argValue: false
-            }, executeCmdForMotorOff, serverUrl, false)
-
             // Lets write value to blinds
             const executeCommand = this.buildOpcuaCommand(thingsIotmappingConfig, index);
             console.log("cmd", executeCommand);
             thingsIotmappingConfig.argValue = getThingType.argValue;
             await this.buildOpcuaExecutionCommand(thingsIotmappingConfig, executeCommand, serverUrl, false)
-
-            // Lets execute motor off before making write function to blinds
-            const executeCmdForMotorOn = this.buildOpcuaCommand({
-                name_space: "ns=13",
-                executing_command: "s=GVL.astSMIDevice[index].bSetPosition"
-            }, index);
-            console.log("execute  motor On", executeCmdForMotorOn);
-            await this.buildOpcuaExecutionCommand({
-                argument_type: "boolean",
-                argValue: true
-            }, executeCmdForMotorOn, serverUrl, false)
         } else {
             res.status(404).json({
                 status: "error",
