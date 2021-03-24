@@ -72,8 +72,7 @@ class OpcuaSessionHelper {
 
             // const cmd = "ns=13;s=GVL.astSMIBlind[1].lrSetPosition";
             var status_code = await session.writeSingleNode(cmd, valueToNode);
-            console.log('writeOPCUACommands status_code =', status_code);
-
+            console.log("Execution Response",cmd,status_code);
             await session.close();
             await client.disconnect();
             return status_code;
@@ -101,13 +100,11 @@ class OpcuaSessionHelper {
 
             const session = await client.createSession();
 
-            // const nodeId = "ns=13;s=GVL.astSMIBlind[1].lrSetPosition";
-            // const nodeId = "ns=13;s=GVL.astDALIFixture[1].bSetLevel";
             const dataValue = await session.read({ nodeId, attributeId: AttributeIds.Value });
             if (dataValue.statusCode !== StatusCodes.Good) {
                 console.log("Could not read ", nodeId);
             }
-            console.log(` data = ${dataValue.value.toString()}`);
+            console.log(` Getting data for Read operation  = ${dataValue.value.toString()}`);
             await session.close();
             await client.disconnect();
             return dataValue;
