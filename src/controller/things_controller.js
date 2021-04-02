@@ -4,7 +4,9 @@ import { Validator } from 'node-input-validator'
 import _ from "lodash"
 // Models
 import db from '../models'
-const ThingDbOps = db.thing
+const ThingDbOps = db.thing;
+
+const ThingDeviceOps = db.things_devices;
 
 class ThingsController {
 
@@ -18,7 +20,10 @@ class ThingsController {
                 isParent: 'required',
                 status: 'required',
                 roomId: 'required',
-                position: 'required'
+                position: 'required',
+                serverUrl: 'required',
+                props: 'required',
+                command_protocal: 'required'
             })
             const matched = await v.check()
             if (!matched) {
@@ -44,12 +49,21 @@ class ThingsController {
                     parent_id: req.body.parentId,
                     position: req.body.position
                 }).then((config) => {
-                    res.status(200).json({
-                        statusCode: 200,
-                        status: "success",
-                        message: "Thing config created successfully.",
-                        data: config
+                    ThingDeviceOps.create({
+                        thing_id: config.dataValues.id,
+                        serverUrl: req.body.serverUrl,
+                        props: req.body.props,
+                        identifier: req.body.identifier,
+                        command_protocal: req.body.command_protocal
+                    }).then((deviceConfig) => {
+                        res.status(200).json({
+                            statusCode: 200,
+                            status: "success",
+                            message: "Thing config created successfully.",
+                            data: deviceConfig
+                        });
                     });
+
                 })
 
             }
@@ -62,14 +76,16 @@ class ThingsController {
     async update(req, res, next) {
         try {
             const v = new Validator(req.body, {
-                id: 'required',
                 name: 'required',
                 identifier: 'required',
                 image: 'required',
                 isParent: 'required',
                 status: 'required',
                 roomId: 'required',
-                position: 'required'
+                position: 'required',
+                serverUrl: 'required',
+                props: 'required',
+                command_protocal: 'required'
             })
             const matched = await v.check()
             if (!matched) {
@@ -81,6 +97,23 @@ class ThingsController {
                     data: null
                 })
             } else {
+                var thingsData = {
+                    name: req.body.name,
+                    identifier: req.body.identifier,
+                    image: req.body.image,
+                    isParent: req.body.isParent,
+                    status: req.body.status,
+                    roomId: req.body.roomId,
+                    position: req.body.position,
+                };
+
+                var deviceConfig = {
+                    serverUrl: req.body.serverUrl,
+                    props: req.body.props,
+                    command_protocal: req.body.command_protocal,
+                    name: req.body.name
+                }
+
                 ThingDbOps.findOne({
                     where: {
                         id: req.body.id
@@ -94,12 +127,19 @@ class ThingsController {
                         });
                     } else {
                         result.update(req.body).then((unit) => {
-                            res.status(200).json({
-                                statusCode: 200,
-                                status: "success",
-                                message: "Things config updated successfully.",
-                                data: unit
-                            });
+                            ThingDeviceOps.findOne({
+                                where: {
+                                    thing_id: unit.id
+                                }
+                            }).then((deviceData) => {
+                                deviceData.update(deviceConfig).then((updatedData) => {
+                                    res.status(200).json({
+                                        status: "sucess",
+                                        data: updatedData,
+                                        statusCode: 200
+                                    });
+                                });
+                            })
                         })
                     }
                 });
