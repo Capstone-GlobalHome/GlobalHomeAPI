@@ -125,30 +125,39 @@ class ThingsOperationController {
 
     //Execute thing command
     async tstCmd(req, res, next) {
-        try {
-            const protocol = new ProviderFactory();
-            protocol.getProvider(req.body.protocol);
-            const data = await protocol.provider.tstCmd(req.body)
-            console.log("Data", data)
-            if (typeof data !== 'undefined' && data !== null) {
-                res.status(200).json({
-                    statusCode: 200,
-                    status: "success",
-                    message: "Things command executed successfully.",
-                    data: { "value": data.value, "description": data.description, "name": data.name }
 
-                });
-            } else {
-                res.status(404).json({
-                    status: "error",
-                    message: "Error on read/write operation",
-                    statusCode: 404
-                });
-            }
+        res.status(200).json({
+            statusCode: 200,
+            status: "success",
+            message: "Things command executed successfully.",
+            data: {}
 
-        } catch (error) {
-            next(error);
-        }
+        });
+
+        // try {
+        //     const protocol = new ProviderFactory();
+        //     protocol.getProvider(req.body.protocol);
+        //     const data = await protocol.provider.tstCmd(req.body)
+        //     console.log("Data", data)
+        //     if (typeof data !== 'undefined' && data !== null) {
+        //         res.status(200).json({
+        //             statusCode: 200,
+        //             status: "success",
+        //             message: "Things command executed successfully.",
+        //             data: { "value": data.value, "description": data.description, "name": data.name }
+
+        //         });
+        //     } else {
+        //         res.status(404).json({
+        //             status: "error",
+        //             message: "Error on read/write operation",
+        //             statusCode: 404
+        //         });
+        //     }
+
+        // } catch (error) {
+        //     next(error);
+        // }
     }
 
 
@@ -369,10 +378,10 @@ class ThingsOperationController {
                     item.target_function = "sensor";
                     item.command = "get";
                     const value = await protocol.provider.readSenorsData(item, res);
-                   
+
                     arrayValue.push({
                         [item.identifier]: value.value,
-                        "label":value.label
+                        "label": value.label
                     });
                 }
                 res.status(200).json({
@@ -395,7 +404,7 @@ class ThingsOperationController {
         }
     }
 
-  
+
 
 }
 

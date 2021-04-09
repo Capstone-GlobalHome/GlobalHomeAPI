@@ -10,12 +10,22 @@ module.exports = (sequelize, DataTypes) => {
      * The `models/index` file will call this method automatically.
      */
     static associate(models) {
-      // define association here
+      preset.belongsTo(models.thing, {
+        foreignKey: 'fk_thing_id'
+      })
     }
   };
   preset.init({
-    thing_attribute_name: DataTypes.STRING,
-    thing_attribute_value: DataTypes.STRING
+    id: {
+      type: DataTypes.UUID,
+      defaultValue: DataTypes.UUIDV1,
+      primaryKey: true
+    },
+    name: DataTypes.STRING,
+    is_default:DataTypes.INTEGER,
+    defaultValue:DataTypes.INTEGER,
+    image:DataTypes.STRING,
+    position: DataTypes.INTEGER,
   }, {
     sequelize,
     modelName: 'preset',
