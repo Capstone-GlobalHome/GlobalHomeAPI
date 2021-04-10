@@ -22,8 +22,8 @@ module.exports = (sequelize, DataTypes) => {
     thing_id: DataTypes.STRING,
     identifier: DataTypes.STRING,
     index: DataTypes.STRING,
-    serverUrl: DataTypes.STRING,
-    command_protocal: DataTypes.STRING
+    url: DataTypes.STRING,
+    command_protocol: DataTypes.STRING
   }, {
     sequelize,
     modelName: 'things_config',
