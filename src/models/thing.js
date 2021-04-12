@@ -36,7 +36,7 @@ module.exports = (sequelize, DataTypes) => {
     isParent: DataTypes.INTEGER,
     status: DataTypes.INTEGER,
     position: DataTypes.INTEGER,
-    thing_type: DataTypes.TEXT,
+    thing_type: DataTypes.STRING,
     parent_id: DataTypes.UUID
   }, {
     sequelize,

@@ -11,6 +11,10 @@ thingsRoute.post("/list", helper.validateToken,thingsController.getThingsInRooms
 thingsRoute.get("/list/:parentId", thingsController.getChildThings); //  get things detail room's
 thingsRoute.get("/:id", thingsController.getThing); //  get detail of particular thing 
 thingsRoute.delete("/delete/:id", thingsController.delete); //  update room's
+
+//presets
+thingsRoute.post("/presets",thingsController.getThingsPresets)
+
 //Things operation perform api
 thingsRoute.post("/config/create", thingsOpsController.createThingsConfig); // create or update room's
 thingsRoute.post("/mapping/create", thingsOpsController.createThingIotMappingConfig); // create or update room's

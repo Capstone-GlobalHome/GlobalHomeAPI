@@ -7,6 +7,7 @@ import { THING_TYPE } from "../constants/things.constant";
 // Models
 import db from '../models';
 const ThingDbOps = db.thing;
+const PresetDb = db.preset;
 
 import { Thing, thingsObj, thingsConfigObj } from "../dbOperations/things_creator";
 
@@ -260,6 +261,43 @@ class ThingsController {
             next(error);
         }
     }
+
+    
+    //Get things presets information
+    async getThingsPresets(req, res, next) {
+        try {
+            const thingId = req.body.thing_id;
+            // { include: ["unit"] }
+            PresetDb.findAll({
+                where: {
+                    fk_thing_id: thingId
+                },
+                order: [
+                    ['position', 'ASC'],
+                ],
+                attributes: {exclude: ['createdAt','updatedAt']}
+            }).then(result => {
+                if (!result) {
+                    res.status(404).json({
+                        status: "error",
+                        message: "No preset found with thing_id:" + thingId,
+                        statusCode: 404
+                    });
+                } else {
+                    res.status(200).json({
+                        statusCode: 200,
+                        status: "success",
+                        message: "Presets fetch successfully.",
+                        data: result
+                    });
+                }
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+
 
 }
 
