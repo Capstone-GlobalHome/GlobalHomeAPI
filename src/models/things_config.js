@@ -11,6 +11,10 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      things_config.belongsTo(models.thing, {
+        foreignKey: 'thing_id',
+        as: 'thing'
+      })
     }
   };
   things_config.init({
@@ -19,10 +23,10 @@ module.exports = (sequelize, DataTypes) => {
       defaultValue: DataTypes.UUIDV1,
       primaryKey: true
     },
-    thing_id: DataTypes.STRING,
     identifier: DataTypes.STRING,
     index: DataTypes.STRING,
     url: DataTypes.STRING,
+    props: DataTypes.TEXT,
     command_protocol: DataTypes.STRING
   }, {
     sequelize,

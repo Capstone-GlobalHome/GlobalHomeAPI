@@ -9,7 +9,7 @@ import db from '../models';
 const ThingDbOps = db.thing;
 const PresetDb = db.preset;
 
-import { Thing, thingsObj, thingsConfigObj } from "../dbOperations/things_creator";
+import { Thing, thingsObj, thingsConfigObj, buildDMXDataList } from "../dataOperations/things_creator";
 
 class ThingsController {
 
@@ -198,6 +198,31 @@ class ThingsController {
                         data: result
                     });
 
+                }
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    // Get list of units associated with given propertyid and building id
+    async getDMX(req, res, next) {
+        try {
+            const parentId = req.params.parentId;
+            ThingDbOps.findAll({
+                where: {
+                    parent_id: parentId,
+                    status: 1
+                }
+            }).then(result => {
+                if (!result) {
+                    res.status(404).json({
+                        status: "error",
+                        message: "No things config information is found ",
+                        statusCode: 404
+                    });
+                } else {
+                    buildDMXDataList(result, ThingDbOps, req.params.parentId, res);
                 }
             });
         } catch (error) {

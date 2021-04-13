@@ -20,6 +20,7 @@ class ThingsOperationController {
                 });
             });
         } catch (error) {
+            console.log(error);
             next(error);
         }
     }
