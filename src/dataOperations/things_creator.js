@@ -22,11 +22,7 @@ export const thingsConfigObj = {
     "url": null,
     "thing_id": null
 }
-let dmxListDataSet = {
-    parent_id: null,
-    groups: [
-    ]
-}
+
 export class Thing {
     constructor(thingInitials) {
         this.thing = thingInitials;
@@ -43,6 +39,11 @@ export class Thing {
 
 };
 export const buildDMXDataList = async (result, ThingDbOps, parent_id, res) => {
+    let dmxListDataSet = {
+        parent_id: null,
+        groups: [
+        ]
+    };
     dmxListDataSet.parent_id = parent_id;
     let promises = [];
 
@@ -98,8 +99,8 @@ export const buildDMXDataList = async (result, ThingDbOps, parent_id, res) => {
                 const config = allConfigs.filter((el)=> el.thing_id === dmxListDataSet.groups[i].children[j].id);
                 if(config.length) {
                     dmxListDataSet.groups[i].children[j].childId = config[0].id;
-                    
-                    dmxListDataSet.groups[i].children[j].address = config[0].props;
+                    var props = JSON.parse(config[0].props.replace(/'/g, '"'));
+                    dmxListDataSet.groups[i].children[j].address = props.address;
                     dmxListDataSet.groups[i].children[j].index = config[0].index;
                     dmxListDataSet.groups[i].children[j].url = config[0].url;
                     dmxListDataSet.groups[i].children[j].protocol = config[0].command_protocol;
