@@ -62,9 +62,29 @@ export const buildDMXDataList = async (result, ThingDbOps, parent_id, res) => {
     let allChilds = await Promise.all(promises);
     allChilds = allChilds.flat();
 
+    // for preset db call
+    promises = [];
+    for (let i = 0; dmxListDataSet.groups[i]; i++) {
+        promises.push(ThingsConfig.findAll({
+            where: {
+                thing_id: dmxListDataSet.groups[i].id
+            },
+            attributes: ['id', 'props', 'thing_id'], 
+        }))
+    }
+    let presets = await Promise.all(promises);
+
+    presets = presets.flat();
 
 
     dmxListDataSet = JSON.parse(JSON.stringify(dmxListDataSet));
+
+    for(let i=0; dmxListDataSet.groups[i]; i++) {
+        const preset = presets.filter((el)=> el.thing_id === dmxListDataSet.groups[i].id);
+        if(preset.length) {
+            dmxListDataSet.groups[i].presets = preset;
+        }
+    }
 
     for (let i = 0; dmxListDataSet.groups[i]; i++) {
         const children = allChilds.filter((el) => el.parent_id === dmxListDataSet.groups[i].id);
@@ -114,6 +134,7 @@ export const buildDMXDataList = async (result, ThingDbOps, parent_id, res) => {
 
     res.status(200).json({
         status: "success",
+        presets: presets,
         data: allChilds,
         parent: result,
         allConfigs: allConfigs,
