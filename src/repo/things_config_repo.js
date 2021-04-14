@@ -12,8 +12,8 @@ class ThingsConfigRepo {
             thing_id: req.body.thing_id,
             identifier: req.body.identifier,
             props: req.body.props,
-            url: req.body.url,
-            command_protocol: req.body.command_protocol
+            serverUrl: req.body.serverUrl,
+            command_protocal: req.body.command_protocal
         });
     }
 

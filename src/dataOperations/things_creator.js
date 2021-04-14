@@ -18,7 +18,7 @@ export const thingsObj = {
 export const thingsConfigObj = {
     "index": null,
     "props": null,
-    "command_protocol": null,
+    "command_protocal": null,
     "url": null,
     "thing_id": null
 }
@@ -44,7 +44,7 @@ export const buildDMXDataList = async (result, ThingDbOps, parent_id, res) => {
         groups: [
         ]
     };
-    dmxListDataSet.parent_id = parent_id;
+    dmxListDataSet.id = parent_id;
     let promises = [];
 
     for (let item of result) {
@@ -69,7 +69,7 @@ export const buildDMXDataList = async (result, ThingDbOps, parent_id, res) => {
             where: {
                 thing_id: dmxListDataSet.groups[i].id
             },
-            attributes: ['id', 'props', 'thing_id'], 
+            attributes: ['id', 'props', 'thing_id', 'serverUrl', 'command_protocal'], 
         }))
     }
     let presets = await Promise.all(promises);
@@ -80,9 +80,19 @@ export const buildDMXDataList = async (result, ThingDbOps, parent_id, res) => {
     dmxListDataSet = JSON.parse(JSON.stringify(dmxListDataSet));
 
     for(let i=0; dmxListDataSet.groups[i]; i++) {
-        const preset = presets.filter((el)=> el.thing_id === dmxListDataSet.groups[i].id);
+        let preset = presets.filter((el)=> el.thing_id === dmxListDataSet.groups[i].id);
         if(preset.length) {
-            dmxListDataSet.groups[i].presets = preset;
+            dmxListDataSet.groups[i].serverUrl = preset[0].serverUrl;
+            dmxListDataSet.groups[i].command_protocal = preset[0].command_protocal;
+            preset = JSON.parse(presets[0].props);
+            dmxListDataSet.groups[i].presets = [];
+            for(var item of preset.presets) {
+                    var obj = {
+
+                    };
+                    obj[item.presetId] = item.value;
+                    dmxListDataSet.groups[i].presets.push(obj);
+            }
         }
     }
 
@@ -122,8 +132,8 @@ export const buildDMXDataList = async (result, ThingDbOps, parent_id, res) => {
                     var props = JSON.parse(config[0].props.replace(/'/g, '"'));
                     dmxListDataSet.groups[i].children[j].address = props.address;
                     dmxListDataSet.groups[i].children[j].index = config[0].index;
-                    dmxListDataSet.groups[i].children[j].url = config[0].url;
-                    dmxListDataSet.groups[i].children[j].protocol = config[0].command_protocol;
+                    dmxListDataSet.groups[i].children[j].serverUrl = config[0].serverUrl;
+                    dmxListDataSet.groups[i].children[j].protocal = config[0].command_protocal;
                     //Object.assign(dmxListDataSet.groups[i].children[j], config[0]);
                 }
             }
@@ -134,11 +144,11 @@ export const buildDMXDataList = async (result, ThingDbOps, parent_id, res) => {
 
     res.status(200).json({
         status: "success",
-        presets: presets,
-        data: allChilds,
-        parent: result,
-        allConfigs: allConfigs,
-        final: dmxListDataSet,
+        // presets: presets,
+        // data: allChilds,
+        // parent: result,
+        //allConfigs: allConfigs,
+         data: dmxListDataSet,
         statusCode: 200
     });
 
