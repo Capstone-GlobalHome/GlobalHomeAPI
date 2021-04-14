@@ -40,7 +40,7 @@ export class Thing {
 };
 export const buildDMXDataList = async (result, ThingDbOps, parent_id, res) => {
     let dmxListDataSet = {
-        parent_id: null,
+        id: null,
         groups: [
         ]
     };
@@ -128,7 +128,7 @@ export const buildDMXDataList = async (result, ThingDbOps, parent_id, res) => {
             for (var j = 0; dmxListDataSet.groups[i].children[j]; j++) {
                 const config = allConfigs.filter((el)=> el.thing_id === dmxListDataSet.groups[i].children[j].id);
                 if(config.length) {
-                    dmxListDataSet.groups[i].children[j].childId = config[0].id;
+                  //  dmxListDataSet.groups[i].children[j].childId = config[0].id;
                     var props = JSON.parse(config[0].props.replace(/'/g, '"'));
                     dmxListDataSet.groups[i].children[j].address = props.address;
                     dmxListDataSet.groups[i].children[j].index = config[0].index;
