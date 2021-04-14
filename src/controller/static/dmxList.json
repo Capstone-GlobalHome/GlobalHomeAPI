@@ -1,7 +1,6 @@
 {
     "status": "success",
     "data": {
-        "parent_id": null,
         "groups": [
             {
                 "id": "396bec00-99b0-11eb-821d-e36cc99dd8e8",
