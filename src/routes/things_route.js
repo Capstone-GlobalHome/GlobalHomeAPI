@@ -13,6 +13,9 @@ thingsRoute.get("/list/:parentId", thingsController.getChildThings); //  get thi
 thingsRoute.get("/dmxlist/:parentId", thingsController.getDMX); //  get DMXs
 
 
+thingsRoute.get("/mock/dmxlist/:parentId", thingsController.getMockDMXList); //  get DMXs
+
+
 thingsRoute.get("/:id", thingsController.getThing); //  get detail of particular thing 
 thingsRoute.delete("/delete/:id", thingsController.delete); //  update room's
 

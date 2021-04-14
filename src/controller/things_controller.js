@@ -4,6 +4,8 @@ import { Validator } from 'node-input-validator'
 import _ from "lodash";
 import { validate, raiseValidationError } from "../utilis/common";
 import { THING_TYPE } from "../constants/things.constant";
+import fs from "fs";
+import path from "path";
 // Models
 import db from '../models';
 const ThingDbOps = db.thing;
@@ -38,11 +40,11 @@ class ThingsController {
                  */
 
                 // Mapping Things Model with request body
-                 let thing = new Thing(Object.assign(thingsObj, req.body));
-                
+                let thing = new Thing(Object.assign(thingsObj, req.body));
+
                 thing.createNew()
                     .then((data) => {
-                        
+
                         console.log("Things creation is done successfully for child", data);
                         let settings = Object.assign(thingsConfigObj, req.body);
                         settings.thing_id = data.id;
@@ -55,7 +57,7 @@ class ThingsController {
                                 message: "Thing config created successfully.",
                                 data: data
                             });
-                        }).catch((error) => {                            
+                        }).catch((error) => {
                             console.log("Things config creation is ended with errors for child", data);
                             next(error);
                         });
@@ -287,7 +289,7 @@ class ThingsController {
         }
     }
 
-    
+
     //Get things presets information
     async getThingsPresets(req, res, next) {
         try {
@@ -300,7 +302,7 @@ class ThingsController {
                 order: [
                     ['position', 'ASC'],
                 ],
-                attributes: {exclude: ['createdAt','updatedAt']}
+                attributes: { exclude: ['createdAt', 'updatedAt'] }
             }).then(result => {
                 if (!result) {
                     res.status(404).json({
@@ -321,7 +323,21 @@ class ThingsController {
             next(error);
         }
     }
+    getMockDMXList(req, res, next) {
+        try {
+            
+            fs.readFile(path.resolve(__dirname, "./static/dmxList.json"), 'utf8', function(err, dmxList) {
+                if(err) {
+                    console.log(err);
+                }
 
+                res.json(JSON.parse(dmxList));
+            });
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
 
 
 }
