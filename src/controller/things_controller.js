@@ -4,6 +4,11 @@ import { Validator } from 'node-input-validator'
 import _ from "lodash";
 import { validate, raiseValidationError } from "../utilis/common";
 import { THING_TYPE } from "../constants/things.constant";
+
+import fs from "fs";
+import path from "path";
+ // 
+
 // Models
 import db from '../models';
 const ThingDbOps = db.thing;
@@ -296,6 +301,22 @@ class ThingsController {
             next(error);
         }
     }
+
+    getMockDMXList(req, res, next) {
+        try {
+            fs.readFile(path.resolve(__dirname, "./static/dmxList.json"), 'utf8', function(err, dmxList) {
+                if(err) {
+                    console.log(err);
+                }
+
+                res.json(JSON.parse(dmxList));
+            });
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
+
 
 
 

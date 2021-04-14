@@ -28,6 +28,6 @@ thingsRoute.post("/dmx/execute",thingsOpsController.writeToDMX)
 thingsRoute.post("/dmx/read",thingsOpsController.readDMX)
 thingsRoute.post("/sensors/read",thingsOpsController.readSensors)
 
-
+thingsRoute.post("/dmx/parent",thingsController.getMockDMXList)
 
 module.exports = thingsRoute;
