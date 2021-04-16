@@ -10,6 +10,7 @@ import path from "path";
 import db from '../models';
 const ThingDbOps = db.thing;
 const PresetDb = db.preset;
+const ThingsConfig = db.things_config;
 
 import { Thing, thingsObj, thingsConfigObj, buildDMXDataList } from "../dataOperations/things_creator";
 
@@ -215,19 +216,42 @@ class ThingsController {
                 where: {
                     parent_id: parentId,
                     status: 1
-                }, order: [
+                },
+                include: [{
+                    model: ThingDbOps,
+                    as: "things-groups",
+                    include: [
+                        {
+                            model: ThingsConfig,
+                            as: 'things-config'
+                        }
+                    ]
+                },
+                {
+                    model: ThingsConfig,
+                    as: "things-config"
+                }]
+                , order: [
                     ['position', 'ASC']
                 ]
+
             }).then(result => {
-                if (!result) {
-                    res.status(404).json({
-                        status: "error",
-                        message: "No things  information is found ",
-                        statusCode: 404
-                    });
-                } else {
-                    buildDMXDataList(result, ThingDbOps, req.params.parentId, res);
-                }
+                // console.log(JSON.stringify(result));
+                res.status(200).json({
+                    status: "error",
+                    message: "No things  information is found ",
+                    statusCode: 200,
+                    data: result
+                });
+                // if (!result) {
+                //     res.status(404).json({
+                //         status: "error",
+                //         message: "No things  information is found ",
+                //         statusCode: 404
+                //     });
+                // } else {
+                //     buildDMXDataList(result, ThingDbOps, req.params.parentId, res);
+                // }
             });
         } catch (error) {
             next(error);
