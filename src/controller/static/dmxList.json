@@ -1,267 +1,249 @@
 {
-    "status": "success",
-    "data": {
-        "groups": [
-            {
-                "id": "396bec00-99b0-11eb-821d-e36cc99dd8e8",
-                "name": "Ceiling Zone 1",
-                "identifier": "Mainlights",
-                "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
-                "isParent": 1,
-                "status": 1,
-                "position": 1,
-                "thing_type": "group_parent_child",
-                "parent_id": "402402b0-8021-11eb-a5eb-67e92aa1467f",
-                "createdAt": "2021-04-10T03:52:52.163Z",
-                "updatedAt": "2021-04-10T03:55:35.244Z",
-                "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
-                "serverUrl": "opc.tcp://25.21.162.217:48050",
-                "command_protocal": "opcua",
-                "presets": [
-                    {
-                        "17ea5872-9b4b-11eb-b75b-3c07543fbf8a": "80"
-                    },
-                    {
-                        "f490a650-9b4b-11eb-b75b-3c07543fbf8a": "50"
-                    },
-                    {
-                        "f890aa38-9b4b-11eb-b75b-3c07543fbf8a": "30"
-                    },
-                    {
-                        "f990aa38-9b4b-11eb-b75b-3c07543fbf8a": "0"
-                    },
-                    {
-                        "f870aa38-9b4b-11eb-b75b-3c07543fbf8a": "0"
-                    }
-                ],
-                "children": [
-                    {
-                        "id": "b87f8520-99b4-11eb-b2bb-cf1aeea55460",
-                        "name": "DMX_31",
-                        "identifier": "DMX",
-                        "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
-                        "isParent": 0,
-                        "status": 1,
-                        "position": 1,
-                        "thing_type": "child",
-                        "parent_id": "396bec00-99b0-11eb-821d-e36cc99dd8e8",
-                        "createdAt": "2021-04-10T04:25:03.349Z",
-                        "updatedAt": "2021-04-10T04:25:03.349Z",
-                        "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
-                        "childId": "d50a05f0-9b8d-11eb-8be8-ddd27120ed12",
-                        "address": "031",
-                        "index": "031",
-                        "serverUrl": "opc.tcp://25.21.162.217:48050",
-                        "protocal": "opcua"
-                    },
-                    {
-                        "id": "c0258b80-99d2-11eb-ad7e-cb5f1e4359c1",
-                        "name": "DMX_33",
-                        "identifier": "DMX",
-                        "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
-                        "isParent": 0,
-                        "status": 1,
-                        "position": 1,
-                        "thing_type": "child",
-                        "parent_id": "396bec00-99b0-11eb-821d-e36cc99dd8e8",
-                        "createdAt": "2021-04-10T08:00:01.083Z",
-                        "updatedAt": "2021-04-10T08:00:01.083Z",
-                        "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
-                        "childId": "3c8a25c0-9b8e-11eb-8be8-ddd27120ed12",
-                        "address": "033",
-                        "index": "033",
-                        "serverUrl": "opc.tcp://25.21.162.217:48050",
-                        "protocal": "opcua"
-                    }
-                ]
-            },
-            {
-                "id": "5befbd00-9a88-11eb-ad7e-cb5f1e4359c1",
-                "name": "Ceiling Zone 2",
-                "identifier": "Mainlights",
-                "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
-                "isParent": 1,
-                "status": 1,
-                "position": 2,
-                "thing_type": "group_parent_child",
-                "parent_id": "402402b0-8021-11eb-a5eb-67e92aa1467f",
-                "createdAt": "2021-04-11T05:40:01.361Z",
-                "updatedAt": "2021-04-11T05:40:01.361Z",
-                "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
-                "serverUrl": "opc.tcp://25.21.162.217:48050",
-                "command_protocal": "opcua",
-                "presets": [
-                    {
-                        "17ea5872-9b4b-11eb-b75b-3c07543fbf8a": "80"
-                    },
-                    {
-                        "f490a650-9b4b-11eb-b75b-3c07543fbf8a": "50"
-                    },
-                    {
-                        "f890aa38-9b4b-11eb-b75b-3c07543fbf8a": "30"
-                    },
-                    {
-                        "f990aa38-9b4b-11eb-b75b-3c07543fbf8a": "0"
-                    },
-                    {
-                        "f870aa38-9b4b-11eb-b75b-3c07543fbf8a": "0"
-                    }
-                ],
-                "children": [
-                    {
-                        "id": "ee9088fc-9a91-11eb-a10e-3c07543fbf8a",
-                        "name": "DMX_022",
-                        "identifier": "DMX",
-                        "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
-                        "isParent": 0,
-                        "status": 1,
-                        "position": 1,
-                        "thing_type": "child",
-                        "parent_id": "5befbd00-9a88-11eb-ad7e-cb5f1e4359c1",
-                        "createdAt": "2021-04-11T05:40:01.361Z",
-                        "updatedAt": "2021-04-11T05:40:01.361Z",
-                        "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
-                        "childId": "9257c8e0-9b8e-11eb-8be8-ddd27120ed12",
-                        "address": "022",
-                        "index": "022",
-                        "serverUrl": "opc.tcp://25.21.162.217:48050",
-                        "protocal": "opcua"
-                    },
-                    {
-                        "id": "ef13c8e8-9a9b-11eb-a10e-3c07543fbf8a",
-                        "name": "DMX_026",
-                        "identifier": "DMX",
-                        "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
-                        "isParent": 0,
-                        "status": 1,
-                        "position": 2,
-                        "thing_type": "child",
-                        "parent_id": "5befbd00-9a88-11eb-ad7e-cb5f1e4359c1",
-                        "createdAt": "2021-04-11T05:40:01.361Z",
-                        "updatedAt": "2021-04-11T05:40:01.361Z",
-                        "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
-                        "childId": "a75ea0b0-9b8e-11eb-8be8-ddd27120ed12",
-                        "address": "026",
-                        "index": "026",
-                        "serverUrl": "opc.tcp://25.21.162.217:48050",
-                        "protocal": "opcua"
-                    },
-                    {
-                        "id": "ef13d57c-9a9b-11eb-a10e-3c07543fbf8a",
-                        "name": "DMX_029",
-                        "identifier": "DMX",
-                        "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
-                        "isParent": 0,
-                        "status": 1,
-                        "position": 3,
-                        "thing_type": "child",
-                        "parent_id": "5befbd00-9a88-11eb-ad7e-cb5f1e4359c1",
-                        "createdAt": "2021-04-11T05:40:01.361Z",
-                        "updatedAt": "2021-04-11T05:40:01.361Z",
-                        "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
-                        "childId": "c0caf580-9b8e-11eb-8be8-ddd27120ed12",
-                        "address": "029",
-                        "index": "029",
-                        "serverUrl": "opc.tcp://25.21.162.217:48050",
-                        "protocal": "opcua"
-                    },
-                    {
-                        "id": "ef13dd42-9a9b-11eb-a10e-3c07543fbf8a",
-                        "name": "DMX_032",
-                        "identifier": "DMX",
-                        "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
-                        "isParent": 0,
-                        "status": 1,
-                        "position": 4,
-                        "thing_type": "child",
-                        "parent_id": "5befbd00-9a88-11eb-ad7e-cb5f1e4359c1",
-                        "createdAt": "2021-04-11T05:40:01.361Z",
-                        "updatedAt": "2021-04-11T05:40:01.361Z",
-                        "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
-                        "childId": "d6e70de0-9b8e-11eb-8be8-ddd27120ed12",
-                        "address": "032",
-                        "index": "032",
-                        "serverUrl": "opc.tcp://25.21.162.217:48050",
-                        "protocal": "opcua"
-                    }
-                ]
-            },
-            {
-                "id": "f7bd87f3-4df0-4ddf-abdb-7e8ddf2b0d7b",
-                "name": "Shelf Lights:",
-                "identifier": "Mainlights",
-                "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
-                "isParent": 1,
-                "status": 1,
-                "position": 3,
-                "thing_type": "group_parent_child",
-                "parent_id": "402402b0-8021-11eb-a5eb-67e92aa1467f",
-                "createdAt": "2021-04-11T05:40:01.361Z",
-                "updatedAt": "2021-04-11T05:40:01.361Z",
-                "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
-                "children": [
-                    {
-                        "id": "ef13eb7a-9a9b-11eb-a10e-3c07543fbf8a",
-                        "name": "DMX_101",
-                        "identifier": "DMX",
-                        "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
-                        "isParent": 0,
-                        "status": 1,
-                        "position": 1,
-                        "thing_type": "child",
-                        "parent_id": "f7bd87f3-4df0-4ddf-abdb-7e8ddf2b0d7b",
-                        "createdAt": "2021-04-11T05:40:01.361Z",
-                        "updatedAt": "2021-04-11T05:40:01.361Z",
-                        "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268"
-                    },
-                    {
-                        "id": "ef13f070-9a9b-11eb-a10e-3c07543fbf8a",
-                        "name": "DMX_103",
-                        "identifier": "DMX",
-                        "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
-                        "isParent": 0,
-                        "status": 1,
-                        "position": 2,
-                        "thing_type": "child",
-                        "parent_id": "f7bd87f3-4df0-4ddf-abdb-7e8ddf2b0d7b",
-                        "createdAt": "2021-04-11T05:40:01.361Z",
-                        "updatedAt": "2021-04-11T05:40:01.361Z",
-                        "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268"
-                    }
-                ]
-            },
-            {
-                "id": "81f41fb1-9c20-4160-a914-1efd3fc47b5f",
-                "name": "Pendant Lights",
-                "identifier": "Mainlights",
-                "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
-                "isParent": 1,
-                "status": 1,
-                "position": 4,
-                "thing_type": "group_parent_child",
-                "parent_id": "402402b0-8021-11eb-a5eb-67e92aa1467f",
-                "createdAt": "2021-04-11T05:40:01.361Z",
-                "updatedAt": "2021-04-11T05:40:01.361Z",
-                "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
-                "children": [
-                    {
-                        "id": "ef13fa16-9a9b-11eb-a10e-3c07543fbf8a",
-                        "name": "DMX_201",
-                        "identifier": "DMX",
-                        "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
-                        "isParent": 0,
-                        "status": 1,
-                        "position": 1,
-                        "thing_type": "child",
-                        "parent_id": "81f41fb1-9c20-4160-a914-1efd3fc47b5f",
-                        "createdAt": "2021-04-11T05:40:01.361Z",
-                        "updatedAt": "2021-04-11T05:40:01.361Z",
-                        "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268"
-                    }
-                ]
-            }
-        ],
-        "id": "402402b0-8021-11eb-a5eb-67e92aa1467f"
-    },
-    "statusCode": 200
+	"status": "success",
+	"data": {
+		"id": "402402b0-8021-11eb-a5eb-67e92aa1467f",
+		"groups": [{
+				"id": "396bec00-99b0-11eb-821d-e36cc99dd8e8",
+				"name": "Ceiling Zone 1",
+				"identifier": "DMX",
+				"image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+				"isParent": 1,
+				"status": 1,
+				"position": 1,
+				"thing_type": "group_parent_child",
+				"parent_id": "402402b0-8021-11eb-a5eb-67e92aa1467f",
+				"createdAt": "2021-04-10T03:52:52.163Z",
+				"updatedAt": "2021-04-10T03:55:35.244Z",
+				"fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
+				"serverUrl": "opc.tcp://25.21.162.217:48050",
+				"command_protocal": "opcua",
+				"presets": {
+					"17ea5872-9b4b-11eb-b75b-3c07543fbf8a": "80",
+					"f490a650-9b4b-11eb-b75b-3c07543fbf8a": "50",
+					"f890aa38-9b4b-11eb-b75b-3c07543fbf8a": "30",
+					"f990aa38-9b4b-11eb-b75b-3c07543fbf8a": "0",
+					"f870aa38-9b4b-11eb-b75b-3c07543fbf8a": "0"
+				},
+				"children": [{
+						"id": "b87f8520-99b4-11eb-b2bb-cf1aeea55460",
+						"name": "DMX_31",
+						"identifier": "DMX",
+						"image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+						"isParent": 0,
+						"status": 1,
+						"position": 1,
+						"thing_type": "child",
+						"parent_id": "396bec00-99b0-11eb-821d-e36cc99dd8e8",
+						"createdAt": "2021-04-10T04:25:03.349Z",
+						"updatedAt": "2021-04-10T04:25:03.349Z",
+						"fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
+						"address": "031",
+						"index": "031",
+						"serverUrl": "opc.tcp://25.21.162.217:48050",
+						"protocal": "opcua"
+					},
+					{
+						"id": "c0258b80-99d2-11eb-ad7e-cb5f1e4359c1",
+						"name": "DMX_33",
+						"identifier": "DMX",
+						"image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+						"isParent": 0,
+						"status": 1,
+						"position": 1,
+						"thing_type": "child",
+						"parent_id": "396bec00-99b0-11eb-821d-e36cc99dd8e8",
+						"createdAt": "2021-04-10T08:00:01.083Z",
+						"updatedAt": "2021-04-10T08:00:01.083Z",
+						"fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
+						"address": "033",
+						"index": "033",
+						"serverUrl": "opc.tcp://25.21.162.217:48050",
+						"protocal": "opcua"
+					}
+				]
+			},
+			{
+				"id": "5befbd00-9a88-11eb-ad7e-cb5f1e4359c1",
+				"name": "Ceiling Zone 2",
+				"identifier": "DMX",
+				"image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+				"isParent": 1,
+				"status": 1,
+				"position": 2,
+				"thing_type": "group_parent_child",
+				"parent_id": "402402b0-8021-11eb-a5eb-67e92aa1467f",
+				"createdAt": "2021-04-11T05:40:01.361Z",
+				"updatedAt": "2021-04-11T05:40:01.361Z",
+				"fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
+				"serverUrl": "opc.tcp://25.21.162.217:48050",
+				"command_protocal": "opcua",
+				"presets": {
+					"17ea5872-9b4b-11eb-b75b-3c07543fbf8a": "80",
+					"f490a650-9b4b-11eb-b75b-3c07543fbf8a": "50",
+					"f890aa38-9b4b-11eb-b75b-3c07543fbf8a": "30",
+					"f990aa38-9b4b-11eb-b75b-3c07543fbf8a": "0",
+					"f870aa38-9b4b-11eb-b75b-3c07543fbf8a": "0"
+				},
+				"children": [{
+						"id": "ee9088fc-9a91-11eb-a10e-3c07543fbf8a",
+						"name": "DMX_022",
+						"identifier": "DMX",
+						"image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+						"isParent": 0,
+						"status": 1,
+						"position": 1,
+						"thing_type": "child",
+						"parent_id": "5befbd00-9a88-11eb-ad7e-cb5f1e4359c1",
+						"createdAt": "2021-04-11T05:40:01.361Z",
+						"updatedAt": "2021-04-11T05:40:01.361Z",
+						"fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
+						"address": "022",
+						"index": "022",
+						"serverUrl": "opc.tcp://25.21.162.217:48050",
+						"protocal": "opcua"
+					},
+					{
+						"id": "ef13c8e8-9a9b-11eb-a10e-3c07543fbf8a",
+						"name": "DMX_026",
+						"identifier": "DMX",
+						"image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+						"isParent": 0,
+						"status": 1,
+						"position": 2,
+						"thing_type": "child",
+						"parent_id": "5befbd00-9a88-11eb-ad7e-cb5f1e4359c1",
+						"createdAt": "2021-04-11T05:40:01.361Z",
+						"updatedAt": "2021-04-11T05:40:01.361Z",
+						"fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
+						"address": "026",
+						"index": "026",
+						"serverUrl": "opc.tcp://25.21.162.217:48050",
+						"protocal": "opcua"
+					},
+					{
+						"id": "ef13d57c-9a9b-11eb-a10e-3c07543fbf8a",
+						"name": "DMX_029",
+						"identifier": "DMX",
+						"image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+						"isParent": 0,
+						"status": 1,
+						"position": 3,
+						"thing_type": "child",
+						"parent_id": "5befbd00-9a88-11eb-ad7e-cb5f1e4359c1",
+						"createdAt": "2021-04-11T05:40:01.361Z",
+						"updatedAt": "2021-04-11T05:40:01.361Z",
+						"fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
+						"address": "029",
+						"index": "029",
+						"serverUrl": "opc.tcp://25.21.162.217:48050",
+						"protocal": "opcua"
+					},
+					{
+						"id": "ef13dd42-9a9b-11eb-a10e-3c07543fbf8a",
+						"name": "DMX_032",
+						"identifier": "DMX",
+						"image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+						"isParent": 0,
+						"status": 1,
+						"position": 4,
+						"thing_type": "child",
+						"parent_id": "5befbd00-9a88-11eb-ad7e-cb5f1e4359c1",
+						"createdAt": "2021-04-11T05:40:01.361Z",
+						"updatedAt": "2021-04-11T05:40:01.361Z",
+						"fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
+						"address": "032",
+						"index": "032",
+						"serverUrl": "opc.tcp://25.21.162.217:48050",
+						"protocal": "opcua"
+					}
+				]
+			},
+			{
+				"id": "f7bd87f3-4df0-4ddf-abdb-7e8ddf2b0d7b",
+				"name": "Shelf Lights:",
+				"identifier": "Mainlights",
+				"image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+				"isParent": 1,
+				"status": 1,
+				"position": 3,
+				"thing_type": "group_parent_child",
+				"parent_id": "402402b0-8021-11eb-a5eb-67e92aa1467f",
+				"createdAt": "2021-04-11T05:40:01.361Z",
+				"updatedAt": "2021-04-11T05:40:01.361Z",
+				"fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
+				"presets": {
+					"17ea5872-9b4b-11eb-b75b-3c07543fbf8a": "80",
+					"f490a650-9b4b-11eb-b75b-3c07543fbf8a": "50",
+					"f890aa38-9b4b-11eb-b75b-3c07543fbf8a": "30",
+					"f990aa38-9b4b-11eb-b75b-3c07543fbf8a": "0",
+					"f870aa38-9b4b-11eb-b75b-3c07543fbf8a": "0"
+				},
+				"children": [{
+						"id": "ef13eb7a-9a9b-11eb-a10e-3c07543fbf8a",
+						"name": "DMX_101",
+						"identifier": "DMX",
+						"image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+						"isParent": 0,
+						"status": 1,
+						"position": 1,
+						"thing_type": "child",
+						"parent_id": "f7bd87f3-4df0-4ddf-abdb-7e8ddf2b0d7b",
+						"createdAt": "2021-04-11T05:40:01.361Z",
+						"updatedAt": "2021-04-11T05:40:01.361Z",
+						"fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268"
+					},
+					{
+						"id": "ef13f070-9a9b-11eb-a10e-3c07543fbf8a",
+						"name": "DMX_103",
+						"identifier": "DMX",
+						"image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+						"isParent": 0,
+						"status": 1,
+						"position": 2,
+						"thing_type": "child",
+						"parent_id": "f7bd87f3-4df0-4ddf-abdb-7e8ddf2b0d7b",
+						"createdAt": "2021-04-11T05:40:01.361Z",
+						"updatedAt": "2021-04-11T05:40:01.361Z",
+						"fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268"
+					}
+				]
+			},
+			{
+				"id": "81f41fb1-9c20-4160-a914-1efd3fc47b5f",
+				"name": "Pendant Lights",
+				"identifier": "Mainlights",
+				"image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+				"isParent": 1,
+				"status": 1,
+				"position": 4,
+				"thing_type": "group_parent_child",
+				"parent_id": "402402b0-8021-11eb-a5eb-67e92aa1467f",
+				"createdAt": "2021-04-11T05:40:01.361Z",
+				"updatedAt": "2021-04-11T05:40:01.361Z",
+				"fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
+				"presets": {
+					"17ea5872-9b4b-11eb-b75b-3c07543fbf8a": "80",
+					"f490a650-9b4b-11eb-b75b-3c07543fbf8a": "50",
+					"f890aa38-9b4b-11eb-b75b-3c07543fbf8a": "30",
+					"f990aa38-9b4b-11eb-b75b-3c07543fbf8a": "0",
+					"f870aa38-9b4b-11eb-b75b-3c07543fbf8a": "0"
+				},
+				"children": [{
+					"id": "ef13fa16-9a9b-11eb-a10e-3c07543fbf8a",
+					"name": "DMX_201",
+					"identifier": "DMX",
+					"image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+					"isParent": 0,
+					"status": 1,
+					"position": 1,
+					"thing_type": "child",
+					"parent_id": "81f41fb1-9c20-4160-a914-1efd3fc47b5f",
+					"createdAt": "2021-04-11T05:40:01.361Z",
+					"updatedAt": "2021-04-11T05:40:01.361Z",
+					"fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268"
+				}]
+			}
+		]
+	},
+	"statusCode": 200
 }
