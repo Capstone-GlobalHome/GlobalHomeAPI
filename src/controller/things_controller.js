@@ -215,12 +215,14 @@ class ThingsController {
                 where: {
                     parent_id: parentId,
                     status: 1
-                }
+                }, order: [
+                    ['position', 'ASC']
+                ]
             }).then(result => {
                 if (!result) {
                     res.status(404).json({
                         status: "error",
-                        message: "No things config information is found ",
+                        message: "No things  information is found ",
                         statusCode: 404
                     });
                 } else {
@@ -325,9 +327,9 @@ class ThingsController {
     }
     getMockDMXList(req, res, next) {
         try {
-            
-            fs.readFile(path.resolve(__dirname, "./static/dmxList.json"), 'utf8', function(err, dmxList) {
-                if(err) {
+
+            fs.readFile(path.resolve(__dirname, "./static/dmxList.json"), 'utf8', function (err, dmxList) {
+                if (err) {
                     console.log(err);
                 }
 
