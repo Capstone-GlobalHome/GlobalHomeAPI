@@ -26,7 +26,7 @@ module.exports = (sequelize, DataTypes) => {
     identifier: DataTypes.STRING,
     index: DataTypes.STRING,
     serverUrl: DataTypes.STRING,
-    props: DataTypes.STRING,
+    props: DataTypes.TEXT,
     command_protocal: DataTypes.STRING
   }, {
     sequelize,
