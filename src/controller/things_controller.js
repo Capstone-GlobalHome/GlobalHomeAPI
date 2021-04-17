@@ -12,7 +12,7 @@ const ThingDbOps = db.thing;
 const PresetDb = db.preset;
 const ThingsConfig = db.things_config;
 
-import { Thing, thingsObj, thingsConfigObj, buildDMXDataList } from "../dataOperations/things_creator";
+import { Thing, thingsObj, thingsConfigObj, buildDMXDataList, buildDMXParent } from "../dataOperations/things_creator";
 
 class ThingsController {
 
@@ -219,39 +219,39 @@ class ThingsController {
                 },
                 include: [{
                     model: ThingDbOps,
-                    as: "things-groups",
+                    as: "childs",
                     include: [
                         {
                             model: ThingsConfig,
-                            as: 'things-config'
+                            as: 'config'
                         }
                     ]
                 },
                 {
                     model: ThingsConfig,
-                    as: "things-config"
+                    as: "config"
                 }]
                 , order: [
                     ['position', 'ASC']
                 ]
 
             }).then(result => {
-                // console.log(JSON.stringify(result));
-                res.status(200).json({
-                    status: "error",
-                    message: "No things  information is found ",
-                    statusCode: 200,
-                    data: result
-                });
-                // if (!result) {
-                //     res.status(404).json({
-                //         status: "error",
-                //         message: "No things  information is found ",
-                //         statusCode: 404
-                //     });
-                // } else {
-                //     buildDMXDataList(result, ThingDbOps, req.params.parentId, res);
-                // }
+                // res.status(200).json({
+                //     status: "error",
+                //     message: "No things  information is found ",
+                //     statusCode: 200,
+                //     data: result
+                // });
+
+                if (!result) {
+                    res.status(404).json({
+                        status: "error",
+                        message: "No things  information is found ",
+                        statusCode: 404
+                    });
+                } else {
+                    buildDMXParent(result, req.params.parentId, res);
+                }
             });
         } catch (error) {
             next(error);

@@ -20,12 +20,12 @@ module.exports = (sequelize, DataTypes) => {
           allowNull: true
         },
         onDelete: 'cascade',
-        as: 'things-groups'
+        as: 'childs'
       })
       thing.hasOne(models.things_config, {
         foreignKey: 'thing_id',
         onDelete: 'cascade',
-        as: 'things-config'
+        as: 'config'
       })
     }
   };
