@@ -39,6 +39,7 @@ export class Thing {
     }
 
 };
+
 export const buildDMXDataList = async (result, ThingDbOps, parent_id, res) => {
     let dmxListDataSet = {
         id: null,
@@ -259,8 +260,6 @@ const buildAddressFromProps = (config) => {
     let address = "";
     if (config && config.props) {
         try {
-            console.log("Address config:id: ", config.id);
-            console.log("Address json: ", JSON.stringify(config.props));
 
             const props = JSON.parse(config.props);
             if (props.address) {

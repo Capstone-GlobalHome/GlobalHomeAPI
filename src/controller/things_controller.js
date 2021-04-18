@@ -1,18 +1,16 @@
 "use strict";
 
-import { Validator } from 'node-input-validator'
-import _ from "lodash";
-import { validate, raiseValidationError } from "../utilis/common";
-import { THING_TYPE } from "../constants/things.constant";
 import fs from "fs";
 import path from "path";
+import { THING_TYPE } from "../constants/things.constant";
+import { buildDMXParent, Thing, thingsConfigObj, thingsObj } from "../dataOperations/things_creator";
 // Models
 import db from '../models';
+import { raiseValidationError, validate } from "../utilis/common";
 const ThingDbOps = db.thing;
 const PresetDb = db.preset;
 const ThingsConfig = db.things_config;
 
-import { Thing, thingsObj, thingsConfigObj, buildDMXDataList, buildDMXParent } from "../dataOperations/things_creator";
 
 class ThingsController {
 
@@ -315,40 +313,6 @@ class ThingsController {
         }
     }
 
-
-    //Get things presets information
-    async getThingsPresets(req, res, next) {
-        try {
-            const thingId = req.body.thing_id;
-            // { include: ["unit"] }
-            PresetDb.findAll({
-                where: {
-                    fk_thing_id: thingId
-                },
-                order: [
-                    ['position', 'ASC'],
-                ],
-                attributes: { exclude: ['createdAt', 'updatedAt'] }
-            }).then(result => {
-                if (!result) {
-                    res.status(404).json({
-                        status: "error",
-                        message: "No preset found with thing_id:" + thingId,
-                        statusCode: 404
-                    });
-                } else {
-                    res.status(200).json({
-                        statusCode: 200,
-                        status: "success",
-                        message: "Presets fetch successfully.",
-                        data: result
-                    });
-                }
-            });
-        } catch (error) {
-            next(error);
-        }
-    }
     getMockDMXList(req, res, next) {
         try {
 
