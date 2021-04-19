@@ -325,10 +325,23 @@ class ThingsController {
             });
         }
         catch (error) {
-            console.log(error)
+            console.log(error);
         }
     }
 
+    savePresets(req, res, next) {
+        try {
+            res.status(200).json({
+                status: "success",
+                message: "Preset information updated ",
+                data: null,
+                statusCode: 200
+            });
+        } catch (error) {
+            next(error);
+        }
+
+    }
 
 }
 
