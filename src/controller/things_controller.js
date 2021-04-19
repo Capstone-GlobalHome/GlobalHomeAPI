@@ -313,27 +313,39 @@ class ThingsController {
             });
         }
         catch (error) {
-            console.log(error)
+            console.log(error);
         }
     }
 
-    async savePresets(req, res, next) {
-        res.status(200).json({
-            status: "success",
-            message: "Preset information updated ",
-            data: null,
-            statusCode: 200
-        });
+    savePresets(req, res, next) {
+        try {
+            res.status(200).json({
+                status: "success",
+                message: "Preset information updated ",
+                data: null,
+                statusCode: 200
+            });
+        } catch (error) {
+            next(error);
+        }
+
     }
 
 
-    async executeDMXParent(req, res, next) {
-        res.status(200).json({
-            status: "success",
-            message: "Dmx channel updated successfully ",
-            data: null,
-            statusCode: 200
-        });
+    executeDMXParent(req, res, next) {
+
+        try {
+            res.status(200).json({
+                status: "success",
+                message: "Dmx channel updated successfully ",
+                data: null,
+                statusCode: 200
+            });
+        } catch (error) {
+            next(error);
+        }
+
+
     }
 
 }
