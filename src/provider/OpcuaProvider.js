@@ -64,7 +64,7 @@ class OpcuaProvider {
 
     async buildOpcuaExecutionCommand(config, cmd, serverUrl, isArrayType) {
         console.log("OpcuaExecutionCommand", cmd);
-        console.log("Sending argument value", JSON.stringify(config.argValue));
+        // console.log("Sending argument value", JSON.stringify(config.argValue));
         // console.log("Sending argument value", JSON.parse(JSON.stringify(config.argValue)));
         const status_code = await opcuaSessionHelper.writeToNode(serverUrl, cmd, this.buildWriteValueObject(config.argument_type,
             config.argValue, isArrayType));
