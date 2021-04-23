@@ -127,38 +127,38 @@ class ThingsOperationController {
     //Execute thing command
     async tstCmd(req, res, next) {
 
-        res.status(200).json({
-            statusCode: 200,
-            status: "success",
-            message: "Things command executed successfully.",
-            data: {}
+        // res.status(200).json({
+        //     statusCode: 200,
+        //     status: "success",
+        //     message: "Things command executed successfully.",
+        //     data: {}
 
-        });
+        // });
 
-        // try {
-        //     const protocol = new ProviderFactory();
-        //     protocol.getProvider(req.body.protocol);
-        //     const data = await protocol.provider.tstCmd(req.body)
-        //     console.log("Data", data)
-        //     if (typeof data !== 'undefined' && data !== null) {
-        //         res.status(200).json({
-        //             statusCode: 200,
-        //             status: "success",
-        //             message: "Things command executed successfully.",
-        //             data: { "value": data.value, "description": data.description, "name": data.name }
+        try {
+            const protocol = new ProviderFactory();
+            protocol.getProvider(req.body.protocol);
+            const data = await protocol.provider.tstCmd(req.body)
+            console.log("Data", data)
+            if (typeof data !== 'undefined' && data !== null) {
+                res.status(200).json({
+                    statusCode: 200,
+                    status: "success",
+                    message: "Things command executed successfully.",
+                    data: { "value": data.value, "description": data.description, "name": data.name }
 
-        //         });
-        //     } else {
-        //         res.status(404).json({
-        //             status: "error",
-        //             message: "Error on read/write operation",
-        //             statusCode: 404
-        //         });
-        //     }
+                });
+            } else {
+                res.status(404).json({
+                    status: "error",
+                    message: "Error on read/write operation",
+                    statusCode: 404
+                });
+            }
 
-        // } catch (error) {
-        //     next(error);
-        // }
+        } catch (error) {
+            next(error);
+        }
     }
 
 
@@ -405,6 +405,46 @@ class ThingsOperationController {
         }
     }
 
+    async executeDMXParent(req, res, next) {
+
+        try {
+            const thingId = req.body.thing_id;
+            const identifier = req.body.identifier;
+            const target_function = req.body.target_function;
+            const command = req.body.command;
+            const dmx_arrary = req.body.dmx_arrary;
+            const thing_config = await ThingsConfigRepo.find({
+                thing_id: thingId,
+                identifier: identifier
+            });
+
+            if (typeof thing_config !== 'undefined' && thing_config !== null) {
+                const commandProtocol = thing_config.command_protocal;
+                const protocol = new ProviderFactory();
+                protocol.getProvider(commandProtocol);
+                thing_config.target_function = target_function;
+                thing_config.command = command;
+                thing_config.dmx_arrary = dmx_arrary;
+                protocol.provider.executeDMXParent(thing_config)
+                res.status(200).json({
+                    statusCode: 200,
+                    status: "success",
+                    message: "Things command executed successfully.",
+                    data: {}
+                });
+            } else {
+                res.status(404).json({
+                    status: "error",
+                    message: "Things configuration not found.",
+                    statusCode: 404
+                });
+            }
+
+        } catch (error) {
+            next(error);
+        }
+
+    }
 
 
 }

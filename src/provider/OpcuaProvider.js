@@ -11,7 +11,7 @@ import { Common } from "../utilis/common";
 const opcuaSessionHelper = new OpcuaSessionHelper();
 
 const opcua = require("node-opcua");
-const {performance} = require('perf_hooks');
+const { performance } = require('perf_hooks');
 import _ from "lodash"
 
 class OpcuaProvider {
@@ -166,7 +166,7 @@ class OpcuaProvider {
     }
 
     async executeDMXReadCommand(getThingType, res) {
-        let r0=performance.now();
+        let r0 = performance.now();
         const thingsIotmappingConfig = await ThingsMappingRepo.findThingMappingConfig(getThingType);
         var r1 = performance.now()
         console.log("Reading things mapping configs in " + (r1 - r0) + " milliseconds.")
@@ -231,6 +231,32 @@ class OpcuaProvider {
         // }
         // console.log("value", value);
         // return status;
+    }
+
+
+    async executeDMXParent(config, res) {
+        const thingsIotmappingConfig = await ThingsMappingRepo.findThingMappingConfingOrdered(config);
+        const dmxArrary = config.dmx_arrary;
+        console.log("DMX channel updating address ", JSON.stringify(dmxArrary));
+        if (typeof thingsIotmappingConfig !== 'undefined' && thingsIotmappingConfig !== null) {
+            DMXChannelOps.findDMXChannelValueArray({ identifier: config.identifier }).then(arrayStringValue => {
+                const dmxChannelArray = JSON.parse(arrayStringValue.channel_array);
+                dmxArrary.forEach((item) => {
+                    let index = parseInt(item.address);
+                    dmxChannelArray[index - 1] = parseFloat(item.value)
+                });
+                const finalArrary = new Float64Array(Array.from(_.values(dmxChannelArray)));
+                let serverUrl = config.serverUrl;
+                // Lets execute 1s command to set elements
+                const cmd1 = this.buildOpcuaCommandWithoutIndex(thingsIotmappingConfig[0]);
+                thingsIotmappingConfig[0].argValue = finalArrary;
+                // First setup set values to elements
+                this.buildOpcuaExecutionCommand(thingsIotmappingConfig[0], cmd1, serverUrl, true)
+                arrayStringValue.update({ id: arrayStringValue.id, channel_array: JSON.stringify(dmxChannelArray) });
+            })
+        } else {
+            console.error("Things mapping config not found")
+        }
     }
 
 
