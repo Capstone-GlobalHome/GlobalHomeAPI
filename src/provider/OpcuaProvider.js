@@ -64,7 +64,8 @@ class OpcuaProvider {
 
     async buildOpcuaExecutionCommand(config, cmd, serverUrl, isArrayType) {
         console.log("OpcuaExecutionCommand", cmd);
-        console.log("Sending argument value", JSON.parse(JSON.stringify(config.argValue)));
+        console.log("Sending argument value", JSON.stringify(config.argValue));
+        // console.log("Sending argument value", JSON.parse(JSON.stringify(config.argValue)));
         const status_code = await opcuaSessionHelper.writeToNode(serverUrl, cmd, this.buildWriteValueObject(config.argument_type,
             config.argValue, isArrayType));
         let obj = { "value": status_code.value, "description": status_code.description, "name:": status_code.name }
@@ -139,8 +140,9 @@ class OpcuaProvider {
     async executeDMXCommand(getThingType, res) {
 
         const thingsIotmappingConfig = await ThingsMappingRepo.findThingMappingConfingOrdered(getThingType);
-        const keys = getThingType.thing_id.split('_');
-        const address = keys[2];
+        const props = JSON.parse(getThingType.props);
+        const address = props.address;
+        console.log("address", address)
         console.log("DMX channel updating address ", address);
         if (typeof thingsIotmappingConfig !== 'undefined' && thingsIotmappingConfig !== null) {
             DMXChannelOps.findDMXChannelValueArray({ identifier: getThingType.identifier }).then(arrayStringValue => {
@@ -163,6 +165,7 @@ class OpcuaProvider {
                 statusCode: 404
             });
         }
+
     }
 
     async executeDMXReadCommand(getThingType, res) {
@@ -177,16 +180,26 @@ class OpcuaProvider {
             const output = await this.buildOpcuaReadCommand(executeCommand, serverUrl);
             var t1 = performance.now()
             console.log("DMX read operation takes " + (t1 - t0) + " milliseconds.")
-            const keys = getThingType.thing_id.split('_');
-            const statAddress = parseInt(keys[2]);
-            const noOfElements = parseInt(keys[3]);
 
+            var m0 = performance.now()
+            this.updateDmxChannelArray(output.value, getThingType.identifier);
+            var m1 = performance.now()
+            console.log("DMX arrary chnnel updte" + (m1 - m0) + " milliseconds.")
+
+            const props = JSON.parse(getThingType.props);
+            const address = props.address;
             let values = new Array();
-            for (let index = statAddress - 1; index < (statAddress + noOfElements - 1); index++) {
-                console.log("data", (output.value[index]));
-                values.push(output.value[index])
-            }
+            values.push(output.value[address - 1])
             console.log("Values", values);
+
+            //code wiil help when we have multi channel dmx
+            // const keys = getThingType.thing_id.split('_');
+            // const statAddress = parseInt(keys[2]);
+            // const noOfElements = parseInt(keys[3]);
+            // for (let index = statAddress - 1; index < (statAddress + noOfElements - 1); index++) {
+            //     console.log("data", (output.value[index]));
+            // }
+            // end here
             return { [getThingType.thing_id]: values }
         } else {
             res.status(404).json({
@@ -211,6 +224,7 @@ class OpcuaProvider {
         }
 
     }
+
     getMeLabel(identifier, value) {
         console.log("Identifier", identifier);
         for (let range in SENSOR_RANGES[identifier]) {
@@ -257,6 +271,22 @@ class OpcuaProvider {
         } else {
             console.error("Things mapping config not found")
         }
+    }
+
+    async updateDmxChannelArray(values, dmxIdentifier) {
+
+        try {
+            DMXChannelOps.findDMXChannelValueArray({ identifier: dmxIdentifier }).then(arrayStringValue => {
+                const dmxChannelArray = JSON.parse(arrayStringValue.channel_array);
+                values.forEach((item, index) => {
+                    dmxChannelArray[index] = item;
+                })
+                arrayStringValue.update({ id: arrayStringValue.id, channel_array: JSON.stringify(dmxChannelArray) });
+            })
+        } catch (error) {
+            console.log(error);
+        }
+
     }
 
 

@@ -294,7 +294,6 @@ class ThingsOperationController {
             const identifier = req.body.identifier;
             const target_function = req.body.target_function;
             const command = req.body.command;
-            let position = Number(thingId.split("_")[2]) - 1;
 
             const getThingType = await ThingsConfigRepo.find({
                 thing_id: thingId,
