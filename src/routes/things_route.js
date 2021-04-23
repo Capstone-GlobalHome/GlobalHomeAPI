@@ -41,6 +41,6 @@ thingsRoute.post("/sensors/read", thingsOpsController.readSensors);
 
 thingsRoute.post("/dmx/parent/execute", thingsOpsController.executeDMXParent);
 
-thingsRoute.post("/dmx/parent", thingsController.getMockDMXList)
+thingsRoute.post("/dmx/parent", thingsController.getDMX)
 
 module.exports = thingsRoute;

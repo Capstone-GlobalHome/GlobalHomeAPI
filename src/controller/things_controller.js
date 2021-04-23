@@ -209,7 +209,7 @@ class ThingsController {
     // Get list of units associated with given propertyid and building id
     async getDMX(req, res, next) {
         try {
-            const parentId = req.params.parentId;
+            const parentId = req.body.thing_id;
             ThingDbOps.findAll({
                 where: {
                     parent_id: parentId,
