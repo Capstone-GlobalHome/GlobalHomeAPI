@@ -175,7 +175,6 @@ export const buildDMXParent = async (result, parent_id, res) => {
     };
     dmxListDataSet.id = parent_id;
 
-
     const resObj = result.map(group => {
 
         // console.log("THings-config", group.config);
@@ -198,6 +197,7 @@ export const buildDMXParent = async (result, parent_id, res) => {
         }
         )
     })
+
     dmxListDataSet.groups = resObj;
     res.status(200).json({
         status: "success",

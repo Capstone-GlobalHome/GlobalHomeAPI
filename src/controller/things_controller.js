@@ -234,13 +234,6 @@ class ThingsController {
                 ]
 
             }).then(result => {
-                // res.status(200).json({
-                //     status: "error",
-                //     message: "No things  information is found ",
-                //     statusCode: 200,
-                //     data: result
-                // });
-
                 if (!result) {
                     res.status(404).json({
                         status: "error",
@@ -248,7 +241,7 @@ class ThingsController {
                         statusCode: 404
                     });
                 } else {
-                    buildDMXParent(result, req.params.parentId, res);
+                    buildDMXParent(result, req.body.thing_id, res);
                 }
             });
         } catch (error) {

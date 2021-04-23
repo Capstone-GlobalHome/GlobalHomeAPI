@@ -2,7 +2,8 @@
 	"status": "success",
 	"data": {
 		"id": "402402b0-8021-11eb-a5eb-67e92aa1467f",
-		"groups": [{
+		"groups": [
+			{
 				"id": "396bec00-99b0-11eb-821d-e36cc99dd8e8",
 				"name": "Ceiling Zone 1",
 				"identifier": "DMX",
