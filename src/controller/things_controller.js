@@ -11,6 +11,8 @@ const ThingDbOps = db.thing;
 const PresetDb = db.preset;
 const ThingsConfig = db.things_config;
 
+const { Op } = require("sequelize");
+
 
 class ThingsController {
 
@@ -150,7 +152,9 @@ class ThingsController {
             const roomId = req.body.roomId;
             ThingDbOps.findAll({
                 where: {
-                    fk_room_id: roomId
+                    fk_room_id: roomId,
+                    parent_id:{[Op.is]: null},
+                    thing_type: { [Op.in]: [THING_TYPE.INDIVIDUAL, THING_TYPE.GROUP, THING_TYPE.GROUP_PARENT] }
                 }, order: [
                     ['position', 'ASC'],
                 ]
