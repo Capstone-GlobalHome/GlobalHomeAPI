@@ -1,0 +1,85 @@
+{
+  "myHomes": [
+    {
+      "id": 1,
+      "title": "Ergon Rotate",
+      "identifier": "Ergon Rotate",
+      "livingUnitId": 2,
+      "image": "",
+      "position": 1,
+      "status": "Active"
+    },
+    {
+      "id": 2,
+      "title": "Consecra Retract",
+      "identifier": "Consecra Retract",
+      "livingUnitId": 2,
+      "image": "",
+      "position": 2,
+      "status": "Active"
+    },
+    {
+      "id": 3,
+      "title": "Repono Stored",
+      "identifier": "Repono Stored",
+      "livingUnitId": 2,
+      "image": "",
+      "position": 3,
+      "status": "Active"
+    },
+    {
+      "id": 4,
+      "title": "Core Hydroponics",
+      "identifier": "Core Hydroponics",
+      "livingUnitId": 2,
+      "image": "",
+      "position": 4,
+      "status": "Active"
+    },
+    {
+      "id": 5,
+      "title": "Core Office",
+      "identifier": "Core Office",
+      "livingUnitId": 2,
+      "image": "",
+      "position": 5,
+      "status": "Active"
+    },
+    {
+      "id": 6,
+      "title": "Labor Cassettes",
+      "identifier": "Labor Cassettes",
+      "livingUnitId": 2,
+      "image": "",
+      "position": 6,
+      "status": "Active"
+    },
+    {
+      "id": 7,
+      "title": "Other",
+      "identifier": "Other",
+      "livingUnitId": 2,
+      "image": "",
+      "position": 7,
+      "status": "Active"
+    },
+    {
+      "id": 8,
+      "title": "Other",
+      "identifier": "Other",
+      "livingUnitId": 2,
+      "image": "",
+      "position": 8,
+      "status": "Active"
+    },
+    {
+      "id": 9,
+      "title": "Other",
+      "identifier": "Other",
+      "livingUnitId": 2,
+      "image": "",
+      "position": 9,
+      "status": "Active"
+    }
+  ]
+}

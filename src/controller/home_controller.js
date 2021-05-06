@@ -4,6 +4,8 @@ import { Validator } from 'node-input-validator'
 import _ from "lodash"
 // Models
 import db from '../models'
+import fs from "fs";
+import path from "path";
 const GlobalFeatureConfig = db.global_feature_config
 const UserShortCut = db.user_shortcut;
 
@@ -389,6 +391,38 @@ class HomeController {
                 });
             })
         });
+    }
+
+    myHome(req, res, next) {
+        try {
+
+            fs.readFile(path.resolve(__dirname, "./static/myHome.json"), 'utf8', function (err, dmxList) {
+                if (err) {
+                    console.log(err);
+                }
+
+                res.json(JSON.parse(dmxList));
+            });
+        }
+        catch (error) {
+            console.log(error);
+        }
+    }
+
+    system(req, res, next) {
+        try {
+
+            fs.readFile(path.resolve(__dirname, "./static/system.json"), 'utf8', function (err, dmxList) {
+                if (err) {
+                    console.log(err);
+                }
+
+                res.json(JSON.parse(dmxList));
+            });
+        }
+        catch (error) {
+            console.log(error);
+        }
     }
 
 }

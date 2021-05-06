@@ -1,0 +1,76 @@
+{
+  "systems": [
+    {
+      "id": 1,
+      "title": "Energy Use",
+      "identifier": "EnergyUse",
+      "livingUnitId": 4,
+      "image": "http://104.237.5.179:4000/energyUseIcon.pdf",
+      "position": 1,
+      "status": "Active"
+    },
+    {
+      "id": 2,
+      "title": "Energy Generation",
+      "identifier": "EnergyGeneration",
+      "livingUnitId": 4,
+      "image": "http://104.237.5.179:4000/energyGenerationIcon.pdf",
+      "position": 2,
+      "status": "Active"
+    },
+    {
+      "id": 3,
+      "title": "HVAC",
+      "identifier": "HVAC",
+      "livingUnitId": 4,
+      "image": "http://104.237.5.179:4000/HVACIcon.pdf",
+      "position": 3,
+      "status": "Active"
+    },
+    {
+      "id": 4,
+      "title": "Ligting",
+      "identifier": "Ligting",
+      "livingUnitId": 4,
+      "image": "http://104.237.5.179:4000/nounLightIcon.pdf",
+      "position": 4,
+      "status": "Active"
+    },
+    {
+      "id": 5,
+      "title": "Security",
+      "identifier": "Security",
+      "livingUnitId": 4,
+      "image": "http://104.237.5.179:4000/securityIcon.pdf",
+      "position": 5,
+      "status": "Active"
+    },
+    {
+      "id": 6,
+      "title": "Communication",
+      "identifier": "Communication",
+      "livingUnitId": 4,
+      "image": "http://104.237.5.179:4000/CommunicationIcon.pdf",
+      "position": 6,
+      "status": "Active"
+    },
+    {
+      "id": 7,
+      "title": "Water",
+      "identifier": "Water",
+      "livingUnitId": 4,
+      "image": "http://104.237.5.179:4000/waterIcon.pdf",
+      "position": 7,
+      "status": "Active"
+    },
+    {
+      "id": 8,
+      "title": "Sensors",
+      "identifier": "Sensors",
+      "livingUnitId": 4,
+      "image": "http://104.237.5.179:4000/sysOtherIcon.pdf",
+      "position": 8,
+      "status": "Active"
+    }
+  ]
+}

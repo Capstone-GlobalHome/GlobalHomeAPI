@@ -13,6 +13,8 @@ roomsRoute.get("/features", homeController.getFeatures); //  update room's
 roomsRoute.put("/features", homeController.update); //  update room's
 roomsRoute.delete("/features", homeController.delete); //  update room's
 roomsRoute.get("/features/:featureId", helper.validateToken, homeController.getAllChildren); //  update room's
+roomsRoute.post("/view/myhome", helper.validateToken, homeController.myHome); // create or update room's
+roomsRoute.post("/view/systems", helper.validateToken, homeController.system); // create or update room's
 roomsRoute.post("/addShortcuts", helper.validateToken, homeController.addShortCuts); // create or update room's
 roomsRoute.get("/userShortcuts", homeController.getUserShortCuts); // create or update room's
 roomsRoute.get("/routines", helper.validateToken, RoutineController.list); // create or update room's
