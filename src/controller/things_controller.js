@@ -7,6 +7,9 @@ import { buildDMXParent, Thing, thingsConfigObj, thingsObj } from "../dataOperat
 // Models
 import db from '../models';
 import { raiseValidationError, validate } from "../utilis/common";
+
+import thermostatData from "./static/thermostat.json";
+
 const ThingDbOps = db.thing;
 const PresetDb = db.preset;
 const ThingsConfig = db.things_config;
@@ -338,6 +341,32 @@ class ThingsController {
             next(error);
         }
 
+    }
+
+    getThermoStatData(req, res, next) {
+        try {
+            res.status(200).json({
+                status: "success",
+                message: `Thermostat details for Thermostat Id ${req.params.id}`,
+                data: thermostatData.get,
+                statusCode: 200
+            });
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    setThermoStatData(req, res, next) {
+        try {
+            res.status(200).json({
+                status: "success",
+                message: `Thermostat details for Thermostat Id ${req.body.id} updated`,
+                data: thermostatData.post,
+                statusCode: 200
+            });
+        } catch (error) {
+            next(error);
+        }
     }
 
 }

@@ -1,8 +1,8 @@
-import express from "express"
-import helper from "../utilis/helper"
-import thingsController from "../controller/things_controller"
-import thingsPresetController from "../controller/things_presets_controller"
-import thingsOpsController from "../controller/things_operation_controller"
+import express from "express";
+import helper from "../utilis/helper";
+import thingsController from "../controller/things_controller";
+import thingsPresetController from "../controller/things_presets_controller";
+import thingsOpsController from "../controller/things_operation_controller";
 
 const thingsRoute = express.Router();
 
@@ -42,5 +42,10 @@ thingsRoute.post("/sensors/read", thingsOpsController.readSensors);
 thingsRoute.post("/dmx/parent/execute", thingsOpsController.executeDMXParent);
 
 thingsRoute.post("/dmx/parent", thingsController.getDMX)
+
+
+thingsRoute.get("/thermostat/:id", thingsController.getThermoStatData)
+
+thingsRoute.post("/thermostat/update/", thingsController.setThermoStatData)
 
 module.exports = thingsRoute;

@@ -1,0 +1,14 @@
+{
+    "get": {
+        "thingId": 1,
+        "name": "Thermostat",
+        "value": "20",
+        "currentValue": "15"
+    },
+    "post": {
+        "thingId": 1,
+        "name": "Thermostat",
+        "value": "20",
+        "currentValue": "15"
+    }
+}
