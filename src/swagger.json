@@ -5,11 +5,18 @@
     "description": "Backend API's for GlobalHome.",
     "version": "1.0.0"
   },
+  "tags": [
+    "Global Home Live APIs",
+    {
+      "name": "Global Home Live APIs",
+      "description": "List of APIs which are implemented"
+    }
+  ],
   "paths": {
     "/user/signup": {
       "post": {
         "tags": [
-          "User"
+          "Global Home Live APIs"
         ],
         "summary": "Signup new user",
         "description": "signup new user with name, email, password. All are required.",
@@ -61,7 +68,7 @@
     "/user/signin": {
       "post": {
         "tags": [
-          "User"
+          "Global Home Live APIs"
         ],
         "summary": "User signin",
         "description": "Authenticate user with Email and Password.",
@@ -105,7 +112,7 @@
     "/user/verify/code": {
       "put": {
         "tags": [
-          "Verification"
+          "Global Home Live APIs"
         ],
         "summary": "Verify verification code",
         "description": "Verify verification code",
@@ -150,7 +157,7 @@
     "/user/resend/code": {
       "post": {
         "tags": [
-          "Verification"
+          "Global Home Live APIs"
         ],
         "summary": "Resend verification code.",
         "description": "Resend verification code.",
@@ -192,7 +199,7 @@
     "/user/forgot/password": {
       "post": {
         "tags": [
-          "Forgot Password"
+          "Global Home Live APIs"
         ],
         "summary": "Forgot Password",
         "description": "Enter field as Email to reset password",
@@ -230,7 +237,7 @@
     "/user/set/password": {
       "put": {
         "tags": [
-          "Forgot Password"
+          "Global Home Live APIs"
         ],
         "summary": "Set Password",
         "description": "Enter field as userId, password, confirm_password and verification_code to set password",
@@ -280,7 +287,7 @@
     "/user/userDetail": {
       "get": {
         "tags": [
-          "User"
+          "Global Home Live APIs"
         ],
         "summary": "Get user Info detail.",
         "description": "User information",
@@ -336,7 +343,7 @@
     "/properties/{propertyId}/buildings/{buildingId}/units": {
       "get": {
         "tags": [
-          "units"
+          "Global Home Live APIs"
         ],
         "summary": "List the living or working units associated with this Property.",
         "description": "List all units registered within a Property.",
@@ -421,7 +428,7 @@
       },
       "post": {
         "tags": [
-          "units"
+          "Global Home Live APIs"
         ],
         "summary": "Create a Unit.",
         "description": "Create a Unit within a Property.\n",
@@ -506,7 +513,7 @@
     "/properties/units/{unitId}": {
       "get": {
         "tags": [
-          "units"
+          "Global Home Live APIs"
         ],
         "summary": "Get individual units detail associated with this Property.",
         "description": "Get individual units detail associated with this Property",
@@ -570,7 +577,7 @@
       },
       "put": {
         "tags": [
-          "units"
+          "Global Home Live APIs"
         ],
         "summary": "Update individual units detail associated with this Property.",
         "description": "Update individual units detail associated with this Property",
@@ -644,7 +651,7 @@
       },
       "delete": {
         "tags": [
-          "units"
+          "Global Home Live APIs"
         ],
         "summary": "Delete unit detail",
         "description": "Delete unit detail",
@@ -698,10 +705,67 @@
         }
       }
     },
+    "/rooms": {
+      "get": {
+        "tags": [
+          "Global Home Live APIs"
+        ],
+        "summary": "List the rooms in Unit",
+        "description": "List the rooms in Unit",
+        "operationId": "listAllRooms",
+        "responses": {
+          "200": {
+            "description": "Successfully information retrived",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Available rooms in Unit",
+                  "data": [
+                    {
+                      "id": "d0945110-7ce8-11eb-9260-877f7674a656",
+                      "name": "Living",
+                      "identifier": "Living",
+                      "image": "http://104.237.5.179:4000/livingroom.pdf",
+                      "type": 1,
+                      "position": 1,
+                      "status": 1,
+                      "fk_room_id": "b4b442a0-7b73-11eb-97b4-abc4b8806184"
+                    }
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/rooms/create": {
       "post": {
         "tags": [
-          "rooms"
+          "Global Home Live APIs"
         ],
         "summary": "Create a room.",
         "description": "Create a room within a unit.\n",
@@ -763,7 +827,7 @@
     "/rooms/{roomId}": {
       "get": {
         "tags": [
-          "rooms"
+          "Global Home Live APIs"
         ],
         "summary": "Get individual room details .",
         "description": "Room detail information",
@@ -824,7 +888,7 @@
       },
       "put": {
         "tags": [
-          "rooms"
+          "Global Home Live APIs"
         ],
         "summary": "Update rooms information",
         "description": "Room informaton update api",
@@ -894,7 +958,7 @@
       },
       "delete": {
         "tags": [
-          "rooms"
+          "Global Home Live APIs"
         ],
         "summary": "Delete room detail",
         "description": "Delete room detail",
@@ -951,7 +1015,7 @@
     "/rooms/unit/{unitId}": {
       "get": {
         "tags": [
-          "rooms"
+          "Global Home Live APIs"
         ],
         "summary": "List the rooms associated with this Unit id.",
         "description": "List all rooms registered within a Unit.",
@@ -1023,7 +1087,7 @@
     "/home/view": {
       "post": {
         "tags": [
-          "home"
+          "Global Home Live APIs"
         ],
         "summary": "List api for gh home screen features and shortcut.",
         "description": "List api for gh home screen features and shortcut.",
@@ -1110,10 +1174,291 @@
         ]
       }
     },
+    "/view/systems": {
+      "post": {
+        "tags": [
+          "Global Home Live APIs"
+        ],
+        "summary": "List all systems on home screen (Static API)*",
+        "description": "List of all systems showing",
+        "operationId": "ghhome-1",
+        "requestBody": {
+          "description": "request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HomeFeatureRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Systems list fetched successfully.",
+                  "data": {
+                    "systems": [
+                      {
+                        "id": 1,
+                        "title": "Energy Use",
+                        "identifier": "EnergyUse",
+                        "livingUnitId": 4,
+                        "image": "http://104.237.5.179:4000/energyUseIcon.pdf",
+                        "position": 1,
+                        "status": "Active"
+                      },
+                      {
+                        "id": 2,
+                        "title": "Energy Generation",
+                        "identifier": "EnergyGeneration",
+                        "livingUnitId": 4,
+                        "image": "http://104.237.5.179:4000/energyGenerationIcon.pdf",
+                        "position": 2,
+                        "status": "Active"
+                      },
+                      {
+                        "id": 3,
+                        "title": "HVAC",
+                        "identifier": "HVAC",
+                        "livingUnitId": 4,
+                        "image": "http://104.237.5.179:4000/HVACIcon.pdf",
+                        "position": 3,
+                        "status": "Active"
+                      },
+                      {
+                        "id": 4,
+                        "title": "Ligting",
+                        "identifier": "Ligting",
+                        "livingUnitId": 4,
+                        "image": "http://104.237.5.179:4000/nounLightIcon.pdf",
+                        "position": 4,
+                        "status": "Active"
+                      },
+                      {
+                        "id": 5,
+                        "title": "Security",
+                        "identifier": "Security",
+                        "livingUnitId": 4,
+                        "image": "http://104.237.5.179:4000/securityIcon.pdf",
+                        "position": 5,
+                        "status": "Active"
+                      },
+                      {
+                        "id": 6,
+                        "title": "Communication",
+                        "identifier": "Communication",
+                        "livingUnitId": 4,
+                        "image": "http://104.237.5.179:4000/CommunicationIcon.pdf",
+                        "position": 6,
+                        "status": "Active"
+                      },
+                      {
+                        "id": 7,
+                        "title": "Water",
+                        "identifier": "Water",
+                        "livingUnitId": 4,
+                        "image": "http://104.237.5.179:4000/waterIcon.pdf",
+                        "position": 7,
+                        "status": "Active"
+                      },
+                      {
+                        "id": 8,
+                        "title": "Sensors",
+                        "identifier": "Sensors",
+                        "livingUnitId": 4,
+                        "image": "http://104.237.5.179:4000/sysOtherIcon.pdf",
+                        "position": 8,
+                        "status": "Active"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
+    "/view/myhome": {
+      "post": {
+        "tags": [
+          "Global Home Live APIs"
+        ],
+        "summary": "Show my home configuration (Static API)*",
+        "description": "Show my home configuration",
+        "operationId": "ghhome-2",
+        "requestBody": {
+          "description": "request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HomeFeatureRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "My home configuration fetched successfully.",
+                  "data": {
+                    "myHomes": [
+                      {
+                        "id": 1,
+                        "title": "Ergon Rotate",
+                        "identifier": "Ergon Rotate",
+                        "livingUnitId": 2,
+                        "image": "",
+                        "position": 1,
+                        "status": "Active"
+                      },
+                      {
+                        "id": 2,
+                        "title": "Consecra Retract",
+                        "identifier": "Consecra Retract",
+                        "livingUnitId": 2,
+                        "image": "",
+                        "position": 2,
+                        "status": "Active"
+                      },
+                      {
+                        "id": 3,
+                        "title": "Repono Stored",
+                        "identifier": "Repono Stored",
+                        "livingUnitId": 2,
+                        "image": "",
+                        "position": 3,
+                        "status": "Active"
+                      },
+                      {
+                        "id": 4,
+                        "title": "Core Hydroponics",
+                        "identifier": "Core Hydroponics",
+                        "livingUnitId": 2,
+                        "image": "",
+                        "position": 4,
+                        "status": "Active"
+                      },
+                      {
+                        "id": 5,
+                        "title": "Core Office",
+                        "identifier": "Core Office",
+                        "livingUnitId": 2,
+                        "image": "",
+                        "position": 5,
+                        "status": "Active"
+                      },
+                      {
+                        "id": 6,
+                        "title": "Labor Cassettes",
+                        "identifier": "Labor Cassettes",
+                        "livingUnitId": 2,
+                        "image": "",
+                        "position": 6,
+                        "status": "Active"
+                      },
+                      {
+                        "id": 7,
+                        "title": "Other",
+                        "identifier": "Other",
+                        "livingUnitId": 2,
+                        "image": "",
+                        "position": 7,
+                        "status": "Active"
+                      },
+                      {
+                        "id": 8,
+                        "title": "Other",
+                        "identifier": "Other",
+                        "livingUnitId": 2,
+                        "image": "",
+                        "position": 8,
+                        "status": "Active"
+                      },
+                      {
+                        "id": 9,
+                        "title": "Other",
+                        "identifier": "Other",
+                        "livingUnitId": 2,
+                        "image": "",
+                        "position": 9,
+                        "status": "Active"
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        },
+        "security": [
+          {
+            "JWT": []
+          }
+        ]
+      }
+    },
     "/home/features": {
       "get": {
         "tags": [
-          "home"
+          "Global Home Live APIs"
         ],
         "summary": "List the features showing on home screen",
         "description": "List of all features showing",
@@ -1174,7 +1519,7 @@
       },
       "post": {
         "tags": [
-          "home"
+          "Global Home Live APIs"
         ],
         "summary": "Create a Global home feature config.",
         "description": "Create a Global home feature config. It will be access by backend support tream",
@@ -1235,7 +1580,7 @@
       },
       "put": {
         "tags": [
-          "home"
+          "Global Home Live APIs"
         ],
         "summary": "Update a Global home feature config.",
         "description": "update a Global home feature config. It will be access by backend support tream",
@@ -1296,7 +1641,7 @@
       },
       "delete": {
         "tags": [
-          "home"
+          "Global Home Live APIs"
         ],
         "summary": "Delete Gh feature config",
         "description": "Delete feature Config",
@@ -1362,7 +1707,7 @@
     "/home/features/{featureId}": {
       "get": {
         "tags": [
-          "home"
+          "Global Home Live APIs"
         ],
         "summary": "Get individual Gh feature config  details .",
         "description": "Gh feature detail information",
@@ -1433,7 +1778,7 @@
     "/home/addShortcuts": {
       "post": {
         "tags": [
-          "home"
+          "Global Home Live APIs"
         ],
         "summary": "Create a user shortcut for feature config.",
         "description": "Create a user shortcut for feature config.",
@@ -1514,7 +1859,7 @@
     "/home/userShortcuts": {
       "get": {
         "tags": [
-          "home"
+          "Global Home Live APIs"
         ],
         "summary": "List the shortcut on the basis of access count",
         "description": "List shortcut ",
@@ -1598,7 +1943,7 @@
     "/routines": {
       "get": {
         "tags": [
-          "routine"
+          "Global Home Live APIs"
         ],
         "summary": "List the routines showing on home screen",
         "description": "List of all features showing",
@@ -1623,15 +1968,15 @@
                       "status": 0,
                       "createdAt": "2021-02-23T12:39:12.352Z",
                       "updatedAt": "2021-02-23T12:42:06.324Z"
-                  },
-                  {
+                    },
+                    {
                       "id": "ccdd4870-75d5-11eb-8a14-013dec7e43fe",
                       "title": "Get Zach ready",
                       "image": "http://104.237.5.179:4000/shortcut.pdf",
                       "status": 0,
                       "createdAt": "2021-02-23T12:51:09.045Z",
                       "updatedAt": "2021-02-23T12:51:09.045Z"
-                  }
+                    }
                   ]
                 }
               }
@@ -1666,7 +2011,7 @@
     "/things/create": {
       "post": {
         "tags": [
-          "things"
+          "Global Home Live APIs"
         ],
         "summary": "Create a things information in the database.",
         "description": "Create a things information in the database.",
@@ -1728,7 +2073,7 @@
       },
       "put": {
         "tags": [
-          "things"
+          "Global Home Live APIs"
         ],
         "summary": "Things device information updation api",
         "description": "Update things device informaiton to the backend",
@@ -1792,7 +2137,7 @@
     "/things/list": {
       "post": {
         "tags": [
-          "things"
+          "Global Home Live APIs"
         ],
         "summary": "Getting list of things inside a rooms.",
         "description": "Getting list of things inside a rooms.",
@@ -1868,7 +2213,7 @@
     "/things/list/{parentId}": {
       "get": {
         "tags": [
-          "things"
+          "Global Home Live APIs"
         ],
         "summary": "Get Child individual things device information",
         "description": "Get Childindividual things device information",
@@ -1950,7 +2295,7 @@
     "/things/{id}": {
       "get": {
         "tags": [
-          "things"
+          "Global Home Live APIs"
         ],
         "summary": "Get individual things device information",
         "description": "Get individual things device information",
@@ -2015,7 +2360,7 @@
     "/things/delete/{id}": {
       "delete": {
         "tags": [
-          "things"
+          "Global Home Live APIs"
         ],
         "summary": "Delete Gh feature config",
         "description": "Delete feature Config",
@@ -2072,7 +2417,7 @@
     "/things/config/create": {
       "post": {
         "tags": [
-          "things"
+          "Global Home Live APIs"
         ],
         "summary": "Create a things configuration for IOT operation.",
         "description": "Create a things configuration for IOT operation",
@@ -2137,7 +2482,7 @@
     "/things/mapping/create": {
       "post": {
         "tags": [
-          "things"
+          "Global Home Live APIs"
         ],
         "summary": "Create a things IOT mapping information ",
         "description": "Create a things IOT mapping information about detail of required field for execution of command ",
@@ -2202,20 +2547,20 @@
         }
       }
     },
-    "/things/execute": {
+    "/things/presets": {
       "post": {
         "tags": [
-          "things"
+          "Global Home Live APIs"
         ],
-        "summary": "Execute a write operation to IOT server",
-        "description": "Execute a write operation command , which is configure at the backend ",
-        "operationId": "execute",
+        "summary": "Create a preset for things",
+        "description": "Create a things preset",
+        "operationId": "createThingPreset",
         "requestBody": {
-          "description": "Create things request body",
+          "description": "Create things preset request body",
           "content": {
             "application/json": {
               "schema": {
-                "$ref": "#/components/schemas/ExecuteCmdRequest"
+                "$ref": "#/components/schemas/ThingPresetRequestBody"
               }
             }
           }
@@ -2231,8 +2576,72 @@
                 "example": {
                   "statusCode": 200,
                   "status": "success",
-                  "message": "Things command executed successfully.",
-                  "data": {}
+                  "message": "Presets fetch successfully.",
+                  "data": [
+                    {
+                      "id": "17ea5872-9b4b-11eb-b75b-3c07543fbf8a",
+                      "name": "Bright",
+                      "is_default": 1,
+                      "defaultValue": 80,
+                      "image": "http://104.237.5.179:4000/bright.pdf",
+                      "position": 1,
+                      "fk_thing_id": "402402b0-8021-11eb-a5eb-67e92aa1467f"
+                    },
+                    {
+                      "id": "f490a650-9b4b-11eb-b75b-3c07543fbf8a",
+                      "name": "Medium",
+                      "is_default": 1,
+                      "defaultValue": 50,
+                      "image": "http://104.237.5.179:4000/medium.pdf",
+                      "position": 2,
+                      "fk_thing_id": "402402b0-8021-11eb-a5eb-67e92aa1467f"
+                    },
+                    {
+                      "id": "f890aa38-9b4b-11eb-b75b-3c07543fbf8a",
+                      "name": "Low",
+                      "is_default": 1,
+                      "defaultValue": 30,
+                      "image": "http://104.237.5.179:4000/low.pdf",
+                      "position": 3,
+                      "fk_thing_id": "402402b0-8021-11eb-a5eb-67e92aa1467f"
+                    },
+                    {
+                      "id": "f490ac72-9b4b-11eb-b75b-3c07543fbf8a",
+                      "name": "Reading",
+                      "is_default": 0,
+                      "defaultValue": 0,
+                      "image": "http://104.237.5.179:4000/custom1.pdf",
+                      "position": 4,
+                      "fk_thing_id": "402402b0-8021-11eb-a5eb-67e92aa1467f"
+                    },
+                    {
+                      "id": "f870ae98-9b4b-11eb-b75b-3c07543fbf8a",
+                      "name": "Dining",
+                      "is_default": 0,
+                      "defaultValue": 0,
+                      "image": "http://104.237.5.179:4000/custom1.pdf",
+                      "position": 5,
+                      "fk_thing_id": "402402b0-8021-11eb-a5eb-67e92aa1467f"
+                    },
+                    {
+                      "id": "91ea5872-9b4b-11eb-b75b-3c07543fbf8a",
+                      "name": "Custom preset-1",
+                      "is_default": 0,
+                      "defaultValue": 0,
+                      "image": "''http://104.237.5.179:4000/medium.pdf",
+                      "position": 100,
+                      "fk_thing_id": "402402b0-8021-11eb-a5eb-67e92aa1467f"
+                    },
+                    {
+                      "id": "99ea5872-9b4b-11eb-b75b-3c07543fbf8a",
+                      "name": "Custom preset-2",
+                      "is_default": 0,
+                      "defaultValue": 0,
+                      "image": "''http://104.237.5.179:4000/medium.pdf",
+                      "position": 100,
+                      "fk_thing_id": "402402b0-8021-11eb-a5eb-67e92aa1467f"
+                    }
+                  ]
                 }
               }
             }
@@ -2244,16 +2653,6 @@
           "403": {
             "description": "Access not authorized or forbidden",
             "content": {}
-          },
-          "404": {
-            "description": "No record found with given data",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/NotFoundError"
-                }
-              }
-            }
           },
           "422": {
             "description": "Validation faliled",
@@ -2268,10 +2667,504 @@
         }
       }
     },
+    "/things/presets/save": {
+      "put": {
+        "tags": [
+          "Global Home Live APIs"
+        ],
+        "summary": "Create a preset for things",
+        "description": "Create a things preset",
+        "operationId": "createThingPreset",
+        "requestBody": {
+          "description": "Create things preset request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": ""
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Thing config created successfully.",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/things/dmx/parent": {
+      "post": {
+        "tags": [
+          "Global Home Live APIs"
+        ],
+        "summary": "Get Parent of DMX thing",
+        "description": "Get Parent of DMX thing",
+        "operationId": "getDMXParent",
+        "requestBody": {
+          "description": "Get DMX parent",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DMXListRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully fetced",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "DMX list successfully.",
+                  "data": {
+                    "id": "402402b0-8021-11eb-a5eb-67e92aa1467f",
+                    "groups": [
+                      {
+                        "id": "396bec00-99b0-11eb-821d-e36cc99dd8e8",
+                        "name": "Ceiling Zone 1",
+                        "identifier": "DMX",
+                        "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+                        "isParent": 1,
+                        "status": 1,
+                        "position": 1,
+                        "thing_type": "group_parent_child",
+                        "parent_id": "402402b0-8021-11eb-a5eb-67e92aa1467f",
+                        "createdAt": "2021-04-10T03:52:52.163Z",
+                        "updatedAt": "2021-04-10T03:55:35.244Z",
+                        "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
+                        "serverUrl": "opc.tcp://25.21.162.217:48050",
+                        "command_protocal": "opcua",
+                        "presets": {
+                          "17ea5872-9b4b-11eb-b75b-3c07543fbf8a": "80",
+                          "f490a650-9b4b-11eb-b75b-3c07543fbf8a": "50",
+                          "f490aa38-9b4b-11eb-b75b-3c07543fbf8a": "30",
+                          "f490ac72-9b4b-11eb-b75b-3c07543fbf8a": "20",
+                          "f490ae98-9b4b-11eb-b75b-3c07543fbf8a": "0"
+                        },
+                        "children": [
+                          {
+                            "id": "b87f8520-99b4-11eb-b2bb-cf1aeea55460",
+                            "name": "DMX_31",
+                            "identifier": "DMX",
+                            "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+                            "isParent": 0,
+                            "status": 1,
+                            "position": 1,
+                            "thing_type": "child",
+                            "parent_id": "396bec00-99b0-11eb-821d-e36cc99dd8e8",
+                            "createdAt": "2021-04-10T04:25:03.349Z",
+                            "updatedAt": "2021-04-10T04:25:03.349Z",
+                            "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
+                            "address": "031",
+                            "index": "031",
+                            "serverUrl": "opc.tcp://25.21.162.217:48050",
+                            "protocal": "opcua"
+                          },
+                          {
+                            "id": "c0258b80-99d2-11eb-ad7e-cb5f1e4359c1",
+                            "name": "DMX_33",
+                            "identifier": "DMX",
+                            "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+                            "isParent": 0,
+                            "status": 1,
+                            "position": 1,
+                            "thing_type": "child",
+                            "parent_id": "396bec00-99b0-11eb-821d-e36cc99dd8e8",
+                            "createdAt": "2021-04-10T08:00:01.083Z",
+                            "updatedAt": "2021-04-10T08:00:01.083Z",
+                            "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
+                            "address": "033",
+                            "index": "033",
+                            "serverUrl": "opc.tcp://25.21.162.217:48050",
+                            "protocal": "opcua"
+                          }
+                        ]
+                      },
+                      {
+                        "id": "5befbd00-9a88-11eb-ad7e-cb5f1e4359c1",
+                        "name": "Ceiling Zone 2",
+                        "identifier": "DMX",
+                        "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+                        "isParent": 1,
+                        "status": 1,
+                        "position": 2,
+                        "thing_type": "group_parent_child",
+                        "parent_id": "402402b0-8021-11eb-a5eb-67e92aa1467f",
+                        "createdAt": "2021-04-11T05:40:01.361Z",
+                        "updatedAt": "2021-04-11T05:40:01.361Z",
+                        "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
+                        "serverUrl": "opc.tcp://25.21.162.217:48050",
+                        "command_protocal": "opcua",
+                        "presets": {
+                          "17ea5872-9b4b-11eb-b75b-3c07543fbf8a": "80",
+                          "f490a650-9b4b-11eb-b75b-3c07543fbf8a": "50",
+                          "f490aa38-9b4b-11eb-b75b-3c07543fbf8a": "30",
+                          "f490ac72-9b4b-11eb-b75b-3c07543fbf8a": "20",
+                          "f490ae98-9b4b-11eb-b75b-3c07543fbf8a": "0"
+                        },
+                        "children": [
+                          {
+                            "id": "ee9088fc-9a91-11eb-a10e-3c07543fbf8a",
+                            "name": "DMX_022",
+                            "identifier": "DMX",
+                            "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+                            "isParent": 0,
+                            "status": 1,
+                            "position": 1,
+                            "thing_type": "child",
+                            "parent_id": "5befbd00-9a88-11eb-ad7e-cb5f1e4359c1",
+                            "createdAt": "2021-04-11T05:40:01.361Z",
+                            "updatedAt": "2021-04-11T05:40:01.361Z",
+                            "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
+                            "address": "022",
+                            "index": "022",
+                            "serverUrl": "opc.tcp://25.21.162.217:48050",
+                            "protocal": "opcua"
+                          },
+                          {
+                            "id": "ef13c8e8-9a9b-11eb-a10e-3c07543fbf8a",
+                            "name": "DMX_026",
+                            "identifier": "DMX",
+                            "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+                            "isParent": 0,
+                            "status": 1,
+                            "position": 2,
+                            "thing_type": "child",
+                            "parent_id": "5befbd00-9a88-11eb-ad7e-cb5f1e4359c1",
+                            "createdAt": "2021-04-11T05:40:01.361Z",
+                            "updatedAt": "2021-04-11T05:40:01.361Z",
+                            "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
+                            "address": "026",
+                            "index": "026",
+                            "serverUrl": "opc.tcp://25.21.162.217:48050",
+                            "protocal": "opcua"
+                          },
+                          {
+                            "id": "ef13d57c-9a9b-11eb-a10e-3c07543fbf8a",
+                            "name": "DMX_029",
+                            "identifier": "DMX",
+                            "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+                            "isParent": 0,
+                            "status": 1,
+                            "position": 3,
+                            "thing_type": "child",
+                            "parent_id": "5befbd00-9a88-11eb-ad7e-cb5f1e4359c1",
+                            "createdAt": "2021-04-11T05:40:01.361Z",
+                            "updatedAt": "2021-04-11T05:40:01.361Z",
+                            "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
+                            "address": "029",
+                            "index": "029",
+                            "serverUrl": "opc.tcp://25.21.162.217:48050",
+                            "protocal": "opcua"
+                          },
+                          {
+                            "id": "ef13dd42-9a9b-11eb-a10e-3c07543fbf8a",
+                            "name": "DMX_032",
+                            "identifier": "DMX",
+                            "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+                            "isParent": 0,
+                            "status": 1,
+                            "position": 4,
+                            "thing_type": "child",
+                            "parent_id": "5befbd00-9a88-11eb-ad7e-cb5f1e4359c1",
+                            "createdAt": "2021-04-11T05:40:01.361Z",
+                            "updatedAt": "2021-04-11T05:40:01.361Z",
+                            "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
+                            "address": "032",
+                            "index": "032",
+                            "serverUrl": "opc.tcp://25.21.162.217:48050",
+                            "protocal": "opcua"
+                          }
+                        ]
+                      },
+                      {
+                        "id": "f7bd87f3-4df0-4ddf-abdb-7e8ddf2b0d7b",
+                        "name": "Shelf Lights:",
+                        "identifier": "Mainlights",
+                        "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+                        "isParent": 1,
+                        "status": 1,
+                        "position": 3,
+                        "thing_type": "group_parent_child",
+                        "parent_id": "402402b0-8021-11eb-a5eb-67e92aa1467f",
+                        "createdAt": "2021-04-11T05:40:01.361Z",
+                        "updatedAt": "2021-04-11T05:40:01.361Z",
+                        "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
+                        "presets": {
+                          "17ea5872-9b4b-11eb-b75b-3c07543fbf8a": "80",
+                          "f490a650-9b4b-11eb-b75b-3c07543fbf8a": "50",
+                          "f490aa38-9b4b-11eb-b75b-3c07543fbf8a": "30",
+                          "f490ac72-9b4b-11eb-b75b-3c07543fbf8a": "20",
+                          "f490ae98-9b4b-11eb-b75b-3c07543fbf8a": "0"
+                        },
+                        "children": [
+                          {
+                            "id": "ef13eb7a-9a9b-11eb-a10e-3c07543fbf8a",
+                            "name": "DMX_101",
+                            "identifier": "DMX",
+                            "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+                            "isParent": 0,
+                            "status": 1,
+                            "position": 1,
+                            "thing_type": "child",
+                            "parent_id": "f7bd87f3-4df0-4ddf-abdb-7e8ddf2b0d7b",
+                            "createdAt": "2021-04-11T05:40:01.361Z",
+                            "updatedAt": "2021-04-11T05:40:01.361Z",
+                            "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268"
+                          },
+                          {
+                            "id": "ef13f070-9a9b-11eb-a10e-3c07543fbf8a",
+                            "name": "DMX_103",
+                            "identifier": "DMX",
+                            "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+                            "isParent": 0,
+                            "status": 1,
+                            "position": 2,
+                            "thing_type": "child",
+                            "parent_id": "f7bd87f3-4df0-4ddf-abdb-7e8ddf2b0d7b",
+                            "createdAt": "2021-04-11T05:40:01.361Z",
+                            "updatedAt": "2021-04-11T05:40:01.361Z",
+                            "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268"
+                          }
+                        ]
+                      },
+                      {
+                        "id": "81f41fb1-9c20-4160-a914-1efd3fc47b5f",
+                        "name": "Pendant Lights",
+                        "identifier": "Mainlights",
+                        "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+                        "isParent": 1,
+                        "status": 1,
+                        "position": 4,
+                        "thing_type": "group_parent_child",
+                        "parent_id": "402402b0-8021-11eb-a5eb-67e92aa1467f",
+                        "createdAt": "2021-04-11T05:40:01.361Z",
+                        "updatedAt": "2021-04-11T05:40:01.361Z",
+                        "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268",
+                        "presets": {
+                          "17ea5872-9b4b-11eb-b75b-3c07543fbf8a": "80",
+                          "f490a650-9b4b-11eb-b75b-3c07543fbf8a": "50",
+                          "f490aa38-9b4b-11eb-b75b-3c07543fbf8a": "30",
+                          "f490ac72-9b4b-11eb-b75b-3c07543fbf8a": "20",
+                          "f490ae98-9b4b-11eb-b75b-3c07543fbf8a": "0"
+                        },
+                        "children": [
+                          {
+                            "id": "ef13fa16-9a9b-11eb-a10e-3c07543fbf8a",
+                            "name": "DMX_201",
+                            "identifier": "DMX",
+                            "image": "http://104.237.5.179:4000/mainLightIcon.pdf",
+                            "isParent": 0,
+                            "status": 1,
+                            "position": 1,
+                            "thing_type": "child",
+                            "parent_id": "81f41fb1-9c20-4160-a914-1efd3fc47b5f",
+                            "createdAt": "2021-04-11T05:40:01.361Z",
+                            "updatedAt": "2021-04-11T05:40:01.361Z",
+                            "fk_room_id": "2a308fc0-7ce6-11eb-96ce-65cf62e0d268"
+                          }
+                        ]
+                      }
+                    ]
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      },
+      "/things/execute": {
+        "post": {
+          "tags": [
+            "Global Home Live APIs"
+          ],
+          "summary": "Execute a write operation to IOT server",
+          "description": "Execute a write operation command , which is configure at the backend ",
+          "operationId": "execute",
+          "requestBody": {
+            "description": "Create things request body",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExecuteCmdRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Successfully created",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ResponseSuccess"
+                  },
+                  "example": {
+                    "statusCode": 200,
+                    "status": "success",
+                    "message": "Things command executed successfully.",
+                    "data": {}
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {}
+            },
+            "403": {
+              "description": "Access not authorized or forbidden",
+              "content": {}
+            },
+            "404": {
+              "description": "No record found with given data",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/NotFoundError"
+                  }
+                }
+              }
+            },
+            "422": {
+              "description": "Validation faliled",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ValidationError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "/things/dmx/parent/execute": {
+        "post": {
+          "tags": [
+            "Global Home Live APIs"
+          ],
+          "summary": "Execute DMX Commands on IOT Server",
+          "description": "Execute a DMX Commands on IOT Server, which is configure at the backend",
+          "operationId": "execute-dmx",
+          "requestBody": {
+            "description": "Execute a DMX Command",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ExecuteDMXCmdRequest"
+                }
+              }
+            }
+          },
+          "responses": {
+            "200": {
+              "description": "Successfully created",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ResponseSuccess"
+                  },
+                  "example": {
+                    "statusCode": 200,
+                    "status": "success",
+                    "message": "Things command executed successfully.",
+                    "data": {}
+                  }
+                }
+              }
+            },
+            "401": {
+              "description": "Unauthorized",
+              "content": {}
+            },
+            "403": {
+              "description": "Access not authorized or forbidden",
+              "content": {}
+            },
+            "404": {
+              "description": "No record found with given data",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/NotFoundError"
+                  }
+                }
+              }
+            },
+            "422": {
+              "description": "Validation faliled",
+              "content": {
+                "application/json": {
+                  "schema": {
+                    "$ref": "#/components/schemas/ValidationError"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/things/read": {
       "post": {
         "tags": [
-          "things"
+          "Global Home Live APIs"
         ],
         "summary": "Read IOT device status",
         "description": "Api to execute a command to the IOT server which send us back the current status of device",
@@ -2338,10 +3231,76 @@
         }
       }
     },
+    "/things/sensors/read": {
+      "post": {
+        "tags": [
+          "Global Home Live APIs"
+        ],
+        "summary": "Read Sensors status",
+        "description": "Api to execute a command to the IOT server which send us back the current status of device",
+        "operationId": "readSensorsState",
+        "requestBody": {
+          "description": "Create things request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReadSensorsRequestBody"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Things command executed successfully.",
+                  "data": {}
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No record found with given data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/things/blind/execute": {
       "post": {
         "tags": [
-          "things"
+          "Global Home Live APIs"
         ],
         "summary": "Writing blind functions IOT device status",
         "description": "Api to execute a command to the IOT server which perform blind operations status of device",
@@ -2411,7 +3370,7 @@
     "/things/dmx/execute": {
       "post": {
         "tags": [
-          "things"
+          "Global Home Live APIs"
         ],
         "summary": "Writing Dmx functions IOT device status",
         "description": "Api to execute a command to the DMX device which perform DMX operations status of device",
@@ -2481,7 +3440,7 @@
     "/things/blind/read": {
       "post": {
         "tags": [
-          "things"
+          "Global Home Live APIs"
         ],
         "summary": "Reading blinds IOT device status",
         "description": "Api to execute a command to the IOT server which perform blind  operation  read state of device",
@@ -2554,10 +3513,153 @@
         }
       }
     },
+    "/things/thermostat/{id}": {
+      "get": {
+        "tags": [
+          "Global Home Live APIs"
+        ],
+        "summary": "Get Thermostat data for thermostat ID Static API*",
+        "description": "Api to execute get Thermostat data for passed thermostat ID in request params",
+        "operationId": "getThermostatData",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "description": "The ID of Thermostat.",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Thermostat data fetched successfully.",
+                  "data": {
+                    "thingId": 1,
+                    "name": "Thermostat",
+                    "value": "20",
+                    "currentValue": "15"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No record found with given data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/things/thermostat": {
+      "post": {
+        "tags": [
+          "Global Home Live APIs"
+        ],
+        "summary": "Update Thermostat data for thermostat ID Static API*",
+        "description": "Api to execute update Thermostat data for passed thermostat ID in request nody",
+        "operationId": "updateThermostatData",
+        "requestBody": {
+          "description": "Create things request body",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UpdateThermoStat"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Successfully created",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ResponseSuccess"
+                },
+                "example": {
+                  "statusCode": 200,
+                  "status": "success",
+                  "message": "Thermostat data updated successfully.",
+                  "data": {
+                    "thingId": 1,
+                    "name": "Thermostat",
+                    "value": "20",
+                    "currentValue": "15"
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "description": "Unauthorized",
+            "content": {}
+          },
+          "403": {
+            "description": "Access not authorized or forbidden",
+            "content": {}
+          },
+          "404": {
+            "description": "No record found with given data",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/NotFoundError"
+                }
+              }
+            }
+          },
+          "422": {
+            "description": "Validation faliled",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ValidationError"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/things/dmx/read": {
       "post": {
         "tags": [
-          "things"
+          "Global Home Live APIs"
         ],
         "summary": "Reading Dmx IOT device status",
         "description": "Api to execute a command to the IOT server which perform DMX  operation  read state of device",
@@ -3206,6 +4308,36 @@
           "executing_command": "ns=13;s=GVL.astDALIFixture[index].bSetLevel"
         }
       },
+      "ThingPresetRequestBody": {
+        "required": [
+          "thing_id"
+        ],
+        "type": "object",
+        "properties": {
+          "thing_id": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "thing_id": "402402b0-8021-11eb-a5eb-67e92aa1467f"
+        }
+      },
+      "DMXListRequestBody": {
+        "required": [
+          "thing_id"
+        ],
+        "type": "object",
+        "properties": {
+          "thing_id": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "thing_id": "f7bd87f3-4df0-4ddf-abdb-7e8ddf2b0d7b"
+        }
+      },
       "ExecuteCmdRequest": {
         "required": [
           "thing_id",
@@ -3245,6 +4377,45 @@
           "argValue": false
         }
       },
+      "ExecuteDMXCmdRequest": {
+        "required": [
+          "thing_id",
+          "identifier",
+          "target_function",
+          "command",
+          "dmx_arrary"
+        ],
+        "type": "object",
+        "properties": {
+          "thing_id": {
+            "type": "string",
+            "required": true
+          },
+          "identifier": {
+            "type": "string",
+            "required": true
+          },
+          "target_function": {
+            "type": "string",
+            "required": true
+          },
+          "command": {
+            "type": "string",
+            "required": true
+          },
+          "dmx_array": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "thing_id": "5befbd00-9a88-11eb-ad7e-cb5f1e4359c1",
+          "identifier": "DMX",
+          "target_function": "intensity",
+          "command": "setDMXValue",
+          "dmx_array": "{'0':16,'1':100,'2':100,'3':100,'4':100,'5':100,'6':100,'7':100,'8':100,'9':100,'10':100,'11':100,'12':100,'13':100,'14':100,'15':100,'16':100,'17':100,'18':100,'19':50,'20':100,'21':68,'22':100,'23':100,'24':100,'25':100,'26':100,'27':100,'28':100,'29':100,'30':100,'31':100,'32':100,'33':100,'34':100,'35':100,'36':100,'37':100,'38':100,'39':100,'40':100,'41':100,'42':100,'43':100,'44':100,'45':100,'46':100,'47':100,'48':100,'49':100,'50':100,'51':100,'52':100,'53':100,'54':100,'55':100,'56':100,'57':100,'58':100,'59':100,'60':100,'61':100,'62':100,'63':100,'64':100,'65':100,'66':100,'67':100,'68':100,'69':100,'70':100,'71':100,'72':100,'73':100,'74':100,'75':100,'76':100,'77':100,'78':100,'79':100,'80':100,'81':100,'82':100,'83':100,'84':100,'85':100,'86':100,'87':100,'88':100,'89':100,'90':100,'91':100,'92':100,'93':100,'94':100,'95':100,'96':100,'97':100,'98':100,'99':100,'100':100,'101':100,'102':100,'103':100,'104':100,'105':100,'106':100,'107':100,'108':100,'109':100,'110':100,'111':100,'112':100,'113':100,'114':100,'115':100,'116':100,'117':100,'118':100,'119':100,'120':100,'121':100,'122':100,'123':100,'124':100,'125':100,'126':100,'127':100,'128':100,'129':100,'130':100,'131':100,'132':100,'133':100,'134':100,'135':100,'136':100,'137':100,'138':100,'139':100,'140':100,'141':100,'142':100,'143':100,'144':100,'145':100,'146':100,'147':100,'148':100,'149':100,'150':100,'151':100,'152':100,'153':100,'154':100,'155':100,'156':100,'157':100,'158':100,'159':100,'160':100,'161':100,'162':100,'163':100,'164':100,'165':100,'166':100,'167':100,'168':100,'169':100,'170':100,'171':100,'172':100,'173':100,'174':100,'175':100,'176':100,'177':100,'178':100,'179':100,'180':100,'181':100,'182':100,'183':100,'184':100,'185':100,'186':100,'187':100,'188':100,'189':100,'190':100,'191':100,'192':100,'193':100,'194':100,'195':100,'196':100,'197':100,'198':100,'199':100,'200':100,'201':100,'202':100,'203':100,'204':100,'205':100,'206':100,'207':100,'208':100,'209':100,'210':100,'211':100,'212':100,'213':100,'214':100,'215':100,'216':100,'217':100,'218':100,'219':100,'220':100,'221':100,'222':100,'223':100,'224':100,'225':100,'226':100,'227':100,'228':100,'229':100,'230':100,'231':100,'232':100,'233':100,'234':100,'235':100,'236':100,'237':100,'238':100,'239':100,'240':100,'241':100,'242':100,'243':100,'244':100,'245':100,'246':100,'247':100,'248':100,'249':100,'250':100,'251':100,'252':100,'253':100,'254':100,'255':100,'256':100,'257':100,'258':100,'259':100,'260':100,'261':100,'262':100,'263':100,'264':100,'265':100,'266':100,'267':100,'268':100,'269':100,'270':100,'271':100,'272':100,'273':100,'274':100,'275':100,'276':100,'277':100,'278':100,'279':100,'280':100,'281':100,'282':100,'283':100,'284':100,'285':100,'286':100,'287':100,'288':100,'289':100,'290':100,'291':100,'292':100,'293':100,'294':100,'295':100,'296':100,'297':100,'298':100,'299':100,'300':100,'301':100,'302':100,'303':100,'304':100,'305':100,'306':100,'307':100,'308':100,'309':100,'310':100,'311':100,'312':100,'313':100,'314':100,'315':100,'316':100,'317':100,'318':100,'319':100,'320':100,'321':100,'322':100,'323':100,'324':100,'325':100,'326':100,'327':100,'328':100,'329':100,'330':100,'331':100,'332':100,'333':100,'334':100,'335':100,'336':100,'337':100,'338':100,'339':100,'340':100,'341':100,'342':100,'343':100,'344':100,'345':100,'346':100,'347':100,'348':100,'349':100,'350':100,'351':100,'352':100,'353':100,'354':100,'355':100,'356':100,'357':100,'358':100,'359':100,'360':100,'361':100,'362':100,'363':100,'364':100,'365':100,'366':100,'367':100,'368':100,'369':100,'370':100,'371':100,'372':100,'373':100,'374':100,'375':100,'376':100,'377':100,'378':100,'379':100,'380':100,'381':100,'382':100,'383':100,'384':100,'385':100,'386':100,'387':100,'388':100,'389':100,'390':100,'391':100,'392':100,'393':100,'394':100,'395':100,'396':100,'397':100,'398':100,'399':100,'400':100,'401':100,'402':100,'403':100,'404':100,'405':100,'406':100,'407':100,'408':100,'409':100,'410':100,'411':100,'412':100,'413':100,'414':100,'415':100,'416':100,'417':100,'418':100,'419':100,'420':100,'421':100,'422':100,'423':100,'424':100,'425':100,'426':100,'427':100,'428':100,'429':100,'430':100,'431':100,'432':100,'433':100,'434':100,'435':100,'436':100,'437':100,'438':100,'439':100,'440':100,'441':100,'442':100,'443':100,'444':100,'445':100,'446':100,'447':100,'448':100,'449':100,'450':100,'451':100,'452':100,'453':100,'454':100,'455':100,'456':100,'457':100,'458':100,'459':100,'460':100,'461':100,'462':100,'463':100,'464':100,'465':100,'466':100,'467':100,'468':100,'469':100,'470':100,'471':100,'472':100,'473':100,'474':100,'475':100,'476':100,'477':100,'478':100,'479':100,'480':100,'481':100,'482':100,'483':100,'484':100,'485':100,'486':100,'487':100,'488':100,'489':100,'490':100,'491':100,'492':100,'493':100,'494':100,'495':100,'496':100,'497':100,'498':100,'499':100,'500':100,'501':100,'502':100,'503':100,'504':100,'505':100,'506':100,'507':100,'508':100,'509':100,'510':100,'511':100}"
+        }
+      },
       "ReadDataRequest": {
         "required": [
           "thing_id",
@@ -3276,6 +4447,23 @@
           "identifier": "DIMMABLE_LIGHT",
           "target_function": "switch",
           "command": "getOn"
+        }
+      },
+      "ReadSensorsRequestBody": {
+        "required": [
+          "identifiers"
+        ],
+        "type": "object",
+        "properties": {
+          "identifiers": {
+            "type": "array",
+            "required": true
+          }
+        },
+        "example": {
+          "identifier": [
+            "DMX"
+          ]
         }
       },
       "WriteBlindDataRequest": {
@@ -3361,6 +4549,21 @@
             50,
             80
           ]
+        }
+      },
+      "UpdateThermoStat": {
+        "required": [
+          "thing_id"
+        ],
+        "type": "object",
+        "properties": {
+          "thing_id": {
+            "type": "string",
+            "required": true
+          }
+        },
+        "example": {
+          "thing_id": "1"
         }
       },
       "ReadBlindDataRequest": {

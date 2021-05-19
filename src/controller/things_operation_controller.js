@@ -378,7 +378,6 @@ class ThingsOperationController {
                     item.target_function = "sensor";
                     item.command = "get";
                     const value = await protocol.provider.readSenorsData(item, res);
-
                     arrayValue.push({
                         [item.identifier]: value.value,
                         "label": value.label
@@ -400,6 +399,7 @@ class ThingsOperationController {
             }
 
         } catch (error) {
+            console.log(error);
             next(error);
         }
     }
