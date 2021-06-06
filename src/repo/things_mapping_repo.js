@@ -4,6 +4,26 @@ const ThingMappingConfigDb = db.thing_mapping_config
 
 class ThingsMappingRepo {
 
+    static async find(conditions) {
+        return ThingMappingConfigDb.findOne({
+            where: conditions
+        });
+    }
+
+    static async findThingMappingConfig(obj) {
+        // console.log("<---------obj------->", obj);
+        const project = await ThingMappingConfigDb.findOne({
+            where: {
+                target_function: obj.target_function,
+                identifier: obj.identifier,
+                command: obj.command
+            }
+        });
+        // console.log("<---------project------->", project);
+        return project;
+
+    }
+
     static async findThingMappingConfig(obj) {
         // console.log("<---------obj------->", obj);
         const project = await ThingMappingConfigDb.findOne({

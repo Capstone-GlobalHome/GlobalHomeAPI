@@ -244,6 +244,83 @@ class ThingsOperationController {
         }
     }
 
+    // Excute thing command to blinds
+    async writeToCurtains(req, res, next) {
+
+        try {
+            const thingId = req.body.thing_id;
+            const command = req.body.command;
+            const argValue = req.body.value;
+            const thingConfig = await ThingsConfigRepo.find({ thing_id: thingId });
+
+            if (typeof thingConfig !== 'undefined' && thingConfig !== null) {
+                const commandProtocol = thingConfig.command_protocal;
+                const protocol = new ProviderFactory();
+                protocol.getProvider(commandProtocol);
+                thingConfig.command = command;
+                thingConfig.argValue = argValue;
+                protocol.provider.executeCurtainCommand(thingConfig, res)
+                res.status(200).json({
+                    statusCode: 200,
+                    status: "success",
+                    message: "Things command executed successfully.",
+                    data: {}
+                });
+            } else {
+                res.status(404).json({
+                    status: "error",
+                    message: "Things configuration not found.",
+                    statusCode: 404
+                });
+            }
+
+        } catch (error) {
+            next(error);
+        }
+    }
+
+    async readBlindCurtains(req, res, next) {
+
+        try {
+            const thingIds = req.body.thing_ids;
+            const identifier = req.body.identifier;
+            const target_function = req.body.target_function;
+            const command = req.body.command;
+            const getThingType = await ThingsConfigRepo.findBlindConfig(thingIds, identifier);
+            if (typeof getThingType !== 'undefined' && getThingType !== null) {
+                let arrayValue = new Array();
+                for (let item of getThingType) {
+                    const commandProtocol = item.command_protocal;
+                    const protocol = new ProviderFactory();
+                    protocol.getProvider(commandProtocol);
+                    item.target_function = target_function;
+                    item.command = command;
+                    const value = await protocol.provider.read(item, res);
+                    // let map = new Map();
+                    // map.set();
+                    // console.log(map);
+                    arrayValue.push({ [item.thing_id]: value.value });
+                }
+                res.status(200).json({
+                    statusCode: 200,
+                    status: "success",
+                    message: "Things command executed successfully.",
+                    data: arrayValue
+                });
+
+            } else {
+                res.status(404).json({
+                    status: "error",
+                    message: "Things mapping configuration missing in database not found.",
+                    statusCode: 404
+                });
+            }
+
+        } catch (error) {
+            next(error);
+        }
+    }
+
 
     // Excute thing command to blinds
     async writeToDMX(req, res, next) {

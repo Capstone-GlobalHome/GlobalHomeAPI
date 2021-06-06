@@ -8,6 +8,9 @@ import OpcuaSessionHelper from '../opcua/opcua_session';
 import { SENSOR_RANGES } from '../constants/sensor.ranges';
 import { Common } from "../utilis/common";
 
+import { buildCurtainHexString } from "../dataOperations/curtain_creator";
+
+
 const opcuaSessionHelper = new OpcuaSessionHelper();
 
 const opcua = require("node-opcua");
@@ -287,6 +290,28 @@ class OpcuaProvider {
             console.log(error);
         }
 
+    }
+
+    async executeCurtainCommand(getThingType, res) {
+        const thingsIotmappingConfig = await ThingsMappingRepo.find({
+            identifier: getThingType.identifier,
+            command: getThingType.command
+        });
+        if (typeof thingsIotmappingConfig !== 'undefined' && thingsIotmappingConfig !== null) {
+            let serverUrl = getThingType.serverUrl;
+            const hex = buildCurtainHexString(getThingType.props, thingsIotmappingConfig.props, getThingType.argValue);
+            const executeCommand = this.buildOpcuaCommandWithoutIndex(thingsIotmappingConfig);
+            console.log("cmd", executeCommand);
+            console.log("hexvalue", hex);
+            thingsIotmappingConfig.argValue = hex;
+            await this.buildOpcuaExecutionCommand(thingsIotmappingConfig, executeCommand, serverUrl, false)
+        } else {
+            res.status(404).json({
+                status: "error",
+                message: "Things mapping configuration not found.",
+                statusCode: 404
+            });
+        }
     }
 
 

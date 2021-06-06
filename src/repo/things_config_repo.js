@@ -37,6 +37,8 @@ class ThingsConfigRepo {
             }
         });
     }
+
+    
 }
 
 export default ThingsConfigRepo
