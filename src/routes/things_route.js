@@ -47,8 +47,8 @@ thingsRoute.post("/dmx/parent", thingsController.getDMX)
 thingsRoute.get("/thermostat/:id", thingsController.getThermoStatData)
 
 thingsRoute.post("/thermostat/update/", thingsController.setThermoStatData)
-
-thingsRoute.post("/curtains/execute", thingsOpsController.writeToCurtains);
-thingsRoute.post("/curtains/read", thingsOpsController.readBlindCurtains);
+ 
+thingsRoute.post("/curtains/execute", thingsOpsController.writeToCurtainsMock);
+// thingsRoute.post("/curtains/read", thingsOpsController.readBlindCurtains);
 
 module.exports = thingsRoute;

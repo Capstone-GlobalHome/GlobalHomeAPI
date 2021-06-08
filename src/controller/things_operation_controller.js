@@ -245,6 +245,22 @@ class ThingsOperationController {
     }
 
     // Excute thing command to blinds
+    writeToCurtainsMock(req, res, next) {
+
+        try {
+
+            res.status(200).json({
+                statusCode: 200,
+                status: "success",
+                message: "Things command executed successfully.",
+                data: {}
+            });
+
+        } catch (error) {
+            next(error);
+        }
+    }
+
     async writeToCurtains(req, res, next) {
 
         try {
