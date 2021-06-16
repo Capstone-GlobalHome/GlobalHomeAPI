@@ -260,6 +260,20 @@ class ThingsOperationController {
             next(error);
         }
     }
+    readToCurtainsMock(req, res, next) {
+
+        try {
+            res.status(200).json({
+                statusCode: 200,
+                status: "success",
+                message: "Things command executed successfully.",
+                value: { [req.body.thing_id]: 10 }
+            });
+
+        } catch (error) {
+            next(error);
+        }
+    }
 
     async writeToCurtains(req, res, next) {
 

@@ -49,6 +49,6 @@ thingsRoute.get("/thermostat/:id", thingsController.getThermoStatData)
 thingsRoute.post("/thermostat/update/", thingsController.setThermoStatData)
  
 thingsRoute.post("/curtains/execute", thingsOpsController.writeToCurtainsMock);
-// thingsRoute.post("/curtains/read", thingsOpsController.readBlindCurtains);
+thingsRoute.post("/curtains/read", thingsOpsController.readToCurtainsMock);
 
 module.exports = thingsRoute;
