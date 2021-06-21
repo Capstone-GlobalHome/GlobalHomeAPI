@@ -23,6 +23,17 @@ export const buildCurtainHexString = (configProps, mappingProps, value) => {
 
 }
 
+export const getReadValueFromHex = (getMotorPositionHex) => {
+
+    console.log("mappingProps", getMotorPositionHex);
+    const item = getMotorPositionHex.split(' ');
+    console.log("hex value", item[11]);
+    const decimal = calculateDecimal(binary1sComplement(convertToNbits(parseInt(item[11], 16).toString(2).toUpperCase(), 8)));
+    console.log("Decimal value", decimal);
+    return decimal
+
+}
+
 
 const buildMsgByte = (byteMsg, map) => {
     let binaryTransformation = parseInt(byteMsg, 16).toString(2).toUpperCase();

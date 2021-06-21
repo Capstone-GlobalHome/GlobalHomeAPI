@@ -52,7 +52,6 @@ class ThingsMappingRepo {
         });
         // console.log("<---------project------->", project);
         return project;
-
     }
 
     static create(req) {

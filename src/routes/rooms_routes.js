@@ -2,7 +2,6 @@ import express from "express"
 import helper from "../utilis/helper"
 import roomsController from "../controller/rooms_controller"
 
-
 const roomsRoute = express.Router();
 
 roomsRoute.post("/create", roomsController.createRoom); // create or update room's

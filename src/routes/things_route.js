@@ -43,12 +43,12 @@ thingsRoute.post("/dmx/parent/execute", thingsOpsController.executeDMXParent);
 
 thingsRoute.post("/dmx/parent", thingsController.getDMX)
 
-
 thingsRoute.get("/thermostat/:id", thingsController.getThermoStatData)
 
 thingsRoute.post("/thermostat/update/", thingsController.setThermoStatData)
  
-thingsRoute.post("/curtains/execute", thingsOpsController.writeToCurtainsMock);
-thingsRoute.post("/curtains/read", thingsOpsController.readToCurtainsMock);
+thingsRoute.post("/curtains/execute", thingsOpsController.writeToCurtains);
+
+thingsRoute.post("/curtains/read", thingsOpsController.readCurtains);
 
 module.exports = thingsRoute;

@@ -8,7 +8,7 @@ import OpcuaSessionHelper from '../opcua/opcua_session';
 import { SENSOR_RANGES } from '../constants/sensor.ranges';
 import { Common } from "../utilis/common";
 
-import { buildCurtainHexString } from "../dataOperations/curtain_creator";
+import { buildCurtainHexString, getReadValueFromHex } from "../dataOperations/curtain_creator";
 
 
 const opcuaSessionHelper = new OpcuaSessionHelper();
@@ -313,6 +313,40 @@ class OpcuaProvider {
             });
         }
     }
+
+    async readCurtainData(config, res) {
+
+        const thingsIotmappingConfig = await ThingsMappingRepo.findThingMappingConfingOrdered(config);
+
+        const data = {};
+
+        if (typeof thingsIotmappingConfig !== 'undefined' && thingsIotmappingConfig !== null) {
+            let serverUrl = config.serverUrl;
+            const props = JSON.parse(config.props);
+            const hex = props.get_motor_position;
+
+            // Now execute s=GVL.astSerialData[1]..sSendString to send get motor position Hex string 
+            const commandSendHexTostringFunction = this.buildOpcuaCommandWithoutIndex(thingsIotmappingConfig[0]);
+            console.log("get_motor_position_hex", hex);
+            thingsIotmappingConfig[0].argValue = hex;
+            await this.buildOpcuaExecutionCommand(thingsIotmappingConfig[0], commandSendHexTostringFunction, serverUrl, false)
+
+            // Now execute s=GVL.astSerialData[1].sReceivedString to get Hex string which parse to get read value
+            const commandReadMotorPosition = this.buildOpcuaCommandWithoutIndex(thingsIotmappingConfig[1]);
+            const output = await this.buildOpcuaReadCommand(commandReadMotorPosition, serverUrl);
+            const value = getReadValueFromHex(output.value)
+            data.value = value;
+        } else {
+            res.status(404).json({
+                status: "error",
+                message: "Things mapping configuration not found.",
+                statusCode: 404
+            });
+        }
+        return data;
+
+    }
+
 
 
 }
