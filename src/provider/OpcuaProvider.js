@@ -299,7 +299,7 @@ class OpcuaProvider {
         });
         if (typeof thingsIotmappingConfig !== 'undefined' && thingsIotmappingConfig !== null) {
             let serverUrl = getThingType.serverUrl;
-            const hex = buildCurtainHexString(getThingType.props, thingsIotmappingConfig.props, getThingType.argValue);
+            let hex = buildCurtainHexString(getThingType.props, thingsIotmappingConfig.props, getThingType.argValue).toString();
             const executeCommand = this.buildOpcuaCommandWithoutIndex(thingsIotmappingConfig);
             console.log("cmd", executeCommand);
             console.log("hexvalue", hex);
@@ -323,11 +323,10 @@ class OpcuaProvider {
         if (typeof thingsIotmappingConfig !== 'undefined' && thingsIotmappingConfig !== null) {
             let serverUrl = config.serverUrl;
             const props = JSON.parse(config.props);
-            const hex = props.get_motor_position;
+            let hex = props.get_motor_position.toString();
 
             // Now execute s=GVL.astSerialData[1]..sSendString to send get motor position Hex string 
             const commandSendHexTostringFunction = this.buildOpcuaCommandWithoutIndex(thingsIotmappingConfig[0]);
-            console.log("get_motor_position_hex", hex);
             thingsIotmappingConfig[0].argValue = hex;
             await this.buildOpcuaExecutionCommand(thingsIotmappingConfig[0], commandSendHexTostringFunction, serverUrl, false)
 

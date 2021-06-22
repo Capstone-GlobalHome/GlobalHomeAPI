@@ -2,7 +2,6 @@
 
 import _ from "lodash"
 // Models
-import db from '../models'
 import ThingsMappingRepo from '../repo/things_mapping_repo'
 import ThingsConfigRepo from '../repo/things_config_repo'
 import ProviderFactory from '../provider/ProviderFactory';
@@ -206,10 +205,12 @@ class ThingsOperationController {
 
         try {
             const thingIds = req.body.thing_ids;
+            console.log("Blinds id",thingIds);
             const identifier = req.body.identifier;
             const target_function = req.body.target_function;
             const command = req.body.command;
             const getThingType = await ThingsConfigRepo.findBlindConfig(thingIds, identifier);
+            console.log("getThingType id",JSON.stringify(getThingType));
             if (typeof getThingType !== 'undefined' && getThingType !== null) {
                 let arrayValue = new Array();
                 for (let item of getThingType) {
@@ -219,9 +220,6 @@ class ThingsOperationController {
                     item.target_function = target_function;
                     item.command = command;
                     const value = await protocol.provider.read(item, res);
-                    // let map = new Map();
-                    // map.set();
-                    // console.log(map);
                     arrayValue.push({ [item.thing_id]: value.value });
                 }
                 res.status(200).json({
@@ -240,6 +238,7 @@ class ThingsOperationController {
             }
 
         } catch (error) {
+            console.log(JSON.stringify(error));
             next(error);
         }
     }
