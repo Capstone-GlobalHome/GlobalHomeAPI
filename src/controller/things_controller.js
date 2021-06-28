@@ -155,29 +155,41 @@ class ThingsController {
             const roomId = req.body.roomId;
             ThingDbOps.findAll({
                 where: {
-                    fk_room_id: roomId,
-                    parent_id:{[Op.is]: null},
-                    thing_type: { [Op.in]: [THING_TYPE.INDIVIDUAL, THING_TYPE.GROUP, THING_TYPE.GROUP_PARENT] }
-                }, order: [
+                    [Op.and]: [{ fk_room_id: roomId }, { status: 1 }, {
+                        [Op.or]: [
+                            {
+                                [Op.and]: [{ thing_type: THING_TYPE.INDIVIDUAL }
+                                ]
+                            },
+                            {
+                                [Op.and]: [
+                                    { parent_id: { [Op.is]: null } },
+                                    { thing_type: { [Op.in]: [THING_TYPE.GROUP, THING_TYPE.GROUP_PARENT] } }
+                                ]
+                            }]
+                    }],
+                }
+                , order: [
                     ['position', 'ASC'],
                 ]
-            }).then(result => {
-                if (!result) {
-                    res.status(404).json({
-                        status: "error",
-                        message: "No things config information is found ",
-                        statusCode: 404
-                    });
-                } else {
-                    res.status(200).json({
-                        statusCode: 200,
-                        status: "success",
-                        message: "List of things successfully.",
-                        data: result
-                    });
+            })
+                .then(result => {
+                    if (!result) {
+                        res.status(404).json({
+                            status: "error",
+                            message: "No things config information is found ",
+                            statusCode: 404
+                        });
+                    } else {
+                        res.status(200).json({
+                            statusCode: 200,
+                            status: "success",
+                            message: "List of things successfully.",
+                            data: result
+                        });
 
-                }
-            });
+                    }
+                });
         } catch (error) {
             next(error);
         }
