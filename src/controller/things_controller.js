@@ -237,6 +237,9 @@ class ThingsController {
                 include: [{
                     model: ThingDbOps,
                     as: "childs",
+                    order: [
+                        ['position', 'ASC']
+                      ],
                     include: [
                         {
                             model: ThingsConfig,

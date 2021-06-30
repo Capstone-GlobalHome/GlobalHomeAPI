@@ -232,7 +232,7 @@ const presetBuilder = (config) => {
 }
 
 const buildChildToThing = (allChilds) => {
-    const childs = allChilds.map(group => {
+    const childs = allChilds.sort((obj1,obj2)=>{return obj1.position-obj2.position}).map(group => {
         // console.log("THings-config", group.config);
         return Object.assign(
             {}, {
