@@ -150,7 +150,7 @@ class OpcuaProvider {
         if (typeof thingsIotmappingConfig !== 'undefined' && thingsIotmappingConfig !== null) {
             DMXChannelOps.findDMXChannelValueArray({ identifier: getThingType.identifier }).then(arrayStringValue => {
                 const dmxChannelArray = JSON.parse(arrayStringValue.channel_array);
-                dmxChannelArray[address - 1] = getThingType.argValue[0]
+                dmxChannelArray[address - 1] = parseFloat(getThingType.argValue[0])
                 const finalArrary = new Float64Array(Array.from(_.values(dmxChannelArray)));
                 let serverUrl = getThingType.serverUrl;
                 // Lets execute 1s command to set elements
