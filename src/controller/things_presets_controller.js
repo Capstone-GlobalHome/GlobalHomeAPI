@@ -44,14 +44,12 @@ class ThingsPresetsController {
 
     async savePresets(req, res, next) {
         try {
-            const parentId = req.body.parent_id;
             const presetId = req.body.preset_id;
-            const groups = req.body.groups;
-            console.log("Groups:1 ",groups);
-            console.log("Groups: ",JSON.stringify(groups));
-            groups.map(async group => {
-                await updatePresets(group, presetId);
-            });
+            const group_ids = req.body.group_ids;
+            if (group_ids) {
+                console.log("GroupsIds: ", JSON.stringify(group_ids));
+                await updatePresets(group_ids, presetId)
+            }
             res.status(200).json({
                 status: "success",
                 message: "Preset value updated",
