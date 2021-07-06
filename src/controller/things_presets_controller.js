@@ -47,6 +47,7 @@ class ThingsPresetsController {
             const parentId = req.body.parent_id;
             const presetId = req.body.preset_id;
             const groups = req.body.groups;
+            console.log("Groups:1 ",groups);
             console.log("Groups: ",JSON.stringify(groups));
             groups.map(async group => {
                 await updatePresets(group, presetId);
