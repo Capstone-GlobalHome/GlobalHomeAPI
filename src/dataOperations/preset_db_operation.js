@@ -17,7 +17,9 @@ export const updatePresets = async (group, presetId) => {
                 console.error("Things config not found with ", group.id);
             } else {
                 const props = JSON.parse(result.props);
+                console.log("props:", props);
                 const transformProps = buildPropsForPresetUpdate(props, presetId, group.value);
+                console.log("transformProps:", transformProps);
                 result.update(Object.assign({}, { props: transformProps }));
             }
         });
@@ -30,16 +32,14 @@ export const updatePresets = async (group, presetId) => {
 }
 
 const buildPropsForPresetUpdate = (props, presetId, value) => {
-    let address = "";
     if (props && props.presets) {
         try {
+            console.log("PresetId", presetId);
             let index = props.presets.findIndex((obj => obj.presetId == presetId));
             props.presets[index].value = value;
         } catch (error) {
             console.error(error);
         }
-    } else {
-        return address;
     }
     return JSON.stringify(props);
 
